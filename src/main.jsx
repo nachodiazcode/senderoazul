@@ -8,7 +8,10 @@ const stories = [
     category: 'Primer equipo',
     title: '¡Goleada azul! La U ganó 3–0 de visita ante La Serena',
     excerpt: 'Universidad de Chile se impuso por 3–0 en La Portada. Una alegría de visita para celebrar con toda la hinchada azul.',
-    image: '/assets/la-serena-u-de-chile.png',
+    image: '/assets/u-la-serena-accion.jpg',
+    imageAlt: 'Jugador de Universidad de Chile rematando ante defensores de La Serena; foto de archivo de septiembre de 2025.',
+    imageCredit: 'Foto de archivo · @udechile vía La Tercera · 28/09/2025',
+    imageSource: 'https://www.latercera.com/el-deportivo/noticia/en-vivo-la-u-visita-a-la-serena-en-un-duelo-pendiente-de-la-liga-de-primera/',
     time: '13 de septiembre de 2026',
     featured: true,
   },
@@ -144,20 +147,21 @@ function App() {
             {featured ? (
               <div className="news-layout">
                 <article className="hero-card">
-                  <img src={featured.image} alt="" />
+                  <img src={featured.image} alt={featured.imageAlt || ''} />
                   <div className="hero-gradient" />
                   <div className="hero-copy">
                     <span className="story-tag">{featured.category}</span>
                     <h2>{featured.title}</h2>
                     <p>{featured.excerpt}</p>
                     <div className="story-meta"><span>{featured.time}</span><span>·</span><span>Nacho Díaz</span></div>
+                    {featured.imageCredit && <a className="photo-credit" href={featured.imageSource} target="_blank" rel="noopener noreferrer">{featured.imageCredit}</a>}
                   </div>
                 </article>
 
                 <div className="side-stories">
                   {secondary.slice(0, 3).map((story) => (
                     <article className="side-story" key={story.id}>
-                      <img src={story.image} alt="" />
+                      <img src={story.image} alt={story.imageAlt || ''} />
                       <div>
                         <span className="small-tag">{story.category}</span>
                         <h3>{story.title}</h3>
@@ -205,7 +209,7 @@ function App() {
                 {stories.map((story, index) => (
                   <article className="latest-item" key={story.id}>
                     <span className="latest-number">0{index + 1}</span>
-                    <img src={story.image} alt="" />
+                    <img src={story.image} alt={story.imageAlt || ''} />
                     <div><span className="small-tag">{story.category}</span><h3>{story.title}</h3><p>{story.excerpt}</p><span className="story-time">{story.time}</span></div>
                   </article>
                 ))}
