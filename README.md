@@ -44,3 +44,17 @@ vite.config.js   Configuración de Vite
 ## Alcance
 
 Los artículos, resultados y posiciones son datos de demostración definidos en el frontend. El proyecto no incluye backend ni integración con un CMS o servicio de newsletter. Para publicar contenido actualizado, se requiere conectar una fuente de datos y los servicios correspondientes.
+
+## Despliegue en Netlify
+
+Sitio publicado: https://senderoazul.netlify.app
+
+La configuración de compilación está en `netlify.toml`. Para publicar una actualización con la CLI de Netlify autenticada y el proyecto vinculado:
+
+```bash
+npm ci
+npm run build
+netlify deploy --prod --dir dist --no-build
+```
+
+El despliegue inicial se realizó desde la CLI; los pushes a GitHub no generan despliegues automáticos hasta configurar la integración del repositorio en Netlify.
