@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# Production output
+dist/
+
+# Local environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# OS and editor files
+.DS_Store
+.idea/
+.vscode/
