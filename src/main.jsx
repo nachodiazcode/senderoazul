@@ -6,10 +6,10 @@ const stories = [
   {
     id: 1,
     category: 'Primer equipo',
-    title: 'La U prepara su visita a La Serena con una batalla clave por el Chile 2',
-    excerpt: 'Las bajas obligan a mover piezas y el mediocampo aparece como la gran zona a resolver antes del viaje a La Portada.',
-    image: '/assets/chile2.png',
-    time: 'Hace 18 min',
+    title: '¡Goleada azul! La U ganó 3–0 de visita ante La Serena',
+    excerpt: 'Universidad de Chile se impuso por 3–0 en La Portada. Una alegría de visita para celebrar con toda la hinchada azul.',
+    image: '/assets/la-serena-u-de-chile.png',
+    time: '13 de septiembre de 2026',
     featured: true,
   },
   {
@@ -47,7 +47,7 @@ const stories = [
 ];
 
 const quickNews = [
-  'Gago prueba variantes para reemplazar a Marcelo Morales.',
+  '¡Triunfo azul! Universidad de Chile ganó 3–0 de visita ante La Serena.',
   'Octavio Rivero sigue sumando minutos tras su regreso.',
   'Agustín Arce aparece entre las alternativas ofensivas.',
   'La U mantiene la pelea por puestos de clasificación internacional.',
@@ -84,9 +84,9 @@ function App() {
     <div className="app-shell">
       <div className="score-strip">
         <div className="container score-inner">
-          <span className="live-pill"><span className="pulse" /> EN VIVO</span>
-          <strong>PRÓXIMO PARTIDO</strong>
-          <span>La Serena</span><span className="score-vs">vs.</span><span>U. de Chile</span>
+          <span className="live-pill">FINALIZADO</span>
+          <strong>TRIUNFO AZUL</strong>
+          <span>La Serena</span><span className="score-vs">0 – 3</span><span>U. de Chile</span>
           <span className="score-date">Dom. 13 Sep · 15:00</span>
           <span className="score-place">La Portada</span>
         </div>
@@ -175,17 +175,17 @@ function App() {
           <div className="container match-grid">
             <div className="match-card">
               <div className="match-title-row">
-                <div><span className="eyebrow light">FECHA 23 · LIGA DE PRIMERA</span><h2>Próximo partido</h2></div>
-                <span className="match-status">PREVIA</span>
+                <div><span className="eyebrow light">FECHA 23 · LIGA DE PRIMERA</span><h2>¡Triunfo de visita!</h2></div>
+                <span className="match-status">FINALIZADO</span>
               </div>
               <div className="teams">
                 <div className="team"><div className="crest rival">LS</div><strong>La Serena</strong><span>Local</span></div>
-                <div className="kickoff"><span>DOM 13 SEP</span><b>15:00</b><small>Estadio La Portada</small></div>
+                <div className="kickoff"><span>DOM 13 SEP</span><b>0 – 3</b><small>Estadio La Portada</small></div>
                 <div className="team"><img src="/assets/logo-sendero.png" alt="" /><strong>U. de Chile</strong><span>Visita</span></div>
               </div>
               <div className="match-footer">
-                <span>La pelea por el Chile 2 entra en zona decisiva.</span>
-                <button>Ver previa →</button>
+                <span>La U ganó 3–0 en La Portada. ¡Vamos los azules!</span>
+                <a href="#noticias">Ver noticia →</a>
               </div>
             </div>
 
