@@ -76,7 +76,45 @@ function NewsCard({ article, saved, onSave, featured = false }) {
 }
 
 function HomePage({ saved, onSave }) {
-  return <><section className="home-hero"><div className="shell hero-heading"><div><span className="eyebrow">FÚTBOL. MEMORIA. PERTENENCIA.</span><h1>La U se vive.<br /><em>Acá se comparte.</em></h1></div><p>La casa de quienes llevan<br />el azul todos los días.</p></div><div className="shell hero-grid"><article className="hero-story"><img src={articles[0].image} alt="Acción entre Universidad de Chile y La Serena, fotografía de archivo" /><div className="hero-shade" /><div className="hero-copy"><span className="tag red">LA ALEGRÍA DE VISITA</span><ArticleLink article={articles[0]}><h2>Tres goles.<br />Una sola alegría.</h2></ArticleLink><p>{articles[0].excerpt}</p><ArticleLink article={articles[0]} className="hero-link">LEER LA CRÓNICA <span>↗</span></ArticleLink><Credit article={articles[0]} /></div></article><aside className="hero-aside"><ScorePanel compact /><article className="memory-teaser"><img src="/assets/tifo.png" alt="Arte editorial de hinchada azul" /><div><span className="eyebrow">MEMORIA AZUL</span><ArticleLink article={articles[3]}><h3>Hay noches que no terminan nunca.</h3></ArticleLink><p>Volver al 2011. Volver a sentirlo.</p></div></article><RouteLink to="/comunidad" className="community-teaser"><span>LA TRIBUNA ES TUYA<b>Elige tu figura del partido</b></span><strong>↗</strong></RouteLink></aside></div></section><section className="shell home-latest"><SectionTitle eyebrow="PERIODISMO CON CORAZÓN AZUL" title="Lo que nos mueve."><RouteLink to="/actualidad" className="section-link">Ver toda la actualidad →</RouteLink></SectionTitle><div className="home-news-grid">{articles.slice(1, 4).map((article) => <NewsCard key={article.id} article={article} saved={saved.includes(article.id)} onSave={onSave} />)}</div></section><section className="shell home-split"><div className="home-data"><span className="eyebrow">PARTIDO & DATA</span><h2>El resultado cuenta.<br />La historia explica.</h2><p>El marcador, los momentos decisivos y una lectura honesta de lo que pasó en La Portada.</p><RouteLink to="/datos" className="button">Explorar el partido →</RouteLink></div><div className="home-tribuna"><span className="eyebrow">PARTICIPA</span><h2>Tu voz también forma parte del Sendero.</h2><p>Elige la figura, demuestra cuánto sabes y deja un recuerdo azul guardado en tu dispositivo.</p><RouteLink to="/comunidad" className="button light">Entrar a la tribuna →</RouteLink></div></section><div className="shell"><BookBanner /></div></>;
+  return <>
+    <section className="concept-hero">
+      <div className="shell concept-grid">
+        <div className="concept-collage">
+          <img className="collage-main" src={articles[0].image} alt="Acción entre Universidad de Chile y La Serena, fotografía de archivo" />
+          <div className="collage-wash" />
+          <div className="collage-score"><small>FINAL · LA PORTADA</small><b>0—3</b><span>TRIUNFO AZUL</span></div>
+          <div className="collage-photo"><img src="/assets/hinchada.png" alt="Arte editorial de la hinchada azul" /><span>LA PASIÓN<br />NO SE EXPLICA.</span></div>
+          <div className="collage-stamp">U</div>
+        </div>
+        <div className="concept-copy">
+          <div className="color-stripe" />
+          <span className="eyebrow">FÚTBOL · MEMORIA · PERTENENCIA</span>
+          <h1>La U<br />se vive.</h1>
+          <h2>Acá se comparte.</h2>
+          <p>{articles[0].excerpt}</p>
+          <ArticleLink article={articles[0]} className="concept-link">LEER LA CRÓNICA <span>↗</span></ArticleLink>
+          <Credit article={articles[0]} />
+        </div>
+      </div>
+      <div className="shell hero-modules">
+        <ScorePanel compact />
+        <article className="memory-teaser">
+          <img src="/assets/tifo.png" alt="Arte editorial de hinchada azul" />
+          <div><span className="eyebrow">MEMORIA AZUL</span><ArticleLink article={articles[3]}><h3>Hay noches que no terminan nunca.</h3></ArticleLink><p>Volver al 2011. Volver a sentirlo.</p></div>
+        </article>
+        <RouteLink to="/comunidad" className="community-teaser"><span>LA TRIBUNA ES TUYA<b>Elige tu figura del partido</b></span><strong>↗</strong></RouteLink>
+      </div>
+    </section>
+    <section className="shell home-latest">
+      <SectionTitle eyebrow="PERIODISMO CON CORAZÓN AZUL" title="Lo que nos mueve."><RouteLink to="/actualidad" className="section-link">Ver toda la actualidad →</RouteLink></SectionTitle>
+      <div className="home-news-grid">{articles.slice(1, 4).map((article) => <NewsCard key={article.id} article={article} saved={saved.includes(article.id)} onSave={onSave} />)}</div>
+    </section>
+    <section className="shell home-split">
+      <div className="home-data"><span className="eyebrow">PARTIDO & DATA</span><h2>El resultado cuenta.<br />La historia explica.</h2><p>El marcador, los momentos decisivos y una lectura honesta de lo que pasó en La Portada.</p><RouteLink to="/datos" className="button">Explorar el partido →</RouteLink></div>
+      <div className="home-tribuna"><span className="eyebrow">PARTICIPA</span><h2>Tu voz también forma parte del Sendero.</h2><p>Elige la figura, demuestra cuánto sabes y deja un recuerdo azul guardado en tu dispositivo.</p><RouteLink to="/comunidad" className="button light">Entrar a la tribuna →</RouteLink></div>
+    </section>
+    <div className="shell"><BookBanner /></div>
+  </>;
 }
 
 function NewsPage({ saved, onSave, saveError }) {
