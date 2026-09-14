@@ -272,32 +272,35 @@ nav a.active { color: var(--blue); }
 .wall-empty p { margin: 8px 0 0; font-size: 10px; }
 
 /* Soy DT: pizarra jugable con formación 3–4–3 y duelo de hinchas. */
-.manager-page { padding: 0 0 80px; background: var(--paper); }
+.manager-page { position: relative; padding: 0 0 80px; overflow: hidden; background: var(--navy); color: white; }
+.manager-page::before { position: absolute; inset: 0; opacity: .2; pointer-events: none; background-image: repeating-linear-gradient(115deg, transparent 0 18px, rgba(255,255,255,.04) 19px 20px), radial-gradient(circle at 20% 20%, rgba(17,87,232,.45), transparent 32%); content: ''; }
 .manager-heading { display: grid; grid-template-columns: 1fr 1fr; gap: 45px; align-items: center; padding: 62px 0 52px; }
+.manager-heading, .manager-layout, .manager-footnote { position: relative; z-index: 1; }
 .manager-heading h1 { margin: 13px 0 20px; font-family: var(--display); font-size: clamp(54px, 6vw, 82px); line-height: .91; letter-spacing: -.055em; text-transform: uppercase; }
-.manager-heading h1 em { color: var(--blue); font-style: normal; }
-.manager-heading p { max-width: 490px; color: var(--muted); font-size: 14px; line-height: 1.75; }
+.manager-heading h1 em { color: var(--blue-light); font-style: normal; }
+.manager-heading p { max-width: 490px; color: #b4c6e0; font-size: 14px; line-height: 1.75; }
 .manager-heading-art { position: relative; min-height: 235px; overflow: hidden; border-radius: 5px; background: var(--navy); box-shadow: var(--shadow); transform: rotate(1.5deg); }
 .manager-heading-art img { width: 100%; height: 100%; min-height: 235px; object-fit: cover; object-position: center; opacity: .72; }
 .manager-heading-art::after { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(8,31,76,.12), rgba(5,15,37,.87)); content: ''; }
 .manager-heading-art span { position: absolute; z-index: 1; right: 24px; bottom: 21px; color: white; font-family: var(--display); font-size: 32px; line-height: .88; letter-spacing: -.04em; text-align: right; }
 .manager-layout { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(320px, .7fr); gap: 22px; align-items: start; }
-.manager-main { padding: 30px; border: 1px solid #d9dce2; border-radius: 5px; background: white; box-shadow: var(--shadow); }
+.manager-main { padding: 30px; border: 1px solid #294a79; border-radius: 5px; background: rgba(7, 27, 62, .92); box-shadow: 0 20px 60px rgba(0,0,0,.28); }
 .manager-toolbar { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
 .manager-toolbar h2 { margin: 8px 0 0; font-family: var(--display); font-size: 32px; line-height: 1; letter-spacing: -.04em; text-transform: uppercase; }
-.manager-score { display: grid; grid-template-columns: auto auto; align-items: end; column-gap: 10px; padding: 9px 12px; border-left: 3px solid var(--red); background: #f2f4f8; }
-.manager-score small { grid-column: 1 / -1; color: var(--muted); font-size: 8px; font-weight: 800; letter-spacing: .13em; }
+.manager-score { display: grid; grid-template-columns: auto auto; align-items: end; column-gap: 10px; padding: 9px 12px; border-left: 3px solid var(--red); background: #081a3a; }
+.manager-score small { grid-column: 1 / -1; color: #9cb4d8; font-size: 8px; font-weight: 800; letter-spacing: .13em; }
 .manager-score strong { color: var(--blue); font-family: var(--display); font-size: 39px; line-height: .9; }
-.manager-score span { max-width: 88px; color: var(--muted); font-size: 8px; line-height: 1.25; }
-.manager-help { margin: 17px 0 20px; color: var(--muted); font-size: 11px; line-height: 1.6; }
-.football-pitch { position: relative; display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: repeat(4, 1fr); gap: 10px; min-height: 620px; padding: 42px 30px; overflow: hidden; border: 5px solid rgba(255,255,255,.72); border-radius: 5px; background-color: #1451a7; background-image: linear-gradient(105deg, rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(165deg, rgba(5,29,78,.2) 1px, transparent 1px), radial-gradient(ellipse at 50% 42%, rgba(255,255,255,.15), transparent 60%); background-size: 32px 32px, 27px 27px, auto; box-shadow: inset 0 0 0 1px rgba(4,17,48,.3), inset 0 0 70px rgba(4,17,48,.5); }
+.manager-score span { max-width: 88px; color: #9cb4d8; font-size: 8px; line-height: 1.25; }
+.manager-help { margin: 17px 0 20px; color: #b3c5df; font-size: 11px; line-height: 1.6; }
+.football-pitch { position: relative; display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: repeat(4, 1fr); gap: 10px; min-height: 620px; padding: 42px 30px; overflow: hidden; border: 5px solid rgba(171,205,255,.68); border-radius: 5px; background-color: #09285b; background-image: linear-gradient(105deg, rgba(255,255,255,.07) 1px, transparent 1px), linear-gradient(165deg, rgba(2,15,42,.26) 1px, transparent 1px), radial-gradient(ellipse at 50% 42%, rgba(23,107,232,.34), transparent 60%); background-size: 32px 32px, 27px 27px, auto; box-shadow: inset 0 0 0 1px rgba(4,17,48,.3), inset 0 0 70px rgba(0,8,25,.6); }
 .football-pitch::before { position: absolute; inset: 16px; border: 2px solid rgba(255,255,255,.57); border-radius: 2px; content: ''; pointer-events: none; }
 .football-pitch::after { position: absolute; top: 50%; right: 16px; left: 16px; height: 1px; background: rgba(255,255,255,.52); box-shadow: 0 -1px 0 rgba(255,255,255,.12); content: ''; pointer-events: none; }
-.pitch-slot { position: relative; z-index: 1; display: flex; min-width: 0; flex-direction: column; align-items: center; justify-content: center; min-height: 130px; padding: 4px; border: 1px dashed rgba(255,255,255,.45); border-radius: 50%; transition: background .2s, border-color .2s, transform .2s; }
+.pitch-slot { position: relative; z-index: 1; display: flex; min-width: 0; flex-direction: column; align-items: center; justify-content: center; min-height: 130px; padding: 4px; border: 1px dashed rgba(209,226,255,.54); border-radius: 50%; transition: background .2s, border-color .2s, transform .2s; }
 .pitch-slot:hover, .pitch-slot.targeted { border-color: white; background: rgba(255,255,255,.13); transform: scale(1.03); }
 .slot-label { margin-bottom: 6px; color: rgba(255,255,255,.68); font-size: 8px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
 .empty-slot { display: grid; width: 29px; height: 29px; place-items: center; border: 1px solid rgba(255,255,255,.62); border-radius: 50%; color: white; font-size: 22px; font-weight: 300; }
-.dt-player { position: relative; display: flex; width: 100%; max-width: 130px; min-height: 74px; flex-direction: column; align-items: center; justify-content: center; padding: 8px 5px 6px; border: 1px solid rgba(255,255,255,.3); border-radius: 4px; background: linear-gradient(145deg, #071d45, #0c3f8e); color: white; box-shadow: 0 6px 11px rgba(3,15,42,.32); cursor: grab; transition: transform .2s, box-shadow .2s, border-color .2s; }
+.dt-player { position: relative; display: flex; width: 100%; max-width: 130px; min-height: 74px; flex-direction: column; align-items: center; justify-content: center; padding: 8px 5px 6px; overflow: hidden; border: 1px solid rgba(255,255,255,.42); border-radius: 4px; background: linear-gradient(145deg, #0a2b68 0 54%, #0d54ca 54% 71%, #102b5b 71%); color: white; box-shadow: 0 6px 11px rgba(3,15,42,.42); cursor: grab; transition: transform .2s, box-shadow .2s, border-color .2s; }
+.dt-player::after { position: absolute; right: -24px; bottom: -28px; width: 75px; height: 75px; border: 2px solid rgba(236,39,64,.65); border-radius: 50%; content: ''; }
 .dt-player:hover, .dt-player.selected { border-color: #ffd46e; box-shadow: 0 0 0 2px rgba(244,202,123,.4), 0 8px 16px rgba(3,15,42,.35); transform: translateY(-3px); }
 .dt-player:active { cursor: grabbing; }
 .dt-rating { position: absolute; top: 4px; left: 6px; color: var(--gold); font-family: var(--compact); font-size: 16px; font-weight: 800; }
@@ -315,22 +318,32 @@ nav a.active { color: var(--blue); }
 .slot-9 { grid-column: 6 / span 3; grid-row: 1; }
 .slot-10 { grid-column: 10 / span 3; grid-row: 1; }
 .manager-actions { display: flex; align-items: center; gap: 17px; margin-top: 21px; }
-.text-button { border: 0; background: none; color: var(--blue); font-size: 10px; font-weight: 800; }
-.manager-actions small { color: var(--muted); font-size: 9px; }
+.text-button { border: 0; background: none; color: var(--blue-light); font-size: 10px; font-weight: 800; }
+.manager-actions small { color: #9cb4d8; font-size: 9px; }
 .manager-sidebar { display: flex; flex-direction: column; gap: 16px; }
-.bench-panel, .duel-panel { padding: 24px; border: 1px solid #d9dce2; border-radius: 5px; background: white; box-shadow: var(--shadow); }
+.bench-panel, .dt-detail { padding: 24px; border: 1px solid #294a79; border-radius: 5px; background: #081b3c; box-shadow: 0 20px 60px rgba(0,0,0,.2); }
+.duel-panel { padding: 24px; border: 1px solid #294a79; border-radius: 5px; background: #0d2e67; box-shadow: 0 20px 60px rgba(0,0,0,.2); }
 .bench-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 13px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
 .bench-head h3 { max-width: 230px; margin: 8px 0 0; font-family: var(--body); font-size: 21px; line-height: 1.05; letter-spacing: -.035em; }
-.bench-head > span { color: var(--muted); font-size: 9px; white-space: nowrap; }
+.bench-head > span { color: #9cb4d8; font-size: 9px; white-space: nowrap; }
 .bench-list { display: flex; max-height: 435px; flex-direction: column; gap: 6px; margin-top: 15px; overflow: auto; }
-.bench-player { display: grid; grid-template-columns: 27px 1fr auto; align-items: center; gap: 9px; padding: 10px; border: 1px solid #e1e4ea; border-radius: 3px; background: #f7f8fa; text-align: left; cursor: grab; transition: background .2s, border-color .2s, transform .2s; }
-.bench-player:hover, .bench-player.selected { border-color: var(--blue); background: #edf3ff; transform: translateX(3px); }
-.bench-number { color: #9aa6b8; font-family: var(--compact); font-size: 17px; font-weight: 800; }
+.bench-player { display: grid; grid-template-columns: 27px 1fr auto; align-items: center; gap: 9px; padding: 10px; border: 1px solid #294a79; border-radius: 3px; background: #0a2349; text-align: left; cursor: grab; transition: background .2s, border-color .2s, transform .2s; }
+.bench-player:hover, .bench-player.selected { border-color: var(--blue-light); background: #123b7a; transform: translateX(3px); }
+.bench-number { color: #7f9dca; font-family: var(--compact); font-size: 17px; font-weight: 800; }
 .bench-player b { display: block; font-size: 11px; }
-.bench-player small { display: block; margin-top: 3px; color: var(--muted); font-size: 8px; }
+.bench-player small { display: block; margin-top: 3px; color: #9eb7dc; font-size: 8px; }
 .bench-player > strong { color: var(--blue); font-family: var(--compact); font-size: 20px; }
-.bench-tip { margin: 14px 0 0; color: var(--muted); font-size: 9px; line-height: 1.6; }
-.duel-panel { background: var(--navy); color: white; }
+.bench-tip { margin: 14px 0 0; color: #9eb7dc; font-size: 9px; line-height: 1.6; }
+.dt-detail-head { display: grid; grid-template-columns: 50px 1fr auto; align-items: center; gap: 11px; }
+.dt-avatar { display: grid; width: 50px; height: 50px; place-items: center; border: 1px solid #7fa9ef; border-radius: 50%; background: linear-gradient(145deg, var(--blue), #09285b); color: white; font-family: var(--compact); font-size: 19px; font-weight: 800; }
+.dt-detail-head h3 { margin: 5px 0 0; font-size: 15px; line-height: 1; }
+.dt-detail-head > strong { color: var(--gold); font-family: var(--display); font-size: 34px; line-height: .8; }
+.dt-attributes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 19px; padding-top: 15px; border-top: 1px solid #294a79; }
+.dt-attributes span { display: flex; flex-direction: column; gap: 5px; }
+.dt-attributes small { color: #7f9dca; font-size: 7px; letter-spacing: .1em; }
+.dt-attributes b { overflow: hidden; color: white; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.dt-detail p { margin: 15px 0 0; color: #9eb7dc; font-size: 9px; line-height: 1.6; }
+.duel-panel { color: white; }
 .duel-panel .eyebrow { color: var(--blue-light); }
 .duel-panel h3 { margin: 12px 0 9px; font-family: var(--display); font-size: 28px; line-height: 1; letter-spacing: -.04em; }
 .duel-panel > p { color: #b6c7df; font-size: 11px; line-height: 1.65; }
