@@ -138,7 +138,7 @@ function HomePage({ saved, onSave }) {
           <img src="/assets/tifo.png" alt="Arte editorial de hinchada azul" />
           <div><span className="eyebrow">MEMORIA AZUL</span><ArticleLink article={articles[3]}><h3>Hay noches que no terminan nunca.</h3></ArticleLink><p>Volver al 2011. Volver a sentirlo.</p></div>
         </article>
-        <RouteLink to="/comunidad" className="community-teaser"><span>LA TRIBUNA ES TUYA<b>Elige tu figura del partido</b></span><strong>↗</strong></RouteLink>
+        <RouteLink to="/soy-dt" className="community-teaser"><span>SOY DT · COPA CHILE<b>Arma tu once para Everton</b></span><strong>↗</strong></RouteLink>
       </div>
     </section>
     <section className="shell home-latest">
