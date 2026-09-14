@@ -1,270 +1,152 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import { articles } from './content';
 import './styles.css';
 
-const stories = [
-  {
-    id: 1,
-    category: 'Primer equipo',
-    title: '¡Goleada azul! La U ganó 3–0 de visita ante La Serena',
-    excerpt: 'Universidad de Chile se impuso por 3–0 en La Portada. Una alegría de visita para celebrar con toda la hinchada azul.',
-    image: '/assets/u-la-serena-accion.jpg',
-    imageAlt: 'Jugador de Universidad de Chile rematando ante defensores de La Serena; foto de archivo de septiembre de 2025.',
-    imageCredit: 'Foto de archivo · @udechile vía La Tercera · 28/09/2025',
-    imageSource: 'https://www.latercera.com/el-deportivo/noticia/en-vivo-la-u-visita-a-la-serena-en-un-duelo-pendiente-de-la-liga-de-primera/',
-    time: '13 de septiembre de 2026',
-    featured: true,
-  },
-  {
-    id: 2,
-    category: 'Análisis',
-    title: '¿Cómo puede cambiar la U sin Charles Aránguiz?',
-    excerpt: 'Poblete gana terreno y el cuerpo técnico evalúa variantes para mantener equilibrio y profundidad.',
-    image: '/assets/formacion.png',
-    time: 'Hace 42 min',
-  },
-  {
-    id: 3,
-    category: 'Hinchas',
-    title: 'El Nacional vuelve a vestirse de azul: postales de una hinchada que no para',
-    excerpt: 'Banderas, lienzos y una identidad que transforma cada partido en un espectáculo aparte.',
-    image: '/assets/hinchada.png',
-    time: 'Hace 1 h',
-  },
-  {
-    id: 4,
-    category: 'Historia',
-    title: 'Los grandes recibimientos que marcaron generaciones de hinchas azules',
-    excerpt: 'Una selección visual de momentos inolvidables desde la galería y la cancha.',
-    image: '/assets/tifo.png',
-    time: 'Hace 2 h',
-  },
-  {
-    id: 5,
-    category: 'Previa',
-    title: 'La Serena vs. Universidad de Chile: horario, contexto y claves del partido',
-    excerpt: 'Todo lo que necesitas saber antes del duelo del domingo en el estadio La Portada.',
-    image: '/assets/previa.png',
-    time: 'Hace 3 h',
-  },
+const navItems = [
+  ['/', 'Portada'],
+  ['/actualidad', 'Actualidad'],
+  ['/datos', 'Partido & data'],
+  ['/memoria', 'Memoria'],
+  ['/comunidad', 'La tribuna'],
 ];
 
-const quickNews = [
-  '¡Triunfo azul! Universidad de Chile ganó 3–0 de visita ante La Serena.',
-  'Octavio Rivero sigue sumando minutos tras su regreso.',
-  'Agustín Arce aparece entre las alternativas ofensivas.',
-  'La U mantiene la pelea por puestos de clasificación internacional.',
+const quiz = [
+  { q: '¿En qué año llegó la primera Copa Sudamericana de la U?', options: ['1994', '2011', '2017'], correct: '2011', why: 'La U conquistó su primer título internacional el 14 de diciembre de 2011.' },
+  { q: '¿En qué año ganó la U su primer campeonato profesional?', options: ['1938', '1940', '1959'], correct: '1940', why: 'El debut profesional fue en 1938; el primer título llegó en 1940.' },
+  { q: '¿Quién dirigía a la U campeona de la Sudamericana?', options: ['Jorge Sampaoli', 'Martín Lasarte', 'Fernando Gago'], correct: 'Jorge Sampaoli', why: 'Jorge Sampaoli estaba al frente del equipo campeón de 2011.' },
 ];
 
-const table = [
-  ['1', 'Colo Colo', '53', '+26'],
-  ['2', 'U. Católica', '39', '+16'],
-  ['3', 'U. de Chile', '39', '+13'],
-  ['4', 'Coquimbo Unido', '36', '+10'],
-  ['5', 'Palestino', '34', '+8'],
-];
+const getRoute = () => {
+  const hash = window.location.hash.replace(/^#/, '') || '/';
+  return hash.split('?')[0].startsWith('/') ? hash.split('?')[0] : `/${hash.split('?')[0]}`;
+};
 
-function Icon({ children }) {
-  return <span className="icon" aria-hidden="true">{children}</span>;
+function useStored(key, initial) {
+  const [value, setValue] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(key)) ?? initial; } catch { return initial; }
+  });
+  const [error, setError] = useState(false);
+  function update(next) {
+    setValue(next);
+    try { localStorage.setItem(key, JSON.stringify(next)); setError(false); } catch { setError(true); }
+  }
+  return [value, update, error];
+}
+
+function RouteLink({ to, children, className = '', onClick }) {
+  return <a href={`#${to}`} className={className} onClick={() => onClick?.()}>{children}</a>;
+}
+
+function ArticleLink({ article, children, className = '' }) {
+  return <RouteLink to={`/articulo/${article.id}`} className={className}>{children || article.title}</RouteLink>;
+}
+
+function Brand() {
+  return <RouteLink to="/" className="brand"><img src="/assets/logo-sendero.png" alt="" /><span><small>MÁS QUE UNA PASIÓN</small><b>EL SENDERO <em>AZUL</em></b></span></RouteLink>;
+}
+
+function Header({ route }) {
+  const [open, setOpen] = useState(false);
+  return <><div className="topline"><div className="shell"><span>UN MEDIO INDEPENDIENTE. UN MISMO SENTIMIENTO.</span><span>SANTIAGO, CHILE <b>•</b> EDICIÓN 13 SEP 2026</span></div></div><header className="site-header"><div className="shell header-row"><Brand /><button className="menu-toggle" aria-label="Abrir navegación" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? '×' : '☰'}</button><nav className={open ? 'open' : ''} aria-label="Principal">{navItems.map(([path, label]) => <RouteLink key={path} to={path} className={route === path ? 'active' : ''} onClick={() => setOpen(false)}>{label}</RouteLink>)}</nav><RouteLink to="/comunidad" className="button header-cta">Soy del Sendero ↗</RouteLink></div></header></>;
+}
+
+function Footer() {
+  return <footer><div className="shell footer-main"><Brand /><p>Periodismo independiente, memoria y comunidad.<br />El amor por la U es lo que nos reúne.</p><div className="footer-nav"><RouteLink to="/actualidad">Actualidad</RouteLink><RouteLink to="/comunidad">Participa</RouteLink><RouteLink to="/memoria">Memoria azul</RouteLink></div></div><div className="shell footer-bottom"><span>© 2026 El Sendero Azul · Medio independiente de hinchas.</span><span>Preferencias guardadas en tu dispositivo. Sin registro.</span></div></footer>;
+}
+
+function SectionTitle({ eyebrow, title, children }) {
+  return <div className="section-title"><div><span className="eyebrow">{eyebrow}</span><h2>{title}</h2></div>{children}</div>;
+}
+
+function Credit({ article }) {
+  return <small className="credit">{article.creditUrl ? <a href={article.creditUrl} target="_blank" rel="noreferrer">{article.credit} ↗</a> : article.credit}</small>;
+}
+
+function ScorePanel({ compact = false }) {
+  return <div className={compact ? 'score-panel compact' : 'score-panel'}><div className="score-kicker"><span>FINALIZADO</span> FECHA 23 · LA PORTADA</div><div className="score-board"><div><small>LOCAL</small><b>LA SERENA</b></div><strong>0 <i>—</i> 3</strong><div><small>VISITA</small><b>LA U</b></div></div><div className="scorers">46′ Arce <span>•</span> 54′ Hormazábal <span>•</span> 90+3′ Lichnovsky</div><ArticleLink article={articles[0]} className="inline-link">Leer la crónica completa →</ArticleLink></div>;
+}
+
+function BookBanner() {
+  return <aside className="book-banner" aria-label="Publicidad del libro Mariano Puyol"><img src="/assets/mariano-puyol-libro.png" alt="Portada de Mariano Puyol, Simplemente un Capitán, por Omar Soto Díaz" /><div><span className="eyebrow">PUBLICIDAD · LIBROS AZULES</span><h2>Hay capitanes que se llevan para siempre.</h2><p>Mariano Puyol. Simplemente un Capitán.<br />Una historia azul, escrita por Omar Soto Díaz.</p></div><a className="button gold" href="https://marianopuyolcapitan.cl/" target="_blank" rel="noreferrer">Conocer el libro ↗</a></aside>;
+}
+
+function NewsCard({ article, saved, onSave, featured = false }) {
+  return <article className={featured ? 'news-card featured' : 'news-card'}><ArticleLink article={article} className="card-image"><img src={article.image} alt={article.credit} loading="lazy" /></ArticleLink><div className="card-body"><div className="card-meta"><span>{article.category}</span><small>{article.type}</small></div><h3><ArticleLink article={article}>{article.title}</ArticleLink></h3><p>{article.excerpt}</p><div className="card-footer"><small>{article.date}</small><button onClick={() => onSave(article.id)} aria-pressed={saved} aria-label={`${saved ? 'Quitar de guardados' : 'Guardar'}: ${article.title}`}>{saved ? '♥' : '♡'}</button></div></div></article>;
+}
+
+function HomePage({ saved, onSave }) {
+  return <><section className="home-hero"><div className="shell hero-heading"><div><span className="eyebrow">FÚTBOL. MEMORIA. PERTENENCIA.</span><h1>La U se vive.<br /><em>Acá se comparte.</em></h1></div><p>La casa de quienes llevan<br />el azul todos los días.</p></div><div className="shell hero-grid"><article className="hero-story"><img src={articles[0].image} alt="Acción entre Universidad de Chile y La Serena, fotografía de archivo" /><div className="hero-shade" /><div className="hero-copy"><span className="tag red">LA ALEGRÍA DE VISITA</span><ArticleLink article={articles[0]}><h2>Tres goles.<br />Una sola alegría.</h2></ArticleLink><p>{articles[0].excerpt}</p><ArticleLink article={articles[0]} className="hero-link">LEER LA CRÓNICA <span>↗</span></ArticleLink><Credit article={articles[0]} /></div></article><aside className="hero-aside"><ScorePanel compact /><article className="memory-teaser"><img src="/assets/tifo.png" alt="Arte editorial de hinchada azul" /><div><span className="eyebrow">MEMORIA AZUL</span><ArticleLink article={articles[3]}><h3>Hay noches que no terminan nunca.</h3></ArticleLink><p>Volver al 2011. Volver a sentirlo.</p></div></article><RouteLink to="/comunidad" className="community-teaser"><span>LA TRIBUNA ES TUYA<b>Elige tu figura del partido</b></span><strong>↗</strong></RouteLink></aside></div></section><section className="shell home-latest"><SectionTitle eyebrow="PERIODISMO CON CORAZÓN AZUL" title="Lo que nos mueve."><RouteLink to="/actualidad" className="section-link">Ver toda la actualidad →</RouteLink></SectionTitle><div className="home-news-grid">{articles.slice(1, 4).map((article) => <NewsCard key={article.id} article={article} saved={saved.includes(article.id)} onSave={onSave} />)}</div></section><section className="shell home-split"><div className="home-data"><span className="eyebrow">PARTIDO & DATA</span><h2>El resultado cuenta.<br />La historia explica.</h2><p>El marcador, los momentos decisivos y una lectura honesta de lo que pasó en La Portada.</p><RouteLink to="/datos" className="button">Explorar el partido →</RouteLink></div><div className="home-tribuna"><span className="eyebrow">PARTICIPA</span><h2>Tu voz también forma parte del Sendero.</h2><p>Elige la figura, demuestra cuánto sabes y deja un recuerdo azul guardado en tu dispositivo.</p><RouteLink to="/comunidad" className="button light">Entrar a la tribuna →</RouteLink></div></section><div className="shell"><BookBanner /></div></>;
+}
+
+function NewsPage({ saved, onSave, saveError }) {
+  const [category, setCategory] = useState('Todo');
+  const [query, setQuery] = useState('');
+  const [onlySaved, setOnlySaved] = useState(false);
+  const normalize = (value) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const filtered = useMemo(() => articles.filter((article) => (category === 'Todo' || article.category === category) && normalize(`${article.title} ${article.excerpt}`).includes(normalize(query)) && (!onlySaved || saved.includes(article.id))), [category, query, onlySaved, saved]);
+  return <div className="page shell"><div className="page-heading editorial-heading"><span className="eyebrow">ACTUALIDAD AZUL</span><h1>Historias para leer<br />con la camiseta puesta.</h1><p>Crónicas, análisis, cultura y memoria. Textos propios con fuentes visibles.</p></div><div className="news-toolbar"><label className="search-box"><span aria-hidden="true">⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} aria-label="Buscar artículos" placeholder="Buscar en El Sendero…" /></label><div className="category-filter" role="group" aria-label="Filtrar por categoría">{['Todo', 'Primer equipo', 'Análisis', 'Historia', 'Cultura azul'].map((item) => <button key={item} aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</button>)}</div><button className="saved-button" aria-pressed={onlySaved} onClick={() => setOnlySaved(!onlySaved)}>{onlySaved ? '♥' : '♡'} Mis guardados ({saved.length})</button></div>{filtered.length ? <div className="news-grid">{filtered.map((article, index) => <NewsCard key={article.id} article={article} featured={index === 0 && category === 'Todo' && !query && !onlySaved} saved={saved.includes(article.id)} onSave={onSave} />)}</div> : <div className="empty-state"><h2>No encontramos artículos con esos filtros.</h2><button onClick={() => { setQuery(''); setCategory('Todo'); setOnlySaved(false); }}>Ver todos los artículos</button></div>}<p className="data-note">Los guardados viven solo en este navegador.{saveError ? ' No pudimos guardar el último cambio.' : ''}</p><BookBanner /></div>;
+}
+
+function DataPage() {
+  return <div className="page shell"><div className="page-heading data-heading"><span className="eyebrow">PARTIDO & DATA</span><h1>La alegría<br />tiene marcador.</h1><p>Los momentos que explican el 3–0 de la U en La Portada.</p></div><div className="data-hero"><ScorePanel /><div className="data-cards"><article><strong>42</strong><h3>Puntos de la U</h3><p>39 antes del encuentro más los tres puntos del triunfo.</p></article><article><strong>8<small>min</small></strong><h3>Para cambiar la tarde</h3><p>Entre el primer gol de Arce y el segundo de Hormazábal.</p></article><article><strong>3</strong><h3>Goleadores distintos</h3><p>Arce, Hormazábal y Lichnovsky construyeron la victoria.</p></article><article><strong>0</strong><h3>Goles recibidos</h3><p>Castellón, Fernández y Lichnovsky protegieron el arco.</p></article></div></div><section className="match-story"><SectionTitle eyebrow="LA PELÍCULA DEL PARTIDO" title="Noventa minutos en cuatro escenas." /><div className="event-list"><article><span>25′–28′</span><div><b>La U resiste</b><p>Castellón responde y Nicolás Fernández evita una apertura granate.</p></div></article><article><span>46′</span><div><b>Arce rompe el cero</b><p>Recuperación alta, entrada al área y zurdazo cruzado para el 1–0.</p></div></article><article><span>54′</span><div><b>Hormazábal inventa una definición</b><p>Guerrero desborda por la derecha y el lateral convierte de taco.</p></div></article><article><span>79′–90+3′</span><div><b>Lichnovsky en las dos áreas</b><p>Primero salva sobre la línea; después cierra la goleada de cabeza.</p></div></article></div></section><div className="data-disclaimer"><b>Cómo trabajamos estos datos</b><p>Corte: final del partido del 13/09/2026. Minutos y acciones tomados del seguimiento de AS proporcionado a la redacción. No inventamos posesión, remates ni métricas avanzadas que no podamos verificar.</p><ArticleLink article={articles[1]}>Leer el análisis del triunfo →</ArticleLink></div></div>;
+}
+
+function MemoryPage({ saved, onSave }) {
+  const memoryArticles = articles.filter((article) => ['Historia', 'Cultura azul'].includes(article.category));
+  return <div className="page"><section className="memory-hero shell"><div className="memory-image"><img src="/assets/hinchada.png" alt="Arte editorial de una hinchada azul" /><span>NO ES SOLO<br />FÚTBOL.</span></div><div className="memory-intro"><span className="eyebrow">EL AZUL SE HEREDA</span><h1>Antes de nosotros.<br />Después de nosotros.<br /><em>Siempre la U.</em></h1><p>Un club vive en las historias que te contaron, en la primera camiseta y en ese abrazo que todavía recuerdas.</p></div></section><section className="shell timeline-section"><SectionTitle eyebrow="UN SENDERO DE CASI UN SIGLO" title="Hitos que nos trajeron hasta acá." /><div className="history-timeline"><article><b>1927</b><span>El origen</span><p>Nace el Club Universitario de Deportes, raíz institucional de Universidad de Chile.</p></article><article><b>1940</b><span>Primera estrella</span><p>La U conquista su primer campeonato profesional.</p></article><article><b>1960s</b><span>El Ballet Azul</span><p>Una generación transforma al club en protagonista y símbolo popular.</p></article><article><b>1994</b><span>Volver a celebrar</span><p>Tras 25 años, la U se corona con una generación inolvidable.</p></article><article><b>2011</b><span>América es azul</span><p>La Copa Sudamericana llega de forma invicta y cambia la escala del sueño.</p></article><article><b>2027</b><span>El centenario</span><p>La historia continúa con una comunidad que ya mira hacia sus cien años.</p></article></div><p className="data-note">Fuente histórica: Club Universidad de Chile. El centenario corresponde al cumplimiento de 100 años desde 1927.</p></section><section className="shell memory-reading"><SectionTitle eyebrow="ARCHIVO DEL SENDERO" title="Leer también es recordar." /><div className="news-grid memory-grid">{memoryArticles.map((article) => <NewsCard key={article.id} article={article} saved={saved.includes(article.id)} onSave={onSave} />)}</div></section><div className="shell"><BookBanner /></div></div>;
+}
+
+function CommunityPage() {
+  const [mvp, setMvp, mvpError] = useStored('sendero-mvp-2026-09-13', '');
+  const [answers, setAnswers, quizError] = useStored('sendero-trivia-v1', {});
+  const [memories, setMemories, memoriesError] = useStored('sendero-memories-v1', []);
+  const [step, setStep] = useState(0);
+  const [memory, setMemory] = useState('');
+  const [name, setName] = useState('');
+  const question = quiz[step];
+  const answer = answers[step];
+  const score = quiz.filter((item, index) => answers[index] === item.correct).length;
+  function addMemory(event) {
+    event.preventDefault();
+    const clean = memory.trim();
+    if (clean.length < 12) return;
+    setMemories([{ id: Date.now(), name: name.trim() || 'Hincha azul', text: clean }, ...memories].slice(0, 8));
+    setMemory(''); setName('');
+  }
+  return <div className="community-page"><section className="shell community-heading"><span className="eyebrow">LA TRIBUNA ES TUYA</span><h1>El partido termina.<br /><em>La conversación sigue.</em></h1><p>Un espacio para participar, jugar y guardar los recuerdos que hacen única tu historia con la U.</p></section><section className="shell participation-grid"><article className="participation-card vote-card"><span className="tag">TU FIGURA · LA SERENA 0–3 U</span><h2>¿Quién se lleva tus aplausos?</h2><p>Elige al jugador que más te representó en La Portada.</p><div className="player-options">{[['Agustín Arce', 'Abrió el marcador · 46′'], ['Fabián Hormazábal', 'Definición de taco · 54′'], ['Igor Lichnovsky', 'Salvó y convirtió · 90+3′']].map(([player, description], index) => <button key={player} className={mvp === player ? 'selected' : ''} aria-pressed={mvp === player} onClick={() => setMvp(player)}><span>0{index + 1}</span><span><b>{player}</b><small>{description}</small></span><i>{mvp === player ? '✓' : '+'}</i></button>)}</div><p className="feedback" aria-live="polite">{mvp ? `Tu figura: ${mvp}. Puedes cambiar tu elección.` : 'Tu elección es personal y se guarda en este navegador.'}</p>{mvpError && <small>No pudimos guardar la elección fuera de esta sesión.</small>}</article><article className="participation-card quiz-card"><span className="tag">DESAFÍO AZUL · {step + 1} / {quiz.length}</span><h2>¿Cuánto azul llevas dentro?</h2><p className="question">{question.q}</p><div className="quiz-options">{question.options.map((option) => <button key={`${step}-${option}`} disabled={Boolean(answer)} className={answer && option === question.correct ? 'correct' : answer === option ? 'incorrect' : ''} onClick={() => setAnswers({ ...answers, [step]: option })}>{option}</button>)}</div><div className="quiz-feedback" aria-live="polite">{answer && <p>{answer === question.correct ? '¡Correcto! ' : 'Esta vez no. '}{question.why}</p>}</div><div className="quiz-progress"><span>{score} / {quiz.length} aciertos</span>{step < quiz.length - 1 ? <button disabled={!answer} onClick={() => setStep(step + 1)}>Siguiente →</button> : <button onClick={() => { setAnswers({}); setStep(0); }}>Volver a jugar ↻</button>}</div><small>Preguntas basadas en la historia oficial del club.{quizError ? ' No pudimos guardar tu progreso.' : ''}</small></article></section><section className="shell memory-wall"><div className="wall-intro"><span className="eyebrow">TU HISTORIA AZUL</span><h2>¿Cuál es el recuerdo que te hizo de la U?</h2><p>Escríbelo para conservarlo en este dispositivo. No se publica ni se envía a ningún servidor.</p><form onSubmit={addMemory}><label>Tu nombre o apodo <input value={name} onChange={(event) => setName(event.target.value)} maxLength="30" placeholder="Hincha azul" /></label><label>Tu recuerdo <textarea value={memory} onChange={(event) => setMemory(event.target.value)} minLength="12" maxLength="280" placeholder="Ese día en que…" required /></label><div><small>{memory.length} / 280</small><button className="button" disabled={memory.trim().length < 12}>Guardar mi recuerdo</button></div></form>{memoriesError && <p role="status">No pudimos guardar el recuerdo en este dispositivo.</p>}</div><div className="saved-memories" aria-live="polite"><span className="eyebrow">MI MURO AZUL</span>{memories.length ? memories.map((item) => <blockquote key={item.id}><p>“{item.text}”</p><footer>{item.name}</footer><button onClick={() => setMemories(memories.filter((memoryItem) => memoryItem.id !== item.id))}>Eliminar</button></blockquote>) : <div className="wall-empty"><b>Este muro todavía espera tu primera historia.</b><p>Puede ser un partido, una persona o una camiseta.</p></div>}</div></section></div>;
+}
+
+function ArticlePage({ article, saved, onSave, saveError }) {
+  const [message, setMessage] = useState('');
+  async function share() {
+    try { await navigator.clipboard.writeText(window.location.href); setMessage('Enlace copiado. ¡Compártelo con otro azul!'); }
+    catch { setMessage('Copia la dirección del navegador para compartir este artículo.'); }
+  }
+  if (!article) return <div className="page shell empty-state"><h1>No encontramos ese artículo.</h1><RouteLink to="/actualidad">Volver a la actualidad →</RouteLink></div>;
+  return <article className="article-page shell"><RouteLink to="/actualidad" className="back-link">← Volver a actualidad</RouteLink><div className="article-heading"><span className="eyebrow">{article.category} / {article.type}</span><h1 tabIndex="-1">{article.title}</h1><p>{article.excerpt}</p><div>REDACCIÓN EL SENDERO AZUL <span>•</span> {article.date}</div></div><figure><img src={article.image} alt={article.credit} /><figcaption><Credit article={article} /></figcaption></figure><div className="article-content"><div className="article-actions"><button aria-pressed={saved} onClick={() => onSave(article.id)}>{saved ? '♥ Guardado' : '♡ Guardar artículo'}</button><button onClick={share}>Copiar enlace ↗</button></div><p className="feedback" aria-live="polite">{message}{saveError ? ' No pudimos guardar el cambio.' : ''}</p>{article.body.map((paragraph, index) => <p key={index}>{paragraph}</p>)}<aside className="source-box"><b>Sobre esta publicación</b><p>Texto original de El Sendero Azul. {article.type === 'Análisis' ? 'Interpretación editorial basada en los hechos del encuentro.' : 'Información redactada a partir de la fuente indicada.'}</p>{article.source.url ? <a href={article.source.url} target="_blank" rel="noreferrer">{article.source.label} ↗</a> : <span>{article.source.label}</span>}</aside><h2>Sigue por el Sendero</h2>{articles.filter((item) => item.id !== article.id).slice(0, 3).map((item) => <ArticleLink key={item.id} article={item} className="related-link" />)}</div></article>;
 }
 
 function App() {
-  const [query, setQuery] = useState('');
-  const [category, setCategory] = useState('Todo');
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const categories = ['Todo', ...new Set(stories.map((story) => story.category))];
-  const visibleStories = useMemo(() => stories.filter((story) => {
-    const matchesCategory = category === 'Todo' || story.category === category;
-    const haystack = `${story.title} ${story.excerpt} ${story.category}`.toLowerCase();
-    return matchesCategory && haystack.includes(query.toLowerCase());
-  }), [query, category]);
-
-  const featured = visibleStories.find((story) => story.featured) || visibleStories[0];
-  const secondary = visibleStories.filter((story) => story.id !== featured?.id);
-
-  return (
-    <div className="app-shell">
-      <div className="score-strip">
-        <div className="container score-inner">
-          <span className="live-pill">FINALIZADO</span>
-          <strong>TRIUNFO AZUL</strong>
-          <span>La Serena</span><span className="score-vs">0 – 3</span><span>U. de Chile</span>
-          <span className="score-date">Dom. 13 Sep · 15:00</span>
-          <span className="score-place">La Portada</span>
-        </div>
-      </div>
-
-      <header className="site-header">
-        <div className="container header-main">
-          <a className="brand" href="#inicio" aria-label="El Sendero Azul, inicio">
-            <img src="/assets/logo-sendero.png" alt="Logo El Sendero Azul" />
-            <div>
-              <span className="brand-kicker">MÁS QUE UNA PASIÓN</span>
-              <span className="brand-name">EL SENDERO <b>AZUL</b></span>
-            </div>
-          </a>
-          <button className="menu-button" onClick={() => setMenuOpen((v) => !v)} aria-label="Abrir menú">☰</button>
-          <nav className={menuOpen ? 'main-nav open' : 'main-nav'}>
-            <a href="#noticias">Noticias</a>
-            <a href="#partidos">Partidos</a>
-            <a href="#tabla">Tabla</a>
-            <a href="#videos">Videos</a>
-            <a href="#historia">Historia</a>
-          </nav>
-          <div className="header-actions">
-            <label className="search-box">
-              <span>⌕</span>
-              <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar en El Sendero…" />
-            </label>
-            <button className="cta">Suscríbete</button>
-          </div>
-        </div>
-      </header>
-
-      <div className="breaking">
-        <div className="container breaking-inner">
-          <span className="breaking-label">ÚLTIMO</span>
-          <div className="ticker"><span>{quickNews.join('  ·  ')}</span></div>
-        </div>
-      </div>
-
-      <main id="inicio">
-        <section className="hero-section" id="noticias">
-          <div className="container">
-            <div className="section-heading">
-              <div>
-                <span className="eyebrow">ACTUALIDAD AZUL</span>
-                <h1>Todo lo que pasa alrededor de la U</h1>
-              </div>
-              <div className="category-tabs" role="tablist">
-                {categories.map((item) => (
-                  <button key={item} className={category === item ? 'active' : ''} onClick={() => setCategory(item)}>{item}</button>
-                ))}
-              </div>
-            </div>
-
-            {featured ? (
-              <div className="news-layout">
-                <article className="hero-card">
-                  <img src={featured.image} alt={featured.imageAlt || ''} />
-                  <div className="hero-gradient" />
-                  <div className="hero-copy">
-                    <span className="story-tag">{featured.category}</span>
-                    <h2>{featured.title}</h2>
-                    <p>{featured.excerpt}</p>
-                    <div className="story-meta"><span>{featured.time}</span><span>·</span><span>Nacho Díaz</span></div>
-                    {featured.imageCredit && <a className="photo-credit" href={featured.imageSource} target="_blank" rel="noopener noreferrer">{featured.imageCredit}</a>}
-                  </div>
-                </article>
-
-                <div className="side-stories">
-                  {secondary.slice(0, 3).map((story) => (
-                    <article className="side-story" key={story.id}>
-                      <img src={story.image} alt={story.imageAlt || ''} />
-                      <div>
-                        <span className="small-tag">{story.category}</span>
-                        <h3>{story.title}</h3>
-                        <span className="story-time">{story.time}</span>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </div>
-            ) : <div className="empty-state">No encontramos noticias con ese filtro.</div>}
-          </div>
-        </section>
-
-        <section className="match-section" id="partidos">
-          <div className="container match-grid">
-            <div className="match-card">
-              <div className="match-title-row">
-                <div><span className="eyebrow light">FECHA 23 · LIGA DE PRIMERA</span><h2>¡Triunfo de visita!</h2></div>
-                <span className="match-status">FINALIZADO</span>
-              </div>
-              <div className="teams">
-                <div className="team"><div className="crest rival">LS</div><strong>La Serena</strong><span>Local</span></div>
-                <div className="kickoff"><span>DOM 13 SEP</span><b>0 – 3</b><small>Estadio La Portada</small></div>
-                <div className="team"><img src="/assets/logo-sendero.png" alt="" /><strong>U. de Chile</strong><span>Visita</span></div>
-              </div>
-              <div className="match-footer">
-                <span>La U ganó 3–0 en La Portada. ¡Vamos los azules!</span>
-                <a href="#noticias">Ver noticia →</a>
-              </div>
-            </div>
-
-            <aside className="coach-card">
-              <img src="/assets/nacho.png" alt="Conductor de El Sendero Azul" />
-              <div className="coach-overlay" />
-              <div className="coach-copy"><span>EL SENDERO AZUL</span><h3>Opinión, identidad y fútbol</h3><p>Un espacio hecho por hinchas para conversar de la U sin corbata.</p></div>
-            </aside>
-          </div>
-        </section>
-
-        <section className="content-section">
-          <div className="container content-grid">
-            <div>
-              <div className="section-title-row"><h2>Últimas noticias</h2><a href="#noticias">Ver todas →</a></div>
-              <div className="latest-list">
-                {stories.map((story, index) => (
-                  <article className="latest-item" key={story.id}>
-                    <span className="latest-number">0{index + 1}</span>
-                    <img src={story.image} alt={story.imageAlt || ''} />
-                    <div><span className="small-tag">{story.category}</span><h3>{story.title}</h3><p>{story.excerpt}</p><span className="story-time">{story.time}</span></div>
-                  </article>
-                ))}
-              </div>
-            </div>
-
-            <aside className="sidebar">
-              <div className="panel" id="tabla">
-                <div className="panel-head"><h3>Tabla 2026</h3><span>PTS</span></div>
-                {table.map(([pos, team, pts, diff]) => (
-                  <div className={team === 'U. de Chile' ? 'table-row highlight' : 'table-row'} key={team}>
-                    <span>{pos}</span><strong>{team}</strong><small>{diff}</small><b>{pts}</b>
-                  </div>
-                ))}
-                <button className="panel-link">Ver tabla completa</button>
-              </div>
-
-              <div className="panel popular-panel">
-                <div className="panel-head"><h3>Lo más leído</h3></div>
-                {quickNews.map((item, idx) => <a href="#noticias" key={item}><span>{idx + 1}</span>{item}</a>)}
-              </div>
-            </aside>
-          </div>
-        </section>
-
-        <section className="video-section" id="videos">
-          <div className="container">
-            <div className="section-title-row inverse"><div><span className="eyebrow light">EL SENDERO TV</span><h2>Videos y análisis</h2></div><button className="ghost-btn">Ir a YouTube ↗</button></div>
-            <div className="video-grid">
-              {[['/assets/chile2.png','La pelea por el Chile 2'],['/assets/formacion.png','La formación que prepara la U'],['/assets/previa.png','La previa: La Serena vs. la U']].map(([img,title]) => (
-                <article className="video-card" key={title}><div className="video-thumb"><img src={img} alt=""/><span className="play">▶</span></div><h3>{title}</h3><p>Debate · Análisis · Comunidad</p></article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="history-section" id="historia">
-          <div className="container history-card">
-            <div><span className="eyebrow">IDENTIDAD</span><h2>La U es fútbol, historia y pueblo</h2><p>Un archivo visual y editorial para recordar partidos, figuras, campañas e historias que construyen la cultura azul.</p><button className="dark-btn">Explorar historia →</button></div>
-            <img src="/assets/tifo.png" alt="Hinchas de Universidad de Chile en el estadio" />
-          </div>
-        </section>
-      </main>
-
-      <footer>
-        <div className="container footer-grid">
-          <div className="footer-brand"><img src="/assets/logo-sendero.png" alt=""/><div><strong>EL SENDERO AZUL</strong><span>Fútbol · Comunidad · Identidad</span></div></div>
-          <div><b>Secciones</b><a href="#noticias">Noticias</a><a href="#partidos">Partidos</a><a href="#tabla">Tabla</a></div>
-          <div><b>Canal</b><a href="#videos">Videos</a><a href="#historia">Historia</a><a href="#inicio">Nosotros</a></div>
-          <div className="newsletter"><b>Newsletter azul</b><p>Recibe lo importante de la U, sin ruido.</p><div><input placeholder="tu@email.cl"/><button>→</button></div></div>
-        </div>
-        <div className="container footer-bottom"><span>© 2026 El Sendero Azul</span><span>Sitio editorial independiente de hinchas.</span></div>
-      </footer>
-    </div>
-  );
+  const [route, setRoute] = useState(getRoute);
+  const [saved, setSaved, saveError] = useStored('sendero-saved-v1', []);
+  const articleId = route.startsWith('/articulo/') ? route.slice('/articulo/'.length) : null;
+  const article = articles.find((item) => item.id === articleId);
+  useEffect(() => { const handleRoute = () => setRoute(getRoute()); window.addEventListener('hashchange', handleRoute); return () => window.removeEventListener('hashchange', handleRoute); }, []);
+  useEffect(() => {
+    const titles = { '/': 'El Sendero Azul | La casa del hincha', '/actualidad': 'Actualidad | El Sendero Azul', '/datos': 'Partido & data | El Sendero Azul', '/memoria': 'Memoria azul | El Sendero Azul', '/comunidad': 'La tribuna | El Sendero Azul' };
+    document.title = article ? `${article.title} | El Sendero Azul` : titles[route] || 'El Sendero Azul';
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [route, article]);
+  const toggleSave = (id) => setSaved(saved.includes(id) ? saved.filter((item) => item !== id) : [...saved, id]);
+  let page;
+  if (articleId) page = <ArticlePage article={article} saved={saved.includes(articleId)} onSave={toggleSave} saveError={saveError} />;
+  else if (route === '/actualidad') page = <NewsPage saved={saved} onSave={toggleSave} saveError={saveError} />;
+  else if (route === '/datos') page = <DataPage />;
+  else if (route === '/memoria') page = <MemoryPage saved={saved} onSave={toggleSave} />;
+  else if (route === '/comunidad') page = <CommunityPage />;
+  else page = <HomePage saved={saved} onSave={toggleSave} />;
+  return <><a className="skip-link" href="#main">Saltar al contenido</a><Header route={route} /><main id="main">{page}</main><Footer /></>;
 }
 
 createRoot(document.getElementById('root')).render(<React.StrictMode><App /></React.StrictMode>);

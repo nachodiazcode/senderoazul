@@ -1,0 +1,105 @@
+export const articles = [
+  {
+    "id": "goleada-en-la-portada",
+    "category": "Primer equipo",
+    "title": "Tres goles. Una sola alegría. La U se impone en La Portada.",
+    "excerpt": "Arce, Hormazábal y Lichnovsky firmaron el 3–0 ante La Serena. Una segunda mitad para volver a casa con el pecho inflado.",
+    "image": "/assets/u-la-serena-accion.jpg",
+    "credit": "Foto de archivo · @udechile vía La Tercera · 28/09/2025",
+    "creditUrl": "https://www.latercera.com/el-deportivo/noticia/en-vivo-la-u-visita-a-la-serena-en-un-duelo-pendiente-de-la-liga-de-primera/",
+    "date": "13 SEP 2026",
+    "type": "Crónica",
+    "source": {
+      "label": "AS · seguimiento del partido, 13/09/2026 (texto proporcionado a la redacción)",
+      "url": null
+    },
+    "body": [
+      "La hinchada azul tiene motivos para celebrar. Universidad de Chile ganó 3–0 en su visita a Deportes La Serena por la fecha 23. El marcador se construyó después del descanso, cuando el equipo de Fernando Gago encontró los goles que habían faltado en una primera mitad disputada.",
+      "El cero inicial también tuvo trabajo defensivo. Gabriel Castellón respondió ante Ángelo Henríquez y Nicolás Fernández apareció para evitar otra ocasión del delantero. La U tuvo sus opciones con Juan Martín Lucero y Fabián Hormazábal, pero llegó al entretiempo sin conseguir la ventaja.",
+      "Agustín Arce cambió el partido apenas comenzó el complemento. A los 46 minutos, aprovechó una pérdida en la salida granate y convirtió con un remate de izquierda. A los 54, Maximiliano Guerrero avanzó por la derecha y asistió a Hormazábal: el lateral resolvió de taco para ampliar la diferencia.",
+      "La Serena buscó volver al partido con Diego Rubio. Una de sus llegadas obligó a Igor Lichnovsky a despejar sobre la línea, una intervención decisiva para conservar el arco en cero. El central, que había entrado en el segundo tiempo, terminó siendo protagonista en ambas áreas.",
+      "En el tercer minuto de descuento, Lichnovsky marcó de cabeza el 3–0 definitivo. Tres goleadores distintos y una victoria que lleva a la U a 42 puntos, igualando la cifra de Universidad Católica informada antes del encuentro. La posición exacta depende de los criterios de desempate y del resto de la fecha.",
+      "La Portada dejó una celebración merecida. Hubo dificultades, respuestas y un segundo tiempo efectivo: razones suficientes para que el regreso se sienta mucho más corto. ¡Vamos la U!"
+    ]
+  },
+  {
+    "id": "claves-del-triunfo",
+    "category": "Análisis",
+    "title": "La goleada también se sostuvo en el área propia",
+    "excerpt": "Dos goles rápidos y una intervención sobre la línea: las acciones que explican el resultado más allá del 3–0.",
+    "image": "/assets/formacion.png",
+    "credit": "Ilustración editorial de archivo · no corresponde al once del partido",
+    "date": "13 SEP 2026",
+    "type": "Análisis",
+    "source": {
+      "label": "AS · seguimiento del partido, 13/09/2026 (texto proporcionado a la redacción)",
+      "url": null
+    },
+    "body": [
+      "El 3–0 puede sugerir una tarde sin sobresaltos. El desarrollo invita a una lectura distinta: Universidad de Chile necesitó resolver situaciones defensivas antes de sacar ventajas en ataque. Las intervenciones de Castellón y Nicolás Fernández en el primer tiempo forman parte de la explicación del triunfo.",
+      "La secuencia de los 46 a los 54 minutos fue el punto de quiebre. Arce castigó una pérdida y Hormazábal aprovechó la acción de Guerrero por la derecha. La U pasó del empate a una diferencia de dos goles en ocho minutos, cambiando las necesidades de ambos equipos.",
+      "El ingreso de Lichnovsky añadió otra respuesta relevante. A los 79 minutos evitó un gol de Rubio sobre la línea; en los descuentos convirtió en el arco contrario. Su aporte resume una tarde en la que defender bien tuvo tanto valor como finalizar las ocasiones.",
+      "Esta lectura se basa en las acciones descritas en el seguimiento del encuentro. Sin una serie completa de remates, posesión o goles esperados del partido terminado, no corresponde atribuir el resultado a un dominio estadístico que no podemos medir. Lo verificable es la efectividad de las acciones decisivas."
+    ]
+  },
+  {
+    "id": "mariano-puyol-capitan",
+    "category": "Cultura azul",
+    "title": "Mariano Puyol: la memoria azul también se lee",
+    "excerpt": "“Simplemente un Capitán”, de Omar Soto Díaz, propone volver a la historia de un referente del club.",
+    "image": "/assets/mariano-puyol-libro.png",
+    "credit": "Material promocional del libro facilitado a El Sendero Azul",
+    "date": "BIBLIOTECA AZUL",
+    "type": "Libros",
+    "source": {
+      "label": "Sitio oficial del libro",
+      "url": "https://marianopuyolcapitan.cl/"
+    },
+    "body": [
+      "El fútbol se cuenta en resultados, pero también en las personas que una hinchada elige recordar. Mariano Puyol: Simplemente un Capitán, de Omar Soto Díaz, pone el foco en uno de esos nombres para Universidad de Chile.",
+      "La presentación oficial del libro recorre su formación en el club, su vínculo con referentes del Ballet Azul y el liderazgo que lo convirtió en una figura reconocible para distintas generaciones. Es una invitación a acercarse a la historia desde una trayectoria personal.",
+      "Para El Sendero Azul, abrir un espacio a los libros significa darle tiempo a conversaciones que no terminan con el pitazo final. Conocer a los jugadores de otras épocas también ayuda a entender las historias que se transmiten en la tribuna y en la familia.",
+      "Esta nota presenta la publicación; no es una reseña de lectura del libro completo. La disponibilidad y las condiciones de compra deben consultarse directamente en su sitio oficial."
+    ]
+  },
+  {
+    "id": "sudamericana-2011",
+    "category": "Historia",
+    "title": "2011: la noche en que el sueño se volvió continental",
+    "excerpt": "El 14 de diciembre quedó en la memoria de la U: su primera Copa Sudamericana, conquistada de manera invicta.",
+    "image": "/assets/tifo.png",
+    "credit": "Imagen editorial de hinchada · ilustración de archivo",
+    "date": "MEMORIA · 14 DIC 2011",
+    "type": "Archivo",
+    "source": {
+      "label": "Universidad de Chile · recuerdo de la Copa Sudamericana",
+      "url": "https://www.udechile.cl/noticias/news-a-12-anos-de-la-gloria-recordamos-la-inolvidable-noche-donde-obtuvimos-la-copa-sudamericana"
+    },
+    "body": [
+      "Hay fechas que se recuerdan sin mirar el calendario. Para la U, el 14 de diciembre de 2011 pertenece a esa categoría. Fue el día de su primer título internacional, la Copa Sudamericana, con un equipo dirigido por Jorge Sampaoli.",
+      "Johnny Herrera, José Rojas, Marcelo Díaz, Charles Aránguiz y Eduardo Vargas forman parte de aquella generación. El recorrido continental llevó al equipo a enfrentar rivales como Nacional, Flamengo, Arsenal y Vasco da Gama antes de la final contra Liga de Quito.",
+      "La victoria en la primera final, con gol de Vargas, dejó la definición encaminada para Santiago. El Nacional recibió la vuelta con la expectativa de una oportunidad histórica. La conquista cerró una campaña invicta y pasó a ser una referencia compartida por el pueblo azul.",
+      "Recordar ese equipo también es recordar con quién vimos la final, dónde gritamos los goles y a quién abrazamos. Esa dimensión de la historia no aparece en una ficha del partido, pero acompaña cada aniversario. ¿Cuál es tu primer recuerdo de aquella noche?"
+    ]
+  },
+  {
+    "id": "99-anos-de-identidad",
+    "category": "Historia",
+    "title": "99 años de la U: una historia que pasa de mano en mano",
+    "excerpt": "Del origen universitario al Ballet Azul y las nuevas generaciones: los hitos de una identidad compartida.",
+    "image": "/assets/hinchada.png",
+    "credit": "Imagen editorial de hinchada · ilustración de archivo",
+    "date": "MEMORIA · 24 MAY 2026",
+    "type": "Identidad",
+    "source": {
+      "label": "Universidad de Chile · aniversario número 99",
+      "url": "https://www.udechile.cl/noticias/99-anos-de-historia-azul-este-domingo-universidad-de-chile-celebra-un-nuevo-aniversario"
+    },
+    "body": [
+      "Universidad de Chile cumplió 99 años el 24 de mayo de 2026. La conmemoración del club recuerda un origen ligado a la vida estudiantil y la creación del Club Universitario de Deportes en 1927. El nombre Universidad de Chile se adoptó en 1934.",
+      "El debut profesional llegó en 1938 y el primer campeonato en 1940. Después, el Ballet Azul convirtió a figuras como Sergio Navarro, Braulio Musso, Carlos Campos y Leonel Sánchez en referencias de la institución.",
+      "La celebración de 1994, con nombres como Luis Musrri, Sergio Vargas y Marcelo Salas, abrió otro capítulo. Años después, la Copa Sudamericana de 2011 extendió esa memoria a una nueva generación de hinchas.",
+      "Los aniversarios permiten mirar ese recorrido sin reducirlo a una colección de trofeos. Cada familia tiene un jugador, un viaje o un partido que explica su relación con la U. El desafío del centenario será también hacer espacio para esas historias."
+    ]
+  }
+];
