@@ -2,24 +2,24 @@ export const articles = [
   {
     "id": "goleada-en-la-portada",
     "category": "Primer equipo",
-    "title": "Tres goles. Una sola alegría. La U se impone en La Portada.",
-    "excerpt": "Arce, Hormazábal y Lichnovsky firmaron el 3–0 ante La Serena. Una segunda mitad para volver a casa con el pecho inflado.",
-    "image": "/assets/u-la-serena-accion.jpg",
-    "credit": "Foto de archivo · @udechile vía La Tercera · 28/09/2025",
-    "creditUrl": "https://www.latercera.com/el-deportivo/noticia/en-vivo-la-u-visita-a-la-serena-en-un-duelo-pendiente-de-la-liga-de-primera/",
+    "title": "La U golpea en La Portada y se trae un 3–0 para seguir arriba",
+    "excerpt": "Arce, Hormazábal y Lichnovsky sellaron una victoria visitante que se armó en el segundo tiempo y deja a la U con impulso para la Copa Chile.",
+    "image": "/assets/triunfo-la-portada-2026.jpg",
+    "credit": "Foto: Club Universidad de Chile · Triunfo en La Portada · 13/09/2026",
+    "creditUrl": "https://www.udechile.cl/search",
     "date": "13 SEP 2026",
     "type": "Crónica",
     "source": {
-      "label": "AS · seguimiento del partido, 13/09/2026 (texto proporcionado a la redacción)",
-      "url": null
+      "label": "Club Universidad de Chile · crónica oficial del 13/09/2026",
+      "url": "https://www.udechile.cl/search"
     },
     "body": [
       "La hinchada azul tiene motivos para celebrar. Universidad de Chile ganó 3–0 en su visita a Deportes La Serena por la fecha 23. El marcador se construyó después del descanso, cuando el equipo de Fernando Gago encontró los goles que habían faltado en una primera mitad disputada.",
       "El cero inicial también tuvo trabajo defensivo. Gabriel Castellón respondió ante Ángelo Henríquez y Nicolás Fernández apareció para evitar otra ocasión del delantero. La U tuvo sus opciones con Juan Martín Lucero y Fabián Hormazábal, pero llegó al entretiempo sin conseguir la ventaja.",
-      "Agustín Arce cambió el partido apenas comenzó el complemento. A los 46 minutos, aprovechó una pérdida en la salida granate y convirtió con un remate de izquierda. A los 54, Maximiliano Guerrero avanzó por la derecha y asistió a Hormazábal: el lateral resolvió de taco para ampliar la diferencia.",
+      "Agustín Arce cambió el partido apenas comenzó el complemento. A los 47 minutos, aprovechó una mala salida local y definió de zurda para abrir la cuenta. Siete minutos después, Maximiliano Guerrero encontró a Fabián Hormazábal por la derecha y el lateral sorprendió con un taco para estirar la ventaja.",
       "La Serena buscó volver al partido con Diego Rubio. Una de sus llegadas obligó a Igor Lichnovsky a despejar sobre la línea, una intervención decisiva para conservar el arco en cero. El central, que había entrado en el segundo tiempo, terminó siendo protagonista en ambas áreas.",
-      "En el tercer minuto de descuento, Lichnovsky marcó de cabeza el 3–0 definitivo. Tres goleadores distintos y una victoria que lleva a la U a 42 puntos, igualando la cifra de Universidad Católica informada antes del encuentro. La posición exacta depende de los criterios de desempate y del resto de la fecha.",
-      "La Portada dejó una celebración merecida. Hubo dificultades, respuestas y un segundo tiempo efectivo: razones suficientes para que el regreso se sienta mucho más corto. ¡Vamos la U!"
+      "En el cuarto minuto de descuento, un córner servido por Guerrero encontró a Igor Lichnovsky en el aire. El cabezazo del central puso el 3–0 y desató la celebración visitante.",
+      "El triunfo entrega confianza para preparar los octavos de final de Copa Chile: la U visitará a Everton el jueves 24, a las 20:00, en el Estadio Sausalito. La Portada queda como una tarde de carácter, eficacia y arco en cero. ¡Vamos la U!"
     ]
   },
   {
