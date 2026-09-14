@@ -9,6 +9,7 @@ const navItems = [
   ['/datos', 'Partido & data'],
   ['/memoria', 'Memoria'],
   ['/comunidad', 'La tribuna'],
+  ['/soy-dt', 'Soy DT'],
 ];
 
 const quiz = [
@@ -16,6 +17,41 @@ const quiz = [
   { q: '¿En qué año ganó la U su primer campeonato profesional?', options: ['1938', '1940', '1959'], correct: '1940', why: 'El debut profesional fue en 1938; el primer título llegó en 1940.' },
   { q: '¿Quién dirigía a la U campeona de la Sudamericana?', options: ['Jorge Sampaoli', 'Martín Lasarte', 'Fernando Gago'], correct: 'Jorge Sampaoli', why: 'Jorge Sampaoli estaba al frente del equipo campeón de 2011.' },
 ];
+
+const dtPlayers = [
+  { id: 'castellon', name: 'Gabriel Castellón', short: 'Castellón', role: 'POR', rating: 82, points: 86, note: 'Arco en cero' },
+  { id: 'ramirez', name: 'Nicolás Ramírez', short: 'N. Ramírez', role: 'DFC', rating: 78, points: 74, note: 'Cierre y anticipo' },
+  { id: 'zaldivia', name: 'Matías Zaldivia', short: 'Zaldivia', role: 'DFC', rating: 80, points: 79, note: 'Liderazgo' },
+  { id: 'tamayo', name: 'Bianneider Tamayo', short: 'Tamayo', role: 'DFC', rating: 76, points: 72, note: 'Duelos ganados' },
+  { id: 'hormazabal', name: 'Fabián Hormazábal', short: 'Hormazábal', role: 'MED', rating: 84, points: 92, note: 'Gol de taco' },
+  { id: 'poblete', name: 'Israel Poblete', short: 'Poblete', role: 'MED', rating: 79, points: 77, note: 'Equilibrio' },
+  { id: 'reinhart', name: 'Tobías Reinhart', short: 'Reinhart', role: 'MED', rating: 77, points: 74, note: 'Recorrido' },
+  { id: 'guerrero', name: 'Maximiliano Guerrero', short: 'Guerrero', role: 'MED', rating: 83, points: 88, note: 'Asistencia' },
+  { id: 'reyna', name: 'Gonzalo Reyna', short: 'Reyna', role: 'DEL', rating: 75, points: 71, note: 'Presión alta' },
+  { id: 'vargas', name: 'Eduardo Vargas', short: 'E. Vargas', role: 'DEL', rating: 85, points: 84, note: 'Experiencia' },
+  { id: 'arce', name: 'Agustín Arce', short: 'Arce', role: 'DEL', rating: 86, points: 96, note: 'Gol y desborde' },
+  { id: 'aranguiz', name: 'Charles Aránguiz', short: 'Aránguiz', role: 'MED', rating: 84, points: 83, note: 'Pase vertical' },
+  { id: 'altamirano', name: 'Javier Altamirano', short: 'Altamirano', role: 'MED', rating: 80, points: 78, note: 'Cambio de ritmo' },
+  { id: 'fernandez', name: 'Nicolás Fernández', short: 'N. Fernández', role: 'DFC', rating: 78, points: 76, note: 'Velocidad' },
+  { id: 'morales', name: 'Marcelo Morales', short: 'Morales', role: 'MED', rating: 77, points: 73, note: 'Proyección' },
+  { id: 'lucero', name: 'Juan Martín Lucero', short: 'Lucero', role: 'DEL', rating: 81, points: 80, note: 'Juego aéreo' },
+];
+
+const dtSlots = [
+  { key: 'POR', label: 'Arquero' },
+  { key: 'DFC-1', label: 'Central' },
+  { key: 'DFC-2', label: 'Central' },
+  { key: 'DFC-3', label: 'Central' },
+  { key: 'MED-1', label: 'Volante' },
+  { key: 'MED-2', label: 'Volante' },
+  { key: 'MED-3', label: 'Volante' },
+  { key: 'MED-4', label: 'Volante' },
+  { key: 'DEL-1', label: 'Delantero' },
+  { key: 'DEL-2', label: 'Delantero' },
+  { key: 'DEL-3', label: 'Delantero' },
+];
+
+const initialLineup = ['castellon', 'ramirez', 'zaldivia', 'tamayo', 'hormazabal', 'poblete', 'reinhart', 'guerrero', 'reyna', 'vargas', 'arce'];
 
 const getRoute = () => {
   const hash = window.location.hash.replace(/^#/, '') || '/';
@@ -48,7 +84,7 @@ function Brand() {
 
 function Header({ route }) {
   const [open, setOpen] = useState(false);
-  return <><div className="topline"><div className="shell"><span>UN MEDIO INDEPENDIENTE. UN MISMO SENTIMIENTO.</span><span>SANTIAGO, CHILE <b>•</b> EDICIÓN 13 SEP 2026</span></div></div><header className="site-header"><div className="shell header-row"><Brand /><button className="menu-toggle" aria-label="Abrir navegación" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? '×' : '☰'}</button><nav className={open ? 'open' : ''} aria-label="Principal">{navItems.map(([path, label]) => <RouteLink key={path} to={path} className={route === path ? 'active' : ''} onClick={() => setOpen(false)}>{label}</RouteLink>)}</nav><RouteLink to="/comunidad" className="button header-cta">Soy del Sendero ↗</RouteLink></div></header></>;
+  return <><div className="topline"><div className="shell"><span>UN MEDIO INDEPENDIENTE. UN MISMO SENTIMIENTO.</span><span>SANTIAGO, CHILE <b>•</b> EDICIÓN 13 SEP 2026</span></div></div><header className="site-header"><div className="shell header-row"><Brand /><button className="menu-toggle" aria-label="Abrir navegación" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? '×' : '☰'}</button><nav className={open ? 'open' : ''} aria-label="Principal">{navItems.map(([path, label]) => <RouteLink key={path} to={path} className={route === path ? 'active' : ''} onClick={() => setOpen(false)}>{label}</RouteLink>)}</nav><RouteLink to="/soy-dt" className="button header-cta">Arma tu once ↗</RouteLink></div></header></>;
 }
 
 function Footer() {
@@ -130,6 +166,60 @@ function DataPage() {
   return <div className="page shell"><div className="page-heading data-heading"><span className="eyebrow">PARTIDO & DATA</span><h1>La alegría<br />tiene marcador.</h1><p>Los momentos que explican el 3–0 de la U en La Portada.</p></div><div className="data-hero"><ScorePanel /><div className="data-cards"><article><strong>42</strong><h3>Puntos de la U</h3><p>39 antes del encuentro más los tres puntos del triunfo.</p></article><article><strong>8<small>min</small></strong><h3>Para cambiar la tarde</h3><p>Entre el primer gol de Arce y el segundo de Hormazábal.</p></article><article><strong>3</strong><h3>Goleadores distintos</h3><p>Arce, Hormazábal y Lichnovsky construyeron la victoria.</p></article><article><strong>0</strong><h3>Goles recibidos</h3><p>Castellón, Fernández y Lichnovsky protegieron el arco.</p></article></div></div><section className="match-story"><SectionTitle eyebrow="LA PELÍCULA DEL PARTIDO" title="Noventa minutos en cuatro escenas." /><div className="event-list"><article><span>25′–28′</span><div><b>La U resiste</b><p>Castellón responde y Nicolás Fernández evita una apertura granate.</p></div></article><article><span>47′</span><div><b>Arce rompe el cero</b><p>Recuperación alta, entrada al área y zurdazo cruzado para el 1–0.</p></div></article><article><span>54′</span><div><b>Hormazábal inventa una definición</b><p>Guerrero desborda por la derecha y el lateral convierte de taco.</p></div></article><article><span>79′–90+4′</span><div><b>Lichnovsky en las dos áreas</b><p>Primero salva sobre la línea; después cierra la goleada de cabeza.</p></div></article></div></section><div className="data-disclaimer"><b>Cómo trabajamos estos datos</b><p>Corte: final del partido del 13/09/2026. Minutos y acciones tomados del seguimiento de AS proporcionado a la redacción. No inventamos posesión, remates ni métricas avanzadas que no podamos verificar.</p><ArticleLink article={articles[1]}>Leer el análisis del triunfo →</ArticleLink></div></div>;
 }
 
+function ManagerPage() {
+  const [lineup, setLineup, lineupError] = useStored('sendero-dt-lineup-v1', initialLineup);
+  const [dragging, setDragging] = useState(null);
+  const [selected, setSelected] = useState(null);
+  const [duel, setDuel] = useState(null);
+  const playerById = useMemo(() => Object.fromEntries(dtPlayers.map((player) => [player.id, player])), []);
+  const activeLineup = Array.isArray(lineup) && lineup.length === dtSlots.length ? lineup : initialLineup;
+  const bench = dtPlayers.filter((player) => !activeLineup.includes(player.id));
+  const roleFit = activeLineup.reduce((sum, playerId, index) => {
+    const player = playerById[playerId];
+    const slotRole = dtSlots[index].key.split('-')[0];
+    return sum + (player?.role === slotRole ? 1 : 0);
+  }, 0);
+  const totalPoints = activeLineup.reduce((sum, playerId) => sum + (playerById[playerId]?.points || 0), 0) + roleFit * 2;
+  const rivalPoints = 846;
+
+  function placePlayer(index, playerId) {
+    if (!playerId || !playerById[playerId]) return;
+    const next = [...activeLineup];
+    const existingIndex = next.indexOf(playerId);
+    if (existingIndex !== -1) {
+      [next[index], next[existingIndex]] = [next[existingIndex], next[index]];
+    } else {
+      next[index] = playerId;
+    }
+    setLineup(next);
+    setSelected(null);
+    setDuel(null);
+  }
+
+  function handleSlotClick(index) {
+    if (selected?.startsWith('bench:')) placePlayer(index, selected.slice(6));
+    else if (selected?.startsWith('lineup:')) placePlayer(index, activeLineup[Number(selected.slice(7))]);
+    else setSelected(`lineup:${index}`);
+  }
+
+  function handleDrop(index) {
+    if (!dragging) return;
+    if (dragging.startsWith('bench:')) placePlayer(index, dragging.slice(6));
+    else if (dragging.startsWith('lineup:')) placePlayer(index, activeLineup[Number(dragging.slice(7))]);
+    setDragging(null);
+  }
+
+  function resetLineup() {
+    setLineup(initialLineup);
+    setSelected(null);
+    setDuel(null);
+  }
+
+  const playerCard = (player, origin, index) => <div className={`dt-player ${selected === `${origin}:${index}` ? 'selected' : ''}`} draggable onDragStart={() => setDragging(`${origin}:${index}`)} onDragEnd={() => setDragging(null)} onClick={(event) => { event.stopPropagation(); setSelected(`${origin}:${index}`); }} role="button" tabIndex="0" onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelected(`${origin}:${index}`); } }}><span className="dt-rating">{player.rating}</span><span className="dt-player-name">{player.short}</span><small>{player.role} · {player.note}</small></div>;
+
+  return <div className="page manager-page"><section className="shell manager-heading"><div><span className="eyebrow">SOY DT · COPA CHILE</span><h1>Arma tu once.<br /><em>Defiende la U.</em></h1><p>Elige tu 3–4–3 para el próximo partido ante Everton. Arrastra a cada jugador, ajusta tu idea y compite contra otro hincha.</p></div><div className="manager-heading-art"><img src="/assets/formacion-3-4-3-analisis.png" alt="Pizarra táctica azul con formación 3-4-3" /><span>LA PIZARRA<br />ES TUYA</span></div></section><section className="shell manager-layout"><div className="manager-main"><div className="manager-toolbar"><div><span className="eyebrow">TU PIZARRA</span><h2>Once titular · 3–4–3</h2></div><div className="manager-score"><small>VALORACIÓN</small><strong>{totalPoints}</strong><span>{roleFit}/11 posiciones naturales</span></div></div><p className="manager-help">Arrastra una carta al campo o selecciónala y toca una posición. Los puntos combinan rendimiento, forma y encaje táctico.</p><div className="football-pitch" aria-label="Campo para armar la formación titular">{dtSlots.map((slot, index) => <div key={slot.key} className={`pitch-slot slot-${index} ${selected === `lineup:${index}` ? 'targeted' : ''}`} onDragOver={(event) => event.preventDefault()} onDrop={() => handleDrop(index)} onClick={() => handleSlotClick(index)}><span className="slot-label">{slot.label}</span>{activeLineup[index] ? playerCard(playerById[activeLineup[index]], 'lineup', index) : <span className="empty-slot">+</span>}</div>)}</div><div className="manager-actions"><button className="button" onClick={() => setDuel({ user: totalPoints, rival: rivalPoints })}>Jugar el duelo ↗</button><button className="text-button" onClick={resetLineup}>Restablecer once</button>{lineupError && <small>No pudimos guardar tu once en este dispositivo.</small>}</div></div><aside className="manager-sidebar"><div className="bench-panel"><div className="bench-head"><div><span className="eyebrow">BANCA</span><h3>Opciones para cambiar el partido</h3></div><span>{bench.length} jugadores</span></div><div className="bench-list">{bench.map((player, index) => <div key={player.id} draggable onDragStart={() => setDragging(`bench:${player.id}`)} onDragEnd={() => setDragging(null)} onClick={() => setSelected(`bench:${player.id}`)} className={`bench-player ${selected === `bench:${player.id}` ? 'selected' : ''}`} role="button" tabIndex="0"><span className="bench-number">{String(index + 1).padStart(2, '0')}</span><span><b>{player.name}</b><small>{player.role} · {player.note}</small></span><strong>{player.points}</strong></div>)}</div><p className="bench-tip">Consejo: un jugador fuera de su posición pierde parte del bonus táctico.</p></div><div className="duel-panel"><span className="eyebrow">RANKING DE LA FECHA</span><h3>¿Tu lectura supera a la de otro azul?</h3><p>Enfrenta tu valoración contra <b>El Bulla 1902</b>, un rival generado para esta fecha.</p>{duel ? <div className="duel-result"><div><small>TU ONCE</small><strong>{duel.user}</strong></div><span>vs</span><div><small>EL BULLA 1902</small><strong>{duel.rival}</strong></div><b className={duel.user >= duel.rival ? 'win' : 'loss'}>{duel.user >= duel.rival ? '¡Ganaste el duelo! 🔵' : 'El rival se impuso. Ajusta tu pizarra.'}</b></div> : <div className="duel-empty">Juega el duelo cuando sientas que tu once está listo.</div>}</div></aside></section><section className="shell manager-footnote"><span>PROTOTIPO JUGABLE</span><p>Tu once y tu resultado se guardan en este navegador. El ranking entre usuarios queda listo para conectar a una base de datos cuando quieras convertirlo en competencia real.</p></section></div>;
+}
+
 function MemoryPage({ saved, onSave }) {
   const memoryArticles = articles.filter((article) => ['Historia', 'Cultura azul'].includes(article.category));
   return <div className="page"><section className="memory-hero shell"><div className="memory-image"><img src="/assets/hinchada.png" alt="Arte editorial de una hinchada azul" /><span>NO ES SOLO<br />FÚTBOL.</span></div><div className="memory-intro"><span className="eyebrow">EL AZUL SE HEREDA</span><h1>Antes de nosotros.<br />Después de nosotros.<br /><em>Siempre la U.</em></h1><p>Un club vive en las historias que te contaron, en la primera camiseta y en ese abrazo que todavía recuerdas.</p></div></section><section className="shell timeline-section"><SectionTitle eyebrow="UN SENDERO DE CASI UN SIGLO" title="Hitos que nos trajeron hasta acá." /><div className="history-timeline"><article><b>1927</b><span>El origen</span><p>Nace el Club Universitario de Deportes, raíz institucional de Universidad de Chile.</p></article><article><b>1940</b><span>Primera estrella</span><p>La U conquista su primer campeonato profesional.</p></article><article><b>1960s</b><span>El Ballet Azul</span><p>Una generación transforma al club en protagonista y símbolo popular.</p></article><article><b>1994</b><span>Volver a celebrar</span><p>Tras 25 años, la U se corona con una generación inolvidable.</p></article><article><b>2011</b><span>América es azul</span><p>La Copa Sudamericana llega de forma invicta y cambia la escala del sueño.</p></article><article><b>2027</b><span>El centenario</span><p>La historia continúa con una comunidad que ya mira hacia sus cien años.</p></article></div><p className="data-note">Fuente histórica: Club Universidad de Chile. El centenario corresponde al cumplimiento de 100 años desde 1927.</p></section><section className="shell memory-reading"><SectionTitle eyebrow="ARCHIVO DEL SENDERO" title="Leer también es recordar." /><div className="news-grid memory-grid">{memoryArticles.map((article) => <NewsCard key={article.id} article={article} saved={saved.includes(article.id)} onSave={onSave} />)}</div></section><div className="shell"><BookBanner /></div></div>;
@@ -172,7 +262,7 @@ function App() {
   const article = articles.find((item) => item.id === articleId);
   useEffect(() => { const handleRoute = () => setRoute(getRoute()); window.addEventListener('hashchange', handleRoute); return () => window.removeEventListener('hashchange', handleRoute); }, []);
   useEffect(() => {
-    const titles = { '/': 'El Sendero Azul | La casa del hincha', '/actualidad': 'Actualidad | El Sendero Azul', '/datos': 'Partido & data | El Sendero Azul', '/memoria': 'Memoria azul | El Sendero Azul', '/comunidad': 'La tribuna | El Sendero Azul' };
+    const titles = { '/': 'El Sendero Azul | La casa del hincha', '/actualidad': 'Actualidad | El Sendero Azul', '/datos': 'Partido & data | El Sendero Azul', '/memoria': 'Memoria azul | El Sendero Azul', '/comunidad': 'La tribuna | El Sendero Azul', '/soy-dt': 'Soy DT | El Sendero Azul' };
     document.title = article ? `${article.title} | El Sendero Azul` : titles[route] || 'El Sendero Azul';
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [route, article]);
@@ -183,6 +273,7 @@ function App() {
   else if (route === '/datos') page = <DataPage />;
   else if (route === '/memoria') page = <MemoryPage saved={saved} onSave={toggleSave} />;
   else if (route === '/comunidad') page = <CommunityPage />;
+  else if (route === '/soy-dt') page = <ManagerPage />;
   else page = <HomePage saved={saved} onSave={toggleSave} />;
   return <><a className="skip-link" href="#main">Saltar al contenido</a><Header route={route} /><main id="main">{page}</main><Footer /></>;
 }
