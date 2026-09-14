@@ -128,7 +128,7 @@ nav a.active { color: var(--blue); }
 .home-tribuna .eyebrow { color: #c9d9ff; }
 .home-tribuna p { color: #d8e3fa; }
 
-.book-banner { display: flex; align-items: center; gap: 34px; min-height: 205px; margin: 60px 0 0; padding: 25px 38px; border: 1px solid #304566; border-radius: 5px; background: var(--navy); color: white; }
+.book-banner { display: flex; align-items: center; gap: 34px; min-height: 205px; margin: 60px 0; padding: 25px 38px; border: 1px solid #304566; border-radius: 5px; background: var(--navy); color: white; }
 .book-banner > img { width: 115px; height: 160px; object-fit: contain; transform: rotate(-4deg); filter: drop-shadow(10px 10px 10px rgba(0,0,0,.4)); }
 .book-banner > div { flex: 1; }
 .book-banner .eyebrow { color: var(--gold); }
