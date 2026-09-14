@@ -84,7 +84,7 @@ function Brand() {
 
 function Header({ route }) {
   const [open, setOpen] = useState(false);
-  return <><div className="topline"><div className="shell"><span>UN MEDIO INDEPENDIENTE. UN MISMO SENTIMIENTO.</span><span>SANTIAGO, CHILE <b>•</b> EDICIÓN 13 SEP 2026</span></div></div><header className="site-header"><div className="shell header-row"><Brand /><button className="menu-toggle" aria-label="Abrir navegación" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? '×' : '☰'}</button><nav className={open ? 'open' : ''} aria-label="Principal">{navItems.map(([path, label]) => <RouteLink key={path} to={path} className={route === path ? 'active' : ''} onClick={() => setOpen(false)}>{label}</RouteLink>)}</nav><RouteLink to="/soy-dt" className="button header-cta">Arma tu once ↗</RouteLink></div></header></>;
+  return <><div className="topline"><div className="shell"><span>UN MEDIO INDEPENDIENTE. UN MISMO SENTIMIENTO.</span><span>SANTIAGO, CHILE <b>•</b> EDICIÓN 13 SEP 2026</span></div></div><header className="site-header"><div className="shell header-row"><Brand /><button className="menu-toggle" aria-label="Abrir navegación" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? '×' : '☰'}</button><nav className={open ? 'open' : ''} aria-label="Principal">{navItems.map(([path, label]) => <RouteLink key={path} to={path} className={`${route === path ? 'active ' : ''}${path === '/soy-dt' ? 'nav-dt' : ''}`} onClick={() => setOpen(false)}>{label}</RouteLink>)}</nav><RouteLink to="/soy-dt" className="button header-cta">Arma tu once ↗</RouteLink></div></header></>;
 }
 
 function Footer() {
