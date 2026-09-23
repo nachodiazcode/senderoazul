@@ -13,8 +13,6 @@ const navItems = [
   ['/escuelas', 'Escuelas'],
   ['/abonos', 'Abonos'],
   ['/tienda', 'Tienda'],
-  ['/prensa', 'Prensa'],
-  ['/soy-dt', 'Último Minuto'],
 ];
 
 const teamChoices = [
@@ -24,7 +22,7 @@ const teamChoices = [
   { id: 'cobresal', name: 'Cobresal', mark: 'CS', primary: '#c96b2b', navy: '#663313', light: '#f0bd8e', accent: '#e7a42e' },
   { id: 'everton', name: 'Everton', mark: 'EV', primary: '#1c4c9b', navy: '#12346e', light: '#a9c8ff', accent: '#f0c62e' },
   { id: 'palestino', name: 'Palestino', mark: 'PA', primary: '#25835d', navy: '#164e39', light: '#a8d8c0', accent: '#d94a48' },
-  { id: 'deportes-limache', name: 'Deportes Limache', mark: 'DL', primary: '#4c9d50', navy: '#24572b', light: '#bce2b6', accent: '#e3d85b' },
+  { id: 'deportes-limache', name: 'Deportes Limache', mark: 'DL', primary: '#8b1e2d', navy: '#170b10', light: '#d38a94', accent: '#c54854' },
   { id: 'nublense', name: 'Ñublense', mark: 'ÑU', primary: '#c9343b', navy: '#682025', light: '#f2b1b6', accent: '#171c26' },
   { id: 'deportes-concepcion', name: 'Deportes Concepción', mark: 'DC', primary: '#7b4ab6', navy: '#3d266d', light: '#d6bdf2', accent: '#f3ce54' },
   { id: 'la-serena', name: 'Deportes La Serena', mark: 'LS', primary: '#9b2e52', navy: '#4f1830', light: '#e9b7c8', accent: '#74a9dc' },
@@ -420,6 +418,46 @@ function getClubSearchUrl(team) {
   return `https://news.google.com/search?q=${encodeURIComponent(`${team.name} fútbol Chile`)}&hl=es-419&gl=CL&ceid=CL:es-419`;
 }
 
+const clubDirectory = {
+  'u-de-chile': { site: 'https://www.udechile.cl/', shop: 'https://tienda.udechile.cl/', socials: [{ label: 'Instagram', url: 'https://www.instagram.com/udechileoficial/' }, { label: 'X', url: 'https://twitter.com/udechile' }, { label: 'YouTube', url: 'https://www.youtube.com/user/canaludechileoficial' }], fan: 'El Var Azul' },
+  'colo-colo': { site: 'https://www.colocolo.cl/', shop: 'https://tienda.colocolo.cl/', socials: [{ label: 'Instagram', url: 'https://www.instagram.com/colocoloficial/' }, { label: 'X', url: 'https://x.com/ColoColo' }, { label: 'YouTube', url: 'https://www.youtube.com/channel/UC8sRB0-aqDg_Gb08md1bQKg' }], fan: 'Sintonía Alba' },
+  'u-catolica': { site: 'https://cruzados.cl/', shop: 'https://tienda.cruzados.cl/', socials: [{ label: 'Instagram', url: 'https://www.instagram.com/cruzados_oficial/' }], fan: 'Frecuencia Cruzada' },
+  cobresal: { site: 'https://cdcobresal.cl/', fan: '' },
+  everton: { site: 'https://www.everton.cl/', fan: '' },
+  palestino: { site: 'https://palestino.cl/', socials: [{ label: 'Instagram', url: 'https://www.instagram.com/palestino/' }], fan: 'La Voz del Tino' },
+  'deportes-limache': { site: 'https://www.deporteslimache.cl/', fan: '' },
+  nublense: { site: 'https://www.losdiablosrojos.cl/', fan: '' },
+  'deportes-concepcion': { site: 'https://elconce.cl/', shop: 'https://elconce.cl/tienda-oficial/', fan: '' },
+  'la-serena': { site: 'https://www.cdlaserena.cl/', fan: '' },
+  coquimbo: { site: 'https://coquimbounido.cl/', socials: [{ label: 'Instagram', url: 'https://www.instagram.com/coquimbounidooficial/' }], fan: '' },
+  audax: { site: 'https://audaxitaliano.cl/', fan: '' },
+  huachipato: { site: 'https://cdhuachipato.cl/', fan: '' },
+  ohiggins: { site: 'https://www.ohigginsfc.cl/', fan: '' },
+  'u-de-concepcion': { site: 'https://www.cdudec.cl/', fan: '' },
+  'la-calera': { site: 'https://ulc.cl/', fan: '' },
+};
+
+function officialSiteSearch(team, terms) {
+  const site = clubDirectory[team.id]?.site || '';
+  const domain = site ? new URL(site).hostname.replace(/^www\./, '') : '';
+  const query = `site:${domain} ${team.name} ${terms}`;
+  return `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+}
+
+function youtubeSearch(team, terms = '') {
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(`${terms} ${team.name} Chile`)}`;
+}
+
+function instagramSearch(team) {
+  return `https://www.google.com/search?q=${encodeURIComponent(`site:instagram.com ${team.name} oficial`)}`;
+}
+
+function socialSearch(team, network) {
+  const domains = { Facebook: 'facebook.com', X: 'x.com', TikTok: 'tiktok.com' };
+  const domain = domains[network];
+  return domain ? `https://www.google.com/search?q=${encodeURIComponent(`site:${domain} ${team.name} oficial`)}` : instagramSearch(team);
+}
+
 const dtPlayers = [
   { id: 'castellon', name: 'Gabriel Castellón', short: 'Castellón', role: 'POR', rating: 82, points: 86, note: 'Arco en cero' },
   { id: 'ramirez', name: 'Nicolás Ramírez', short: 'N. Ramírez', role: 'DFC', rating: 78, points: 74, note: 'Cierre y anticipo' },
@@ -480,6 +518,32 @@ function TeamCrest({ team, className = 'team-crest' }) {
   return <span className={className} aria-hidden="true"><img src={`/assets/clubs/${team.id}.svg`} alt="" decoding="async" /></span>;
 }
 
+function AppLoading({ team }) {
+  return <div className="app-loading" role="status" aria-live="polite" aria-label={`Preparando El Sendero del Soccer para ${team?.name || 'tu club'}`}>
+    <div className="app-loading-glow" />
+    <div className="app-loading-card">
+      <div className="app-loading-brand"><span className="app-loading-ball" aria-hidden="true">⚽</span><span>EL SENDERO <em>DEL SOCCER</em></span></div>
+      <div className="app-loading-crest"><TeamCrest team={team} className="team-crest" /></div>
+      <span className="eyebrow">TU CLUB · TU SENDERO</span>
+      <h1>Vistiendo<br /><em>el Sendero.</em></h1>
+      <p>Ahora con los colores de {team?.name || 'tu equipo'}.</p>
+      <div className="app-loading-ball-spinner" aria-hidden="true"><span>⚽</span></div>
+      <div className="app-loading-progress" aria-hidden="true"><span /></div>
+      <small>FÚTBOL · ANÁLISIS · NOTICIAS</small>
+    </div>
+  </div>;
+}
+
+function NewsLoadingCards() {
+  return <div className="source-news-grid loading-news-grid" role="status" aria-label="Cargando noticias del club">
+    {[0, 1, 2, 3].map((item) => <article className="source-news-card loading-news-card" key={item} aria-hidden="true">
+      <div className="loading-line loading-news-meta"><i /></div>
+      <div className="loading-news-main"><span className="loading-news-crest" /><div><i className="loading-line" /><i className="loading-line short" /><i className="loading-line" /></div></div>
+      <div className="loading-line loading-news-footer"><i /></div>
+    </article>)}
+  </div>;
+}
+
 function ArticleLink({ article, children, className = '' }) {
   return <RouteLink to={`/articulo/${article.id}`} className={className}>{children || article.title}</RouteLink>;
 }
@@ -505,8 +569,10 @@ function Header({ route, favoriteTeam, onChooseTeam }) {
 }
 
 function Footer({ favoriteTeam }) {
-  const showUniversityLinks = favoriteTeam?.id === 'u-de-chile';
-  return <footer><div className="shell footer-main"><Brand /><p>Fútbol, análisis, noticias y debate<br />para quienes viven el juego.</p>{showUniversityLinks && <div className="footer-social" aria-label="Redes oficiales de Universidad de Chile"><a href="https://twitter.com/udechile" target="_blank" rel="noreferrer">X</a><a href="https://www.instagram.com/udechileoficial/" target="_blank" rel="noreferrer">IG</a><a href="https://www.youtube.com/user/canaludechileoficial" target="_blank" rel="noreferrer">YT</a><a href="https://www.facebook.com/clubuniversidaddechileoficial/" target="_blank" rel="noreferrer">f</a><a href="https://www.tiktok.com/@udechile?_t=8X3QzIjOj5B&_r=1" target="_blank" rel="noreferrer">♪</a></div>}</div><div className="shell footer-bottom"><span>© 2026 El Sendero del Soccer · Pasión por el juego.</span><span>Sitio editorial independiente. Las marcas pertenecen a sus respectivos titulares.</span><span>Escudos: <a href="https://www.footylogos.com/es/competition/liga-de-primera-chile" target="_blank" rel="noreferrer">FootyLogos.com ↗</a></span></div></footer>;
+  const team = favoriteTeam || teamChoices[0];
+  const directory = clubDirectory[team.id] || {};
+  const shortNames = { Instagram: 'IG', X: 'X', YouTube: 'YT' };
+  return <footer><div className="shell footer-main"><Brand /><p>Fútbol, análisis, noticias y debate<br />para quienes viven el juego.</p><div className="footer-team-links"><a className="footer-team-site" href={directory.site} target="_blank" rel="noreferrer">{team.mark} · sitio oficial ↗</a>{directory.socials?.length > 0 && <div className="footer-social" aria-label={`Redes oficiales de ${team.name}`}>{directory.socials.map((social) => <a key={social.label} href={social.url} target="_blank" rel="noreferrer" aria-label={`${social.label} oficial de ${team.name}`}>{shortNames[social.label] || social.label}</a>)}</div>}</div></div><div className="shell footer-bottom"><span>© 2026 El Sendero del Soccer · Pasión por el juego.</span><span>Sitio editorial independiente. Las marcas pertenecen a sus respectivos titulares.</span><span>Escudos: <a href="https://www.footylogos.com/es/competition/liga-de-primera-chile" target="_blank" rel="noreferrer">FootyLogos.com ↗</a></span></div></footer>;
 }
 
 function SectionTitle({ eyebrow, title, children }) {
@@ -672,9 +738,9 @@ function HomePage({ saved, onSave, favoriteTeam }) {
   </>;
 }
 
-function NewsPage({ saved, onSave, saveError, favoriteTeam }) {
+function NewsPage({ saved, onSave, saveError, favoriteTeam, latestMode = false }) {
   const activeTeam = favoriteTeam || teamChoices.find((item) => item.id === 'u-de-chile');
-  const { items: sourceItems, updatedAt, state } = useNewsFeed(20, activeTeam.id);
+  const { items: sourceItems, updatedAt, state } = useNewsFeed(latestMode ? 12 : 20, activeTeam.id);
   const clubArticles = useMemo(() => articles.filter((article) => article.clubIds?.includes(activeTeam.id)), [activeTeam.id]);
   const categories = useMemo(() => ['Todo', ...new Set([...sourceItems.map((item) => item.topic), ...clubArticles.map((article) => article.category)])], [sourceItems, clubArticles]);
   const [category, setCategory] = useState('Todo');
@@ -683,9 +749,9 @@ function NewsPage({ saved, onSave, saveError, favoriteTeam }) {
   useEffect(() => { setCategory('Todo'); setQuery(''); setOnlySaved(false); }, [activeTeam.id]);
   const normalize = (value) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   const filtered = useMemo(() => clubArticles.filter((article) => (category === 'Todo' || article.category === category) && normalize(`${article.title} ${article.excerpt}`).includes(normalize(query)) && (!onlySaved || saved.includes(article.id))), [clubArticles, category, query, onlySaved, saved]);
-  const filteredSource = useMemo(() => sourceItems.filter((item) => (category === 'Todo' || item.topic === category) && normalize(`${item.headline} ${item.summary} ${item.source}`).includes(normalize(query))), [sourceItems, category, query]);
+  const filteredSource = useMemo(() => sourceItems.filter((item) => (category === 'Todo' || item.topic === category) && normalize(`${item.headline} ${item.summary} ${item.source}`).includes(normalize(query))).sort((a, b) => new Date(b.publishedAt || '1970-01-01').getTime() - new Date(a.publishedAt || '1970-01-01').getTime()), [sourceItems, category, query]);
   const savedForTeam = saved.filter((id) => clubArticles.some((article) => article.id === id));
-  return <div className="page shell"><div className="page-heading editorial-heading"><span className="eyebrow">ACTUALIDAD DE {activeTeam.mark}</span><h1>Todo sobre<br />{activeTeam.name}.</h1><p>Actualidad deportiva y archivo editorial de tu club. Los datos externos se enlazan a su fuente; los textos de esta página son resúmenes originales.</p></div><div className="news-toolbar"><label className="search-box"><span aria-hidden="true">⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} aria-label={`Buscar artículos de ${activeTeam.name}`} placeholder={`Buscar en ${activeTeam.name}…`} /></label><div className="category-filter" role="group" aria-label="Filtrar por categoría">{categories.map((item) => <button key={item} aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</button>)}</div><button className="saved-button" aria-pressed={onlySaved} onClick={() => setOnlySaved(!onlySaved)}>{onlySaved ? '♥' : '♡'} Mis guardados ({savedForTeam.length})</button></div>{!onlySaved && <section className="source-news-section"><div className="source-news-heading"><div><span className="eyebrow">FUENTES VERIFICABLES</span><h2>Lo más reciente para {activeTeam.name}.</h2></div><small>{state === 'loading' ? 'Actualizando…' : `Edición editorial · corte ${updatedAt ? new Intl.DateTimeFormat('es-CL', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(updatedAt)).toUpperCase() : 'editorial'}`}</small></div>{filteredSource.length ? <div className="source-news-grid">{filteredSource.map((item) => <SourceNewsCard key={item.id} item={item} />)}</div> : <div className="empty-state"><h2>{sourceItems.length ? 'No hay titulares con esos filtros.' : `Todavía no hay resúmenes verificados para ${activeTeam.name}.`}</h2><p>No completamos esta sección con noticias de otros equipos.</p>{!sourceItems.length && <a href={getClubSearchUrl(activeTeam)} target="_blank" rel="noreferrer">Buscar actualidad ↗</a>}</div>}</section>}{(filtered.length > 0 || onlySaved) && <section className="club-archive"><div className="source-news-heading"><div><span className="eyebrow">ARCHIVO PROPIO</span><h2>Historias del Sendero.</h2></div><small>Reportajes y análisis originales</small></div>{filtered.length ? <div className="news-grid">{filtered.map((article, index) => <NewsCard key={article.id} article={article} featured={index === 0 && category === 'Todo' && !query && !onlySaved} saved={saved.includes(article.id)} onSave={onSave} />)}</div> : <div className="empty-state"><h2>No tienes historias guardadas de este equipo.</h2><p>Prueba con otra categoría o quita la búsqueda.</p><button onClick={() => setOnlySaved(false)}>Volver a actualidad</button></div>}</section>}<p className="data-note">Los guardados viven solo en este navegador.{saveError ? ' No pudimos guardar el último cambio.' : ''}</p>{activeTeam.id === 'u-de-chile' && <BookBanner />}</div>;
+  return <div className="page shell"><div className="page-heading editorial-heading"><span className="eyebrow">{latestMode ? `RADAR DE ÚLTIMO MINUTO · ${activeTeam.mark}` : `ACTUALIDAD DE ${activeTeam.mark}`}</span><h1>{latestMode ? <>Lo último<br />de {activeTeam.mark}.</> : <>Todo sobre<br />{activeTeam.name}.</>}</h1><p>{latestMode ? `El pulso reciente de ${activeTeam.name}: titulares filtrados por club, fecha visible y enlace a cada fuente. Este radar se actualiza editorialmente; no es una transmisión en vivo.` : `Actualidad deportiva y archivo editorial de tu club. Los datos externos se enlazan a su fuente; los textos de esta página son resúmenes originales.`}</p>{latestMode && <RouteLink to="/soy-dt" className="inline-link">Armar mi once para {activeTeam.mark} →</RouteLink>}</div><div className="news-toolbar"><label className="search-box"><span aria-hidden="true">⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} aria-label={`Buscar artículos de ${activeTeam.name}`} placeholder={`Buscar en ${activeTeam.name}…`} /></label><div className="category-filter" role="group" aria-label="Filtrar por categoría">{categories.map((item) => <button key={item} aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</button>)}</div>{!latestMode && <button className="saved-button" aria-pressed={onlySaved} onClick={() => setOnlySaved(!onlySaved)}>{onlySaved ? '♥' : '♡'} Mis guardados ({savedForTeam.length})</button>}</div>{!onlySaved && <section className="source-news-section"><div className="source-news-heading"><div><span className="eyebrow">{latestMode ? 'SELECCIÓN RECIENTE · CON FUENTE' : 'FUENTES VERIFICABLES'}</span><h2>{latestMode ? `Ahora en el radar de ${activeTeam.name}.` : `Lo más reciente para ${activeTeam.name}.`}</h2></div><small>{state === 'loading' ? 'Actualizando…' : `Corte editorial · ${updatedAt ? new Intl.DateTimeFormat('es-CL', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(updatedAt)).toUpperCase() : 'sin fecha'}`}</small></div>{state === 'loading' && sourceItems.length === 0 ? <NewsLoadingCards /> : filteredSource.length ? <div className="source-news-grid">{filteredSource.map((item) => <SourceNewsCard key={item.id} item={item} />)}</div> : <div className="empty-state"><h2>{sourceItems.length ? 'No hay titulares con esos filtros.' : `Todavía no hay resúmenes verificados para ${activeTeam.name}.`}</h2><p>No completamos esta sección con noticias de otros equipos.</p>{!sourceItems.length && <a href={getClubSearchUrl(activeTeam)} target="_blank" rel="noreferrer">Buscar actualidad ↗</a>}</div>}</section>}{!latestMode && (filtered.length > 0 || onlySaved) && <section className="club-archive"><div className="source-news-heading"><div><span className="eyebrow">ARCHIVO PROPIO</span><h2>Historias del Sendero.</h2></div><small>Reportajes y análisis originales</small></div>{filtered.length ? <div className="news-grid">{filtered.map((article, index) => <NewsCard key={article.id} article={article} featured={index === 0 && category === 'Todo' && !query && !onlySaved} saved={saved.includes(article.id)} onSave={onSave} />)}</div> : <div className="empty-state"><h2>No tienes historias guardadas de este equipo.</h2><p>Prueba con otra categoría o quita la búsqueda.</p><button onClick={() => setOnlySaved(false)}>Volver a actualidad</button></div>}</section>}{latestMode && <ClubConnections team={activeTeam} />}<p className="data-note">Los guardados viven solo en este navegador.{saveError ? ' No pudimos guardar el último cambio.' : ''}</p>{!latestMode && activeTeam.id === 'u-de-chile' && <BookBanner />}</div>;
 }
 
 function DataPage({ favoriteTeam }) {
@@ -871,12 +937,40 @@ function UniversityManagerPage() {
   </div>;
 }
 
+function ClubConnections({ team }) {
+  const directory = clubDirectory[team.id] || {};
+  const fanQuery = directory.fan || `hinchas ${team.name}`;
+  const socialChannels = ['Instagram', 'Facebook', 'X', 'TikTok', 'YouTube'].map((network) => {
+    const verified = directory.socials?.find((item) => item.label === network);
+    const searchUrl = network === 'YouTube' ? youtubeSearch(team, 'canal oficial') : network === 'Instagram' ? instagramSearch(team) : socialSearch(team, network);
+    return { label: verified ? `${network} oficial` : network, detail: verified ? `Cuenta de ${team.name}` : `Buscar la cuenta oficial de ${team.name}`, url: verified?.url || searchUrl, kind: verified ? 'OFICIAL' : 'BÚSQUEDA' };
+  });
+  const channels = [
+    { label: 'Sitio oficial', detail: 'Noticias, actividades y canales del club', url: directory.site, kind: 'OFICIAL' },
+    ...socialChannels,
+    { label: directory.fan || 'Voces de la hinchada', detail: directory.fan ? `Medio o canal partidario · ${team.name}` : 'Explorar creadores y programas de hinchas', url: youtubeSearch(team, fanQuery), kind: directory.fan ? 'HINCHAS' : 'EXPLORAR' },
+  ].filter((item) => item.url);
+  return <section className="shell club-connections"><div className="club-connections-heading"><div><span className="eyebrow">AFUERA DE LA CANCHA · {team.mark}</span><h2>La conversación también vive en la tribuna.</h2><p>Sigue las cuentas del club y descubre voces de su hinchada.</p></div><TeamCrest team={team} className="connections-crest" /></div><div className="club-channel-grid">{channels.map((channel) => <a key={channel.label} className="club-channel-card" href={channel.url} target="_blank" rel="noreferrer"><small>{channel.kind}</small><strong>{channel.label}</strong><span>{channel.detail}</span><b aria-hidden="true">↗</b></a>)}</div><p className="club-channel-note">Los enlaces marcados “Búsqueda” o “Explorar” ayudan a encontrar la cuenta o el canal correcto. No los presentamos como perfiles verificados.</p></section>;
+}
+
+function ClubGallery({ team }) {
+  const media = clubMedia[team.id];
+  const photos = team.id === 'u-de-chile'
+    ? [
+      { image: '/assets/hinchada.png', alt: 'Hinchada de Universidad de Chile alentando con banderas azules y rojas', label: 'La hinchada' },
+      { image: '/assets/tifo.png', alt: 'Tifo azul y rojo de la hinchada de Universidad de Chile', label: 'El tifo' },
+      { image: media.image, alt: media.alt, label: 'El plantel' },
+    ]
+    : media ? [{ image: media.image, alt: media.alt, label: media.caption || 'Archivo del club' }] : [];
+  return <section className="shell club-gallery"><div className="club-gallery-heading"><div><span className="eyebrow">GALERÍA · {team.mark}</span><h2>El club, en imágenes.</h2><p>{photos.length > 1 ? 'Una selección del archivo visual del proyecto, más acceso a otras galerías del club.' : 'La foto disponible en el archivo del proyecto y un acceso para encontrar más material del club.'}</p></div><a href={officialSiteSearch(team, 'galería fotos hinchada plantel')} target="_blank" rel="noreferrer">Buscar más fotos ↗</a></div><div className={`club-gallery-grid ${photos.length > 1 ? 'multi' : ''}`}>{photos.map((photo) => <figure key={photo.image}><img src={photo.image} alt={photo.alt} loading="lazy" /><figcaption><span>{photo.label}</span><TeamCrest team={team} className="gallery-mini-crest" /></figcaption></figure>)}<a className="club-gallery-more" href={officialSiteSearch(team, 'galería fotos hinchada plantel')} target="_blank" rel="noreferrer"><TeamCrest team={team} className="gallery-more-crest" /><span>Álbum abierto</span><strong>Encuentra más momentos de {team.name}.</strong><small>Buscar galerías publicadas por el club ↗</small></a></div></section>;
+}
+
 function MemoryPage({ saved, onSave, favoriteTeam }) {
   const team = favoriteTeam || teamChoices[0];
   const profile = clubProfiles[team.id];
   const media = clubMedia[team.id];
   const memoryArticles = articles.filter((article) => ['Historia', 'Cultura azul'].includes(article.category) && article.clubIds?.includes(team.id));
-  return <div className="page"><section className="memory-hero shell"><div className="memory-art-wrap"><div className="memory-image"><img src={media?.image} alt={media?.alt || `Imagen de ${team.name}`} /><span>{profile.identity.split(' · ')[0]}<br />EN LA PIEL</span></div><MediaCredit media={media} /></div><div className="memory-intro"><span className="eyebrow">HISTORIA · {team.name.toUpperCase()}</span><h1>{profile.historyTitle}</h1><p>{profile.historyLead}</p><a className="inline-link" href={profile.sourceUrl} target="_blank" rel="noreferrer">{profile.sourceLabel} ↗</a></div></section><section className="shell timeline-section"><SectionTitle eyebrow={`HISTORIA DE ${team.mark}`} title="Hitos que le dieron forma." /><div className="history-timeline">{profile.facts.map(([year, title, description]) => <article key={`${year}-${title}`}><b>{year}</b><span>{title}</span><p>{description}</p></article>)}</div><p className="data-note">Reseña breve preparada por El Sendero. Consulta la <a href={profile.sourceUrl} target="_blank" rel="noreferrer">fuente institucional o histórica: {profile.sourceLabel} ↗</a>.</p></section><section className="shell memory-reading"><SectionTitle eyebrow={`ARCHIVO DE ${team.mark}`} title={`Leer más de ${team.name}.`} />{memoryArticles.length ? <div className="news-grid memory-grid">{memoryArticles.map((article) => <NewsCard key={article.id} article={article} saved={saved.includes(article.id)} onSave={onSave} />)}</div> : <div className="club-history-teaser"><TeamCrest team={team} className="empty-crest" /><div><span className="eyebrow">DEL ARCHIVO DEL CLUB</span><h3>{profile.historyTitle}</h3><p>{profile.historyLead}</p><a href={profile.sourceUrl} target="_blank" rel="noreferrer">Seguir leyendo en {profile.sourceLabel} ↗</a></div></div>}</section>{team.id === 'u-de-chile' && <div className="shell"><BookBanner /></div>}</div>;
+  return <div className="page"><section className="memory-hero shell"><div className="memory-art-wrap"><div className="memory-image"><img src={media?.image} alt={media?.alt || `Imagen de ${team.name}`} /><span>{profile.identity.split(' · ')[0]}<br />EN LA PIEL</span></div><MediaCredit media={media} /></div><div className="memory-intro"><span className="eyebrow">HISTORIA · {team.name.toUpperCase()}</span><h1>{profile.historyTitle}</h1><p>{profile.historyLead}</p><a className="inline-link" href={profile.sourceUrl} target="_blank" rel="noreferrer">{profile.sourceLabel} ↗</a></div></section><ClubGallery team={team} /><section className="shell timeline-section"><SectionTitle eyebrow={`HISTORIA DE ${team.mark}`} title="Hitos que le dieron forma." /><div className="history-timeline">{profile.facts.map(([year, title, description]) => <article key={`${year}-${title}`}><b>{year}</b><span>{title}</span><p>{description}</p></article>)}</div><p className="data-note">Reseña breve preparada por El Sendero. Consulta la <a href={profile.sourceUrl} target="_blank" rel="noreferrer">fuente institucional o histórica: {profile.sourceLabel} ↗</a>.</p></section><section className="shell memory-reading"><SectionTitle eyebrow={`ARCHIVO DE ${team.mark}`} title={`Leer más de ${team.name}.`} />{memoryArticles.length ? <div className="news-grid memory-grid">{memoryArticles.map((article) => <NewsCard key={article.id} article={article} saved={saved.includes(article.id)} onSave={onSave} />)}</div> : <div className="club-history-teaser"><TeamCrest team={team} className="empty-crest" /><div><span className="eyebrow">DEL ARCHIVO DEL CLUB</span><h3>{profile.historyTitle}</h3><p>{profile.historyLead}</p><a href={profile.sourceUrl} target="_blank" rel="noreferrer">Seguir leyendo en {profile.sourceLabel} ↗</a></div></div>}</section><ClubConnections team={team} />{team.id === 'u-de-chile' && <div className="shell"><BookBanner /></div>}</div>;
 }
 
 function CommunityPage({ favoriteTeam }) {
@@ -908,27 +1002,24 @@ function ClubSectionPage({ route, favoriteTeam }) {
   const topic = {
     '/escuelas': {
       label: 'ESCUELAS', title: 'El fútbol empieza en comunidad.',
-      copy: `La identidad de ${team.name} también se transmite entre generaciones. Aquí reunimos una ficha de su historia y un acceso para revisar la información formativa vigente publicada por el club.`,
-      search: `${team.name} fútbol formativo escuela oficial`, action: 'Buscar fútbol formativo oficial', note: 'Revisa edades, cupos y fechas directamente con la institución; esta guía no representa una inscripción.'
+      copy: `La identidad de ${team.name} también se transmite entre generaciones. Consulta la información de fútbol formativo publicada por el club: categorías, pruebas y actividades pueden cambiar durante la temporada.`,
+      search: 'fútbol formativo escuela cantera', action: 'Consultar fútbol formativo', note: 'Revisa edades, cupos y fechas directamente con la institución; esta guía no representa una inscripción.'
     },
     '/abonos': {
       label: 'ABONOS', title: 'Tu lugar en la tribuna.',
       copy: `El estadio, la ciudad y los colores hacen especial cada regreso a casa. Consulta directamente los canales de ${team.name} para ver disponibilidad y condiciones de abonos.`,
-      search: `${team.name} abonos entradas 2026 sitio oficial`, action: 'Consultar abonos y entradas', note: 'No mostramos precios ni disponibilidad porque cambian durante la temporada. Confirma siempre en el canal oficial.'
+      search: 'abonos socios entradas', action: 'Consultar abonos y entradas', note: 'No mostramos precios ni disponibilidad porque cambian durante la temporada. Confirma siempre en el canal oficial.'
     },
     '/tienda': {
       label: 'TIENDA', title: 'Colores para llevar.',
       copy: `La camiseta acompaña la historia de ${team.name}. Encuentra la tienda o distribución oficial y confirma modelo, tallas y autenticidad antes de comprar.`,
-      search: `${team.name} tienda oficial camisetas`, action: 'Buscar la tienda oficial', note: 'El Sendero no vende productos. Comprueba que el vendedor esté reconocido por el club.'
-    },
-    '/prensa': {
-      label: 'PRENSA', title: 'El club, contado desde su fuente.',
-      copy: `Sigue la cobertura y los comunicados de ${team.name}. Nuestra guía enlaza la información institucional y una búsqueda de noticias centrada en tu equipo.`,
-      search: `${team.name} fútbol Chile`, action: 'Abrir noticias del club', note: 'Las notas externas abren en sus propios sitios; los resúmenes del Sendero se identifican y enlazan a su fuente.'
+      search: 'tienda oficial camisetas merchandising', action: 'Visitar la tienda del club', note: 'El Sendero no vende productos. Comprueba que el vendedor esté reconocido por el club.'
     },
   }[route];
-  const destination = route === '/prensa' ? getClubSearchUrl(team) : `https://www.google.com/search?q=${encodeURIComponent(topic.search)}`;
-  return <div className="page shell club-guide-page"><section className="club-guide-hero"><div className="club-guide-art"><img src={media.image} alt={media.alt} /><span>{topic.label} · {team.mark}</span><MediaCredit media={media} /></div><div className="club-guide-copy"><span className="eyebrow">{topic.label} · {profile.identity}</span><h1>{topic.title}</h1><p>{topic.copy}</p><a className="button" href={destination} target="_blank" rel="noreferrer">{topic.action} ↗</a>{route === '/escuelas' && <RouteLink className="club-guide-community-link" to="/comunidad">Compartir un recuerdo de la tribuna →</RouteLink>}</div></section><section className="club-guide-info"><div><span className="eyebrow">UNA GUÍA DE EL SENDERO</span><h2>{profile.historyTitle}</h2><p>{profile.historyLead}</p><a href={profile.sourceUrl} target="_blank" rel="noreferrer">{profile.sourceLabel} ↗</a></div><div className="club-guide-facts">{profile.facts.slice(0, 3).map(([year, title, description]) => <article key={`${year}-${title}`}><b>{year}</b><span><strong>{title}</strong><small>{description}</small></span></article>)}</div></section><p className="data-note club-guide-note">{topic.note}</p></div>;
+  const hasOfficialShop = Boolean(clubDirectory[team.id]?.shop);
+  const destination = route === '/tienda' ? (clubDirectory[team.id]?.shop || officialSiteSearch(team, topic.search)) : officialSiteSearch(team, topic.search);
+  const actionLabel = route === '/tienda' && !hasOfficialShop ? 'Buscar tienda oficial' : topic.action;
+  return <div className="page shell club-guide-page"><section className="club-guide-hero"><div className="club-guide-art"><img src={media.image} alt={media.alt} /><span>{topic.label} · {team.mark}</span><MediaCredit media={media} /></div><div className="club-guide-copy"><span className="eyebrow">{topic.label} · {profile.identity}</span><h1>{topic.title}</h1><p>{topic.copy}</p><a className="button" href={destination} target="_blank" rel="noreferrer">{actionLabel} ↗</a><a className="club-official-secondary" href={clubDirectory[team.id]?.site} target="_blank" rel="noreferrer">Sitio oficial de {team.name} ↗</a>{route === '/escuelas' && <RouteLink className="club-guide-community-link" to="/comunidad">Compartir un recuerdo de la tribuna →</RouteLink>}</div></section><section className="club-guide-info"><div><span className="eyebrow">UNA GUÍA DE EL SENDERO</span><h2>{profile.historyTitle}</h2><p>{profile.historyLead}</p><a href={profile.sourceUrl} target="_blank" rel="noreferrer">{profile.sourceLabel} ↗</a></div><div className="club-guide-facts">{profile.facts.slice(0, 4).map(([year, title, description]) => <article key={`${year}-${title}`}><b>{year}</b><span><strong>{title}</strong><small>{description}</small></span></article>)}</div></section><div className="club-guide-shortcuts"><RouteLink to="/memoria">Galería e historia del club <span>↗</span></RouteLink><RouteLink to="/comunidad">Compartir recuerdos <span>↗</span></RouteLink></div><p className="data-note club-guide-note">{topic.note}</p><ClubConnections team={team} /></div>;
 }
 
 function ArticlePage({ article, saved, onSave, saveError, favoriteTeam }) {
@@ -944,13 +1035,46 @@ function ArticlePage({ article, saved, onSave, saveError, favoriteTeam }) {
 
 function App() {
   const [route, setRoute] = useState(getRoute);
+  const [appLoading, setAppLoading] = useState(true);
   const [saved, setSaved, saveError] = useStored('sendero-saved-v1', []);
   const [favoriteTeamId, setFavoriteTeamId] = useStored('sendero-favorite-team-v1', '');
   const [teamPickerOpen, setTeamPickerOpen] = useState(() => !favoriteTeamId);
   const favoriteTeam = teamChoices.find((team) => team.id === favoriteTeamId);
+  const loadingTeam = favoriteTeam || teamChoices[0];
   const articleId = route.startsWith('/articulo/') ? route.slice('/articulo/'.length) : null;
   const article = articles.find((item) => item.id === articleId);
   useEffect(() => { const handleRoute = () => setRoute(getRoute()); window.addEventListener('hashchange', handleRoute); return () => window.removeEventListener('hashchange', handleRoute); }, []);
+  useEffect(() => {
+    if (!appLoading) return;
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      window.clearTimeout(minimumTimer);
+      window.clearTimeout(fallbackTimer);
+      setAppLoading(false);
+    };
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const minimumReady = new Promise((resolve) => window.setTimeout(resolve, reducedMotion ? 100 : 520));
+    const minimumTimer = window.setTimeout(finish, reducedMotion ? 100 : 520);
+    const fallbackTimer = window.setTimeout(finish, 1400);
+    const image = new Image();
+    const imageUrl = clubMedia[loadingTeam.id]?.image;
+    const imageReady = new Promise((resolve) => {
+      if (!imageUrl) return resolve();
+      image.onload = resolve;
+      image.onerror = resolve;
+      image.src = imageUrl;
+      if (image.complete) resolve();
+    });
+    const fontsReady = document.fonts?.ready?.catch(() => undefined) || Promise.resolve();
+    Promise.all([imageReady, fontsReady, minimumReady]).then(finish);
+    return () => {
+      finished = true;
+      window.clearTimeout(minimumTimer);
+      window.clearTimeout(fallbackTimer);
+    };
+  }, [appLoading, loadingTeam]);
   useEffect(() => {
     if (!favoriteTeam) return;
     const root = document.documentElement;
@@ -966,7 +1090,7 @@ function App() {
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', favoriteTeam.navy);
   }, [favoriteTeam]);
   useEffect(() => {
-    const titles = { '/': 'El Sendero del Soccer | Pasión por el juego', '/actualidad': 'Noticias | El Sendero del Soccer', '/datos': 'Partidos | El Sendero del Soccer', '/memoria': 'El Club | El Sendero del Soccer', '/comunidad': 'Comunidad | El Sendero del Soccer', '/escuelas': 'Escuelas | El Sendero del Soccer', '/abonos': 'Abonos | El Sendero del Soccer', '/tienda': 'Tienda | El Sendero del Soccer', '/prensa': 'Prensa | El Sendero del Soccer', '/soy-dt': 'Último Minuto | El Sendero del Soccer' };
+    const titles = { '/': 'El Sendero del Soccer | Pasión por el juego', '/actualidad': 'Noticias | El Sendero del Soccer', '/datos': 'Partidos | El Sendero del Soccer', '/memoria': 'El Club | El Sendero del Soccer', '/comunidad': 'Comunidad | El Sendero del Soccer', '/escuelas': 'Escuelas | El Sendero del Soccer', '/abonos': 'Abonos | El Sendero del Soccer', '/tienda': 'Tienda | El Sendero del Soccer', '/soy-dt': 'Pizarra del DT | El Sendero del Soccer' };
     document.title = article ? `${article.title} | El Sendero del Soccer` : titles[route] || 'El Sendero del Soccer';
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [route, article]);
@@ -977,11 +1101,11 @@ function App() {
   else if (route === '/datos') page = <DataPage favoriteTeam={favoriteTeam} />;
   else if (route === '/memoria') page = <MemoryPage key={favoriteTeam?.id} saved={saved} onSave={toggleSave} favoriteTeam={favoriteTeam} />;
   else if (route === '/comunidad') page = <CommunityPage key={favoriteTeam?.id} favoriteTeam={favoriteTeam} />;
-  else if (['/escuelas', '/abonos', '/tienda', '/prensa'].includes(route)) page = <ClubSectionPage route={route} favoriteTeam={favoriteTeam} />;
+  else if (['/escuelas', '/abonos', '/tienda'].includes(route)) page = <ClubSectionPage route={route} favoriteTeam={favoriteTeam} />;
   else if (route === '/soy-dt') page = <ManagerPage key={favoriteTeam?.id} favoriteTeam={favoriteTeam} />;
   else page = <HomePage saved={saved} onSave={toggleSave} favoriteTeam={favoriteTeam} />;
-  const chooseTeam = (teamId) => { setFavoriteTeamId(teamId); setTeamPickerOpen(false); };
-  return <><a className="skip-link" href="#main">Saltar al contenido</a><Header route={route} favoriteTeam={favoriteTeam} onChooseTeam={() => setTeamPickerOpen(true)} /><main id="main">{page}</main><Footer favoriteTeam={favoriteTeam} />{teamPickerOpen && <TeamPicker selectedTeam={favoriteTeam} onSelect={chooseTeam} />}</>;
+  const chooseTeam = (teamId) => { setFavoriteTeamId(teamId); setTeamPickerOpen(false); setAppLoading(true); };
+  return <><a className="skip-link" href="#main">Saltar al contenido</a><Header route={route} favoriteTeam={favoriteTeam} onChooseTeam={() => setTeamPickerOpen(true)} /><main id="main">{page}</main><Footer favoriteTeam={favoriteTeam} />{teamPickerOpen && <TeamPicker selectedTeam={favoriteTeam} onSelect={chooseTeam} />}{appLoading && <AppLoading team={loadingTeam} />}</>;
 }
 
 createRoot(document.getElementById('root')).render(<React.StrictMode><App /></React.StrictMode>);
