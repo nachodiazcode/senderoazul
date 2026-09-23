@@ -48,7 +48,7 @@ export const articles = [
     "title": "El capitán que todavía ordena nuestra memoria",
     "excerpt": "Mariano Puyol vuelve a escena en “Simplemente un Capitán”, el libro de Omar Soto Díaz sobre un referente eterno.",
     "image": "/assets/mariano-puyol-libro.png",
-    "credit": "Material promocional del libro facilitado a El Sendero Azul",
+    "credit": "Material promocional del libro facilitado a El Sendero del Soccer",
     "date": "BIBLIOTECA AZUL",
     "type": "Libros",
     "source": {
@@ -58,7 +58,7 @@ export const articles = [
     "body": [
       "El fútbol se cuenta en resultados, pero también en las personas que una hinchada elige recordar. Mariano Puyol: Simplemente un Capitán, de Omar Soto Díaz, pone el foco en uno de esos nombres para Universidad de Chile.",
       "La presentación oficial del libro recorre su formación en el club, su vínculo con referentes del Ballet Azul y el liderazgo que lo convirtió en una figura reconocible para distintas generaciones. Es una invitación a acercarse a la historia desde una trayectoria personal.",
-      "Para El Sendero Azul, abrir un espacio a los libros significa darle tiempo a conversaciones que no terminan con el pitazo final. Conocer a los jugadores de otras épocas también ayuda a entender las historias que se transmiten en la tribuna y en la familia.",
+      "Para El Sendero del Soccer, abrir un espacio a los libros significa darle tiempo a conversaciones que no terminan con el pitazo final. Conocer a los jugadores de otras épocas también ayuda a entender las historias que se transmiten en la tribuna y en la familia.",
       "Esta nota presenta la publicación; no es una reseña de lectura del libro completo. La disponibilidad y las condiciones de compra deben consultarse directamente en su sitio oficial."
     ]
   },

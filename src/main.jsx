@@ -1,16 +1,39 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { articles } from './content';
+import { feedUpdatedAt, newsFeed } from './news-feed';
 import { auth, googleProvider, isFirebaseConfigured, onAuthStateChanged, signInWithPopup, signOut } from './firebase';
 import './styles.css';
 
 const navItems = [
-  ['/', 'Portada'],
-  ['/actualidad', 'Actualidad'],
-  ['/datos', 'Partido & data'],
-  ['/memoria', 'Memoria'],
-  ['/comunidad', 'La tribuna'],
-  ['/soy-dt', 'Soy DT'],
+  ['/', 'Inicio'],
+  ['/datos', 'Equipos'],
+  ['/memoria', 'El Club'],
+  ['/actualidad', 'Noticias'],
+  ['/comunidad', 'Escuelas'],
+  ['/comunidad', 'Abonos'],
+  ['/actualidad', 'Tienda'],
+  ['/actualidad', 'Prensa'],
+  ['/soy-dt', 'Último Minuto'],
+];
+
+const teamChoices = [
+  { id: 'u-de-chile', name: 'Universidad de Chile', mark: 'U', primary: '#2459d3', navy: '#173c7a', light: '#a9c4ff', accent: '#d94a57' },
+  { id: 'colo-colo', name: 'Colo-Colo', mark: 'CC', primary: '#252a32', navy: '#11161d', light: '#d8dde3', accent: '#8f98a5' },
+  { id: 'u-catolica', name: 'Universidad Católica', mark: 'UC', primary: '#2b6dcc', navy: '#173d7c', light: '#bad4ff', accent: '#f4f6fa' },
+  { id: 'cobresal', name: 'Cobresal', mark: 'CS', primary: '#c96b2b', navy: '#663313', light: '#f0bd8e', accent: '#e7a42e' },
+  { id: 'everton', name: 'Everton', mark: 'EV', primary: '#1c4c9b', navy: '#12346e', light: '#a9c8ff', accent: '#f0c62e' },
+  { id: 'palestino', name: 'Palestino', mark: 'PA', primary: '#25835d', navy: '#164e39', light: '#a8d8c0', accent: '#d94a48' },
+  { id: 'deportes-limache', name: 'Deportes Limache', mark: 'DL', primary: '#4c9d50', navy: '#24572b', light: '#bce2b6', accent: '#e3d85b' },
+  { id: 'nublense', name: 'Ñublense', mark: 'ÑU', primary: '#c9343b', navy: '#682025', light: '#f2b1b6', accent: '#171c26' },
+  { id: 'deportes-concepcion', name: 'Deportes Concepción', mark: 'DC', primary: '#7b4ab6', navy: '#3d266d', light: '#d6bdf2', accent: '#f3ce54' },
+  { id: 'la-serena', name: 'Deportes La Serena', mark: 'LS', primary: '#9b2e52', navy: '#4f1830', light: '#e9b7c8', accent: '#74a9dc' },
+  { id: 'coquimbo', name: 'Coquimbo Unido', mark: 'CQ', primary: '#be9830', navy: '#2c2b24', light: '#ead895', accent: '#171a20' },
+  { id: 'audax', name: 'Audax Italiano', mark: 'AI', primary: '#2d9a60', navy: '#174c35', light: '#b8e0c5', accent: '#d64545' },
+  { id: 'huachipato', name: 'Huachipato', mark: 'HU', primary: '#4a9bd8', navy: '#173e6a', light: '#b8dcf5', accent: '#1d2634' },
+  { id: 'ohiggins', name: "O'Higgins", mark: 'OH', primary: '#49a9df', navy: '#1f527b', light: '#b9e1f6', accent: '#e2c73e' },
+  { id: 'u-de-concepcion', name: 'Universidad de Concepción', mark: 'UDC', primary: '#1d4aa6', navy: '#112d68', light: '#afc6ff', accent: '#e1be30' },
+  { id: 'la-calera', name: 'Unión La Calera', mark: 'ULC', primary: '#b72f3c', navy: '#651b26', light: '#efaab1', accent: '#f5f5f5' },
 ];
 
 const quiz = [
@@ -80,20 +103,85 @@ function ArticleLink({ article, children, className = '' }) {
 }
 
 function Brand() {
-  return <RouteLink to="/" className="brand"><img src="/assets/logo-sendero.png" alt="" /><span><small>MÁS QUE UNA PASIÓN</small><b>EL SENDERO <em>AZUL</em></b></span></RouteLink>;
+  return <RouteLink to="/" className="brand" aria-label="El Sendero del Soccer · Inicio"><span className="brand-ball" aria-hidden="true">⚽</span><span><small>FÚTBOL · ANÁLISIS · NOTICIAS</small><strong>EL SENDERO <em>DEL SOCCER</em></strong></span></RouteLink>;
 }
 
-function Header({ route }) {
+function TeamPicker({ selectedTeam, onSelect }) {
+  return <div className="team-onboarding" role="dialog" aria-modal="true" aria-labelledby="team-picker-title"><div className="team-picker-card"><span className="eyebrow">PERSONALIZA TU EXPERIENCIA</span><h1 id="team-picker-title">¿Cuál es tu<br /><em>equipo favorito?</em></h1><p>Elegiremos los colores del sitio según tu club. Puedes cambiarlo cuando quieras.</p><div className="team-grid">{teamChoices.map((team) => <button key={team.id} className={`team-option ${selectedTeam?.id === team.id ? 'selected' : ''}`} onClick={() => onSelect(team.id)} style={{ '--team-primary': team.primary, '--team-navy': team.navy, '--team-light': team.light, '--team-accent': team.accent }}><span className="team-mark">{team.mark}</span><span>{team.name}</span></button>)}</div></div></div>;
+}
+
+function MatchdayStrip() {
+  return <aside className="matchday-strip" aria-label="Próximo partido de Universidad de Chile">
+    <div className="shell matchday-inner">
+      <div className="matchday-live"><span className="live-pulse" />PRÓXIMO PARTIDO</div>
+      <div className="matchday-competition">COPA CHILE · OCTAVOS</div>
+      <div className="matchday-teams"><b>EVERTON</b><span>VS</span><b>LA U</b></div>
+      <div className="matchday-meta">JUE 24 SEP · 20:30 <i /> SAUSALITO</div>
+      <RouteLink to="/soy-dt" className="matchday-action">ARMA TU ONCE <span>↗</span></RouteLink>
+    </div>
+  </aside>;
+}
+
+function Header({ route, favoriteTeam, onChooseTeam }) {
   const [open, setOpen] = useState(false);
-  return <><div className="topline"><div className="shell"><span>UN MEDIO INDEPENDIENTE. UN MISMO SENTIMIENTO.</span><span>SANTIAGO, CHILE <b>•</b> EDICIÓN 13 SEP 2026</span></div></div><header className="site-header"><div className="shell header-row"><Brand /><button className="menu-toggle" aria-label="Abrir navegación" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? '×' : '☰'}</button><nav className={open ? 'open' : ''} aria-label="Principal">{navItems.map(([path, label]) => <RouteLink key={path} to={path} className={`${route === path ? 'active ' : ''}${path === '/soy-dt' ? 'nav-dt' : ''}`} onClick={() => setOpen(false)}>{label}</RouteLink>)}</nav><RouteLink to="/soy-dt" className="button header-cta">Arma tu once ↗</RouteLink></div></header></>;
+  const edition = new Intl.DateTimeFormat('es-CL', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date()).replace('.', '').toUpperCase();
+  return <><div className="topline"><div className="shell"><span>EL CLUB DE TODOS · MÁS QUE UNA PASIÓN</span><span>SANTIAGO, CHILE <b>•</b> EDICIÓN {edition}</span></div></div><header className="site-header"><div className="shell header-row"><Brand /><button className="menu-toggle" aria-label="Abrir navegación" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? '×' : '☰'}</button><nav className={open ? 'open' : ''} aria-label="Principal">{navItems.map(([path, label], index) => <RouteLink key={`${path}-${label}`} to={path} className={`${route === path && index < 5 ? 'active ' : ''}${path === '/soy-dt' ? 'nav-dt' : ''}`} onClick={() => setOpen(false)}>{label}</RouteLink>)}<button className="mobile-team-switch" onClick={() => { setOpen(false); onChooseTeam(); }}>Mi equipo: {favoriteTeam?.name || 'Elegir'}</button></nav><div className="header-actions"><button className="team-switch" onClick={onChooseTeam} aria-label="Cambiar mi equipo favorito"><span>{favoriteTeam?.mark || '⚽'}</span><small>{favoriteTeam?.name || 'Mi equipo'}</small></button><RouteLink to="/actualidad" className="header-search" aria-label="Buscar noticias"><span>⌕</span><small>BUSCAR</small></RouteLink></div></div></header><MatchdayStrip /></>;
 }
 
 function Footer() {
-  return <footer><div className="shell footer-main"><Brand /><p>Periodismo independiente, memoria y comunidad.<br />El amor por la U es lo que nos reúne.</p><div className="footer-nav"><RouteLink to="/actualidad">Actualidad</RouteLink><RouteLink to="/comunidad">Participa</RouteLink><RouteLink to="/memoria">Memoria azul</RouteLink></div></div><div className="shell footer-bottom"><span>© 2026 El Sendero Azul · Medio independiente de hinchas.</span><span>Preferencias guardadas en tu dispositivo. Sin registro.</span></div></footer>;
+  return <footer><div className="shell footer-main"><Brand /><p>Fútbol, análisis, noticias y debate<br />para quienes viven el juego.</p><div className="footer-social" aria-label="Redes sociales"><a href="https://twitter.com/udechile" target="_blank" rel="noreferrer">X</a><a href="https://www.instagram.com/udechileoficial/" target="_blank" rel="noreferrer">IG</a><a href="https://www.youtube.com/user/canaludechileoficial" target="_blank" rel="noreferrer">YT</a><a href="https://www.facebook.com/clubuniversidaddechileoficial/" target="_blank" rel="noreferrer">f</a><a href="https://www.tiktok.com/@udechile?_t=8X3QzIjOj5B&_r=1" target="_blank" rel="noreferrer">♪</a></div></div><div className="shell footer-bottom"><span>© 2026 El Sendero del Soccer · Pasión por el juego.</span><span>Universidad de Chile y sus marcas pertenecen a sus respectivos titulares.</span></div></footer>;
 }
 
 function SectionTitle({ eyebrow, title, children }) {
   return <div className="section-title"><div><span className="eyebrow">{eyebrow}</span><h2>{title}</h2></div>{children}</div>;
+}
+
+function useNewsFeed(limit = 6) {
+  const [feed, setFeed] = useState({ items: [], updatedAt: null, state: 'loading' });
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch(`/api/news?limit=${limit}`, { signal: controller.signal })
+      .then((response) => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+      })
+      .then((payload) => setFeed({ items: payload.items || [], updatedAt: payload.updatedAt, state: 'live' }))
+      .catch((error) => {
+        if (error.name !== 'AbortError') setFeed({ items: newsFeed.slice(0, limit), updatedAt: feedUpdatedAt, state: 'cached' });
+      });
+    return () => controller.abort();
+  }, [limit]);
+
+  return feed;
+}
+
+function SourceMark({ source }) {
+  return <span className="source-mark" aria-hidden="true">{source.trim().slice(0, 1)}</span>;
+}
+
+function NewsRadar() {
+  const { items, updatedAt, state } = useNewsFeed(6);
+  const lead = items[0];
+  const remaining = items.slice(1);
+  const updateLabel = updatedAt
+    ? new Intl.DateTimeFormat('es-CL', { hour: '2-digit', minute: '2-digit' }).format(new Date(updatedAt))
+    : null;
+
+  return <section className="shell news-radar" aria-labelledby="radar-title">
+    <SectionTitle eyebrow="AGENDA DE LOS MEDIOS" title="Radar azul.">
+      <div className="radar-status" role="status"><span className={state === 'loading' ? 'status-dot loading' : 'status-dot'} />{state === 'loading' ? 'Buscando titulares…' : `Actualizado ${updateLabel} · CLT`}</div>
+    </SectionTitle>
+    {lead ? <div className="radar-grid">
+      <a className="radar-lead" href={lead.sourceUrl} target="_blank" rel="noreferrer">
+        <img src={lead.image} alt="" />
+        <span className="radar-shade" />
+        <div><span className="radar-topic">{lead.topic}</span><h3>{lead.headline}</h3><p>{lead.summary}</p><small><SourceMark source={lead.source} /> {lead.source} · {lead.publishedLabel} <b>↗</b></small></div>
+      </a>
+      <div className="radar-stream">{remaining.map((item) => <a key={item.id} href={item.sourceUrl} target="_blank" rel="noreferrer" className="radar-item"><SourceMark source={item.source} /><span><small>{item.topic} · {item.publishedLabel}</small><b>{item.headline}</b><em>{item.source} ↗</em></span></a>)}</div>
+    </div> : <div className="radar-skeleton" aria-hidden="true"><span /><span /><span /></div>}
+    <div className="radar-note"><span>◉</span><p><b>Lectura rápida, criterio propio.</b> Este radar reúne titulares de otros medios; las crónicas de El Sendero del Soccer están identificadas más abajo.</p><RouteLink to="/actualidad">Ver nuestras historias →</RouteLink></div>
+  </section>;
 }
 
 function Credit({ article }) {
@@ -102,6 +190,20 @@ function Credit({ article }) {
 
 function ScorePanel({ compact = false }) {
   return <div className={compact ? 'score-panel compact' : 'score-panel'}><div className="score-kicker"><span>FINALIZADO</span> FECHA 23 · LA PORTADA</div><div className="score-board"><div><small>LOCAL</small><b>LA SERENA</b></div><strong>0 <i>—</i> 3</strong><div><small>VISITA</small><b>LA U</b></div></div><div className="scorers">47′ Arce <span>•</span> 54′ Hormazábal <span>•</span> 90+4′ Lichnovsky</div><ArticleLink article={articles[0]} className="inline-link">Leer la crónica completa →</ArticleLink></div>;
+}
+
+function FixtureRail() {
+  const fixtures = [
+    { venue: 'Estadio Nacional', date: '05 SEP · 20:42', home: 'Universidad de Chile', away: 'Coquimbo Unido', score: '4 — 2', done: true },
+    { venue: 'Estadio La Portada', date: '13 SEP · 15:00', home: 'Deportes La Serena', away: 'Universidad de Chile', score: '0 — 3', done: true },
+    { venue: 'Estadio Sausalito', date: '24 SEP · 20:30', home: 'Everton', away: 'Universidad de Chile', score: 'VS', done: false },
+    { venue: 'Estadio Nacional', date: '27 SEP · 17:30', home: 'Universidad de Chile', away: 'Everton', score: 'VS', done: false },
+  ];
+  return <section className="shell fixtures" aria-label="Calendario de partidos">
+    <div className="fixtures-heading"><div><span className="eyebrow">PRÓXIMOS PARTIDOS</span><h2>El calendario azul.</h2></div><div className="fixture-tabs"><span className="active">Masculino</span><span>Femenino</span></div></div>
+    <div className="fixture-grid">{fixtures.map((fixture) => <article className={fixture.done ? 'fixture done' : 'fixture'} key={`${fixture.date}-${fixture.home}`}><div className="fixture-venue"><span>{fixture.venue}</span><b>{fixture.done ? 'FINALIZADO' : 'PRÓXIMAMENTE'}</b></div><time>{fixture.date}</time><div className="fixture-clubs"><span>{fixture.home}</span><strong>{fixture.score}</strong><span>{fixture.away}</span></div></article>)}</div>
+    <RouteLink to="/datos" className="fixtures-link">VER TODOS LOS PARTIDOS <span>→</span></RouteLink>
+  </section>;
 }
 
 function BookBanner() {
@@ -117,31 +219,38 @@ function HomePage({ saved, onSave }) {
     <section className="concept-hero">
       <div className="shell concept-grid">
         <div className="concept-collage">
-          <img className="collage-main" src={articles[0].image} alt="Acción entre Universidad de Chile y La Serena, fotografía de archivo" />
+          <img className="collage-main" src="/assets/el-sendero-del-soccer.png" alt="Identidad visual de El Sendero del Soccer" />
           <div className="collage-wash" />
-          <div className="collage-score"><small>FINAL · LA PORTADA</small><b>0—3</b><span>TRIUNFO AZUL</span></div>
-          <div className="collage-photo"><img src="/assets/hinchada.png" alt="Arte editorial de la hinchada azul" /><span>LA PASIÓN<br />NO SE EXPLICA.</span></div>
-          <div className="collage-stamp">U</div>
+          <div className="collage-score"><small>EL SENDERO DEL SOCCER</small><b>FÚTBOL</b><span>PASIÓN POR EL JUEGO</span></div>
+          <div className="collage-stamp">⚽</div>
         </div>
         <div className="concept-copy">
           <div className="color-stripe" />
-          <span className="eyebrow">FÚTBOL · MEMORIA · PERTENENCIA</span>
-          <h1>La U<br />se vive.</h1>
-          <h2>Acá se comparte.</h2>
-          <p>{articles[0].excerpt}</p>
-          <ArticleLink article={articles[0]} className="concept-link">LEER LA CRÓNICA <span>↗</span></ArticleLink>
-          <Credit article={articles[0]} />
+          <span className="eyebrow">FÚTBOL · ANÁLISIS · NOTICIAS · DEBATE</span>
+          <h1>El fútbol<br />se vive.</h1>
+          <h2>El Sendero del Soccer.</h2>
+          <p>Actualidad, táctica y una mirada propia para seguir cada partido. Un punto de encuentro para quienes sienten pasión por el juego.</p>
+          <RouteLink to="/actualidad" className="concept-link">ENTRA AL SENDERO <span>↗</span></RouteLink>
+          <small className="credit">Identidad visual de El Sendero del Soccer</small>
         </div>
       </div>
       <div className="shell hero-modules">
         <ScorePanel compact />
         <article className="memory-teaser">
           <img src="/assets/tifo.png" alt="Arte editorial de hinchada azul" />
-          <div><span className="eyebrow">MEMORIA AZUL</span><ArticleLink article={articles[3]}><h3>Hay noches que no terminan nunca.</h3></ArticleLink><p>Volver al 2011. Volver a sentirlo.</p></div>
+          <div><span className="eyebrow">GALERÍA</span><ArticleLink article={articles[3]}><h3>Hinchas vs La Serena</h3></ArticleLink><p>La galería de una tarde que fue azul.</p></div>
         </article>
-        <RouteLink to="/soy-dt" className="community-teaser"><span>SOY DT · COPA CHILE<b>Arma tu once para Everton</b></span><strong>↗</strong></RouteLink>
+        <RouteLink to="/actualidad" className="community-teaser"><span>TIENDA OFICIAL<b>La colección UCH 2026 ya está aquí</b></span><strong>↗</strong></RouteLink>
       </div>
     </section>
+    <section className="shell home-signals" aria-label="En cifras">
+      <div className="signal-intro"><span className="eyebrow">UNIVERSIDAD DE CHILE</span><b>El club<br />de todos.</b></div>
+      <div className="signal-card"><span>42</span><div><b>PUNTOS</b><small>CAMPEONATO NACIONAL</small></div></div>
+      <div className="signal-card"><span>6</span><div><b>COPA CHILE</b><small>TÍTULOS OBTENIDOS</small></div></div>
+      <RouteLink to="/datos" className="signal-link"><span>CALENDARIO<br />DE PARTIDOS</span><b>→</b></RouteLink>
+    </section>
+    <FixtureRail />
+    <NewsRadar />
     <section className="shell home-latest">
       <SectionTitle eyebrow="PERIODISMO CON CORAZÓN AZUL" title="Lo que nos mueve."><RouteLink to="/actualidad" className="section-link">Ver toda la actualidad →</RouteLink></SectionTitle>
       <div className="home-news-grid">{articles.slice(1, 4).map((article) => <NewsCard key={article.id} article={article} saved={saved.includes(article.id)} onSave={onSave} />)}</div>
@@ -169,6 +278,13 @@ function DataPage() {
 
 function ManagerPage() {
   const [lineup, setLineup, lineupError] = useStored('sendero-dt-lineup-v1', initialLineup);
+  const [jwtToken, setJwtToken, jwtTokenError] = useStored('sendero-jwt-v1', '');
+  const [jwtUser, setJwtUser] = useState(null);
+  const [authMode, setAuthMode] = useState('register');
+  const [authForm, setAuthForm] = useState({ name: '', email: '', password: '' });
+  const [authOpen, setAuthOpen] = useState(false);
+  const [jwtBusy, setJwtBusy] = useState(false);
+  const [jwtMessage, setJwtMessage] = useState('');
   const [dragging, setDragging] = useState(null);
   const [selected, setSelected] = useState(null);
   const [duel, setDuel] = useState(null);
@@ -188,9 +304,20 @@ function ManagerPage() {
   const rivalPoints = 846;
 
   useEffect(() => {
+    if (import.meta.env.PROD) return undefined;
     if (!auth) return undefined;
     return onAuthStateChanged(auth, (nextUser) => setUser(nextUser), () => setAuthMessage('No pudimos comprobar tu sesión.'));
   }, []);
+
+  useEffect(() => {
+    if (import.meta.env.PROD) return undefined;
+    if (!jwtToken) return undefined;
+    fetch('/api/auth', { headers: { Authorization: `Bearer ${jwtToken}` } })
+      .then((response) => { if (!response.ok) throw new Error('expired'); return response.json(); })
+      .then((payload) => setJwtUser(payload.user))
+      .catch(() => { setJwtToken(''); setJwtUser(null); });
+    return undefined;
+  }, [jwtToken]);
 
   async function handleGoogleLogin() {
     if (!auth || !googleProvider) {
@@ -207,6 +334,31 @@ function ManagerPage() {
   async function handleLogout() {
     if (!auth) return;
     try { await signOut(auth); } catch { setAuthMessage('No pudimos cerrar tu sesión.'); }
+  }
+
+  async function handleJwtSubmit(event) {
+    event.preventDefault();
+    setJwtBusy(true);
+    setJwtMessage('');
+    try {
+      const response = await fetch('/api/auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: authMode, ...authForm }) });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || 'No pudimos completar el acceso.');
+      setJwtToken(payload.token);
+      setJwtUser(payload.user);
+      setAuthOpen(false);
+      setAuthForm({ name: '', email: '', password: '' });
+    } catch (error) {
+      setJwtMessage(error.message);
+    } finally {
+      setJwtBusy(false);
+    }
+  }
+
+  function handleJwtLogout() {
+    setJwtToken('');
+    setJwtUser(null);
+    setJwtMessage('');
   }
 
   function placePlayer(index, playerId) {
@@ -242,9 +394,46 @@ function ManagerPage() {
     setDuel(null);
   }
 
-  const playerCard = (player, origin, index) => <div className={`dt-player ${selected === `${origin}:${index}` ? 'selected' : ''}`} draggable onDragStart={() => setDragging(`${origin}:${index}`)} onDragEnd={() => setDragging(null)} onClick={(event) => { event.stopPropagation(); setSelected(`${origin}:${index}`); }} role="button" tabIndex="0" onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelected(`${origin}:${index}`); } }}><span className="dt-rating">{player.rating}</span><span className="dt-player-name">{player.short}</span><small>{player.role} · {player.note}</small></div>;
+  const playerCard = (player, origin, index) => <div className={`dt-player ${selected === `${origin}:${index}` ? 'selected' : ''}`} draggable onDragStart={() => setDragging(`${origin}:${index}`)} onDragEnd={() => setDragging(null)} onClick={(event) => { event.stopPropagation(); setSelected(`${origin}:${index}`); }} role="button" tabIndex="0" onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelected(`${origin}:${index}`); } }}><div className="dt-card-top"><span className="dt-rating">{player.rating}</span><span className="dt-role">{player.role}</span></div><span className="dt-card-mark" aria-hidden="true">S</span><span className="dt-player-name">{player.short}</span><div className="dt-card-stats"><span><b>{player.rating}</b>VAL</span><span><b>{player.points}</b>FOR</span><span><b>{player.role}</b>POS</span></div></div>;
 
-  return <div className="page manager-page"><section className="shell manager-heading"><div><span className="eyebrow">SOY DT · COPA CHILE</span><h1>Arma tu once.<br /><em>Defiende la U.</em></h1><p>Elige tu 3–4–3 para el próximo partido ante Everton. Arrastra a cada jugador, ajusta tu idea y compite contra otro hincha.</p><div className="manager-auth">{user ? <><span className="auth-avatar">{(user.displayName || user.email || 'U').slice(0, 1).toUpperCase()}</span><span><b>{user.displayName || 'Hincha azul'}</b><small>Sesión iniciada con Google</small></span><button className="auth-link" onClick={handleLogout}>Salir</button></> : <><span className="google-mark">G</span><span><b>Guarda tu once y compite</b><small>Accede con tu cuenta de Google</small></span><button className="auth-button" onClick={handleGoogleLogin} disabled={authBusy}>{authBusy ? 'Conectando…' : 'Entrar con Google'}</button></>}{!isFirebaseConfigured && <small className="auth-note">Falta conectar Firebase para activar el acceso.</small>}{authMessage && <small className="auth-message" role="status">{authMessage}</small>}</div></div><div className="manager-heading-art"><img src="/assets/tifo.png" alt="Mosaico azul de la hinchada de Universidad de Chile" /><span>LA PIZARRA<br />ES TUYA</span></div></section><section className="shell manager-layout"><div className="manager-main"><div className="manager-toolbar"><div><span className="eyebrow">TU PIZARRA</span><h2>Once titular · 3–4–3</h2></div><div className="manager-score"><small>VALORACIÓN</small><strong>{totalPoints}</strong><span>{roleFit}/11 posiciones naturales</span></div></div><p className="manager-help">Arrastra una carta al campo o selecciónala y toca una posición. Los puntos combinan rendimiento, forma y encaje táctico.</p><div className="football-pitch" aria-label="Campo para armar la formación titular">{dtSlots.map((slot, index) => <div key={slot.key} className={`pitch-slot slot-${index} ${selected === `lineup:${index}` ? 'targeted' : ''}`} onDragOver={(event) => event.preventDefault()} onDrop={() => handleDrop(index)} onClick={() => handleSlotClick(index)}><span className="slot-label">{slot.label}</span>{activeLineup[index] ? playerCard(playerById[activeLineup[index]], 'lineup', index) : <span className="empty-slot">+</span>}</div>)}</div><div className="manager-actions"><button className="button" onClick={() => setDuel({ user: totalPoints, rival: rivalPoints })}>Jugar el duelo ↗</button><button className="text-button" onClick={resetLineup}>Restablecer once</button>{lineupError && <small>No pudimos guardar tu once en este dispositivo.</small>}</div></div><aside className="manager-sidebar"><div className="bench-panel"><div className="bench-head"><div><span className="eyebrow">BANCA</span><h3>Opciones para cambiar el partido</h3></div><span>{bench.length} jugadores</span></div><div className="bench-list">{bench.map((player, index) => <div key={player.id} draggable onDragStart={() => setDragging(`bench:${player.id}`)} onDragEnd={() => setDragging(null)} onClick={() => setSelected(`bench:${player.id}`)} className={`bench-player ${selected === `bench:${player.id}` ? 'selected' : ''}`} role="button" tabIndex="0"><span className="bench-number">{String(index + 1).padStart(2, '0')}</span><span><b>{player.name}</b><small>{player.role} · {player.note}</small></span><strong>{player.points}</strong></div>)}</div><p className="bench-tip">Consejo: un jugador fuera de su posición pierde parte del bonus táctico.</p></div><div className="dt-detail"><div className="dt-detail-head"><span className="dt-avatar">{selectedPlayer.short.slice(0, 2).toUpperCase()}</span><div><span className="eyebrow">FICHA DE JUGADOR</span><h3>{selectedPlayer.name}</h3></div><strong>{selectedPlayer.rating}</strong></div><div className="dt-attributes"><span><small>POSICIÓN</small><b>{selectedPlayer.role}</b></span><span><small>FORMA</small><b>{selectedPlayer.points}</b></span><span><small>APORTE</small><b>{selectedPlayer.note}</b></span></div><p>Seleccionado para tu pizarra. Arrástralo para probar otra sociedad.</p></div><div className="duel-panel"><span className="eyebrow">RANKING DE LA FECHA</span><h3>¿Tu lectura supera a la de otro azul?</h3><p>Enfrenta tu valoración contra <b>El Bulla 1902</b>, un rival generado para esta fecha.</p>{duel ? <div className="duel-result"><div><small>TU ONCE</small><strong>{duel.user}</strong></div><span>vs</span><div><small>EL BULLA 1902</small><strong>{duel.rival}</strong></div><b className={duel.user >= duel.rival ? 'win' : 'loss'}>{duel.user >= duel.rival ? '¡Ganaste el duelo! 🔵' : 'El rival se impuso. Ajusta tu pizarra.'}</b></div> : <div className="duel-empty">Juega el duelo cuando sientas que tu once está listo.</div>}</div></aside></section><section className="shell manager-footnote"><span>PROTOTIPO JUGABLE</span><p>Tu once y tu resultado se guardan en este navegador. El ranking entre usuarios queda listo para conectar a una base de datos cuando quieras convertirlo en competencia real.</p></section></div>;
+  const activeUser = jwtUser || user;
+  const openRegister = () => { setAuthMode('register'); setAuthOpen(true); setJwtMessage(''); };
+  const openLogin = () => { setAuthMode('login'); setAuthOpen(true); setJwtMessage(''); };
+  const playDuel = () => {
+    if (!import.meta.env.PROD && !activeUser) { openRegister(); setJwtMessage('Regístrate para jugar el duelo y guardar tu sesión.'); return; }
+    setDuel({ user: totalPoints, rival: rivalPoints });
+  };
+  return <div className="page manager-page">
+    <section className="shell manager-heading">
+      <div>
+        <span className="eyebrow">SOY DT · COPA CHILE</span>
+        <h1>Arma tu once.<br /><em>Defiende la U.</em></h1>
+        <p>Elige tu 3–4–3 para el próximo partido ante Everton. Arrastra a cada jugador, ajusta tu idea y compite contra otro hincha.</p>
+        <div className="manager-auth">
+          {import.meta.env.PROD ? <><span className="auth-avatar">U</span><span><b>Juega sin registrarte</b><small>Tu once se guarda solo en este dispositivo. El duelo es una demostración.</small></span></> : <>{activeUser ? <><span className="auth-avatar">{(activeUser.displayName || activeUser.name || activeUser.email || 'U').slice(0, 1).toUpperCase()}</span><span><b>{activeUser.displayName || activeUser.name || 'Hincha azul'}</b><small>{jwtUser ? activeUser.email : 'Sesión iniciada con Google'}</small></span><button className="auth-link" onClick={jwtUser ? handleJwtLogout : handleLogout}>Salir</button></> : <><span className="google-mark">G</span><span><b>Guarda tu once y compite</b><small>Regístrate gratis en 20 segundos</small></span><button className="auth-button" onClick={openRegister}>Crear cuenta</button><button className="auth-link" onClick={openLogin}>Entrar</button></>}{!isFirebaseConfigured && !activeUser && <small className="auth-note">Registro simple activo · Google opcional.</small>}{authMessage && <small className="auth-message" role="status">{authMessage}</small>}{jwtMessage && <small className="auth-message" role="status">{jwtMessage}</small>}</>}
+        </div>
+        {!import.meta.env.PROD && authOpen && <form className="jwt-form" onSubmit={handleJwtSubmit}>
+          <div className="jwt-tabs"><button type="button" className={authMode === 'register' ? 'active' : ''} onClick={() => setAuthMode('register')}>Crear cuenta</button><button type="button" className={authMode === 'login' ? 'active' : ''} onClick={() => setAuthMode('login')}>Entrar</button></div>
+          {authMode === 'register' && <label>Nombre o apodo<input value={authForm.name} onChange={(event) => setAuthForm({ ...authForm, name: event.target.value })} maxLength="40" autoComplete="name" required /></label>}
+          <label>Email<input type="email" value={authForm.email} onChange={(event) => setAuthForm({ ...authForm, email: event.target.value })} autoComplete="email" required /></label>
+          <label>Contraseña<input type="password" value={authForm.password} onChange={(event) => setAuthForm({ ...authForm, password: event.target.value })} minLength="6" autoComplete={authMode === 'register' ? 'new-password' : 'current-password'} required /></label>
+          <div className="jwt-form-actions"><small>Token de sesión válido por 7 días.</small><button className="auth-button" disabled={jwtBusy}>{jwtBusy ? 'Guardando…' : authMode === 'register' ? 'Registrarme' : 'Entrar'}</button></div>
+        </form>}
+      </div>
+      <div className="manager-heading-art"><img src="/assets/tifo.png" alt="Mosaico azul de la hinchada de Universidad de Chile" /><span>LA PIZARRA<br />ES TUYA</span></div>
+    </section>
+    <section className="shell manager-layout"><div className="manager-main">
+      <div className="manager-toolbar"><div><span className="eyebrow">TU PIZARRA</span><h2>Once titular · 3–4–3</h2></div><div className="manager-score"><small>VALORACIÓN</small><strong>{totalPoints}</strong><span>{roleFit}/11 posiciones naturales</span></div></div>
+      <p className="manager-help">Arrastra una carta al campo o selecciónala y toca una posición. Los puntos combinan rendimiento, forma y encaje táctico.</p>
+      <div className="football-pitch" aria-label="Campo para armar la formación titular">{dtSlots.map((slot, index) => <div key={slot.key} className={`pitch-slot slot-${index} ${selected === `lineup:${index}` ? 'targeted' : ''}`} onDragOver={(event) => event.preventDefault()} onDrop={() => handleDrop(index)} onClick={() => handleSlotClick(index)}><span className="slot-label">{slot.label}</span>{activeLineup[index] ? playerCard(playerById[activeLineup[index]], 'lineup', index) : <span className="empty-slot">+</span>}</div>)}</div>
+      <div className="manager-actions"><button className="button" onClick={playDuel}>Jugar el duelo ↗</button><button className="text-button" onClick={resetLineup}>Restablecer once</button>{lineupError && <small>No pudimos guardar tu once en este dispositivo.</small>}{jwtTokenError && <small>No pudimos guardar tu sesión en este dispositivo.</small>}</div>
+    </div><aside className="manager-sidebar">
+      <div className="bench-panel"><div className="bench-head"><div><span className="eyebrow">BANCA</span><h3>Opciones para cambiar el partido</h3></div><span>{bench.length} jugadores</span></div><div className="bench-list">{bench.map((player, index) => <div key={player.id} draggable onDragStart={() => setDragging(`bench:${player.id}`)} onDragEnd={() => setDragging(null)} onClick={() => setSelected(`bench:${player.id}`)} className={`bench-player ${selected === `bench:${player.id}` ? 'selected' : ''}`} role="button" tabIndex="0"><span className="bench-number">{String(index + 1).padStart(2, '0')}</span><span><b>{player.name}</b><small>{player.role} · {player.note}</small></span><strong>{player.points}</strong></div>)}</div><p className="bench-tip">Consejo: un jugador fuera de su posición pierde parte del bonus táctico.</p></div>
+      <div className="dt-detail"><div className="dt-detail-head"><span className="dt-avatar">{selectedPlayer.short.slice(0, 2).toUpperCase()}</span><div><span className="eyebrow">FICHA DE JUGADOR</span><h3>{selectedPlayer.name}</h3></div><strong>{selectedPlayer.rating}</strong></div><div className="dt-attributes"><span><small>POSICIÓN</small><b>{selectedPlayer.role}</b></span><span><small>FORMA</small><b>{selectedPlayer.points}</b></span><span><small>APORTE</small><b>{selectedPlayer.note}</b></span></div><p>Seleccionado para tu pizarra. Arrástralo para probar otra sociedad.</p></div>
+      <div className="duel-panel"><span className="eyebrow">RANKING DE LA FECHA</span><h3>¿Tu lectura supera a la de otro azul?</h3><p>Enfrenta tu valoración contra <b>El Bulla 1902</b>, un rival generado para esta fecha.</p>{duel ? <div className="duel-result"><div><small>TU ONCE</small><strong>{duel.user}</strong></div><span>vs</span><div><small>EL BULLA 1902</small><strong>{duel.rival}</strong></div><b className={duel.user >= duel.rival ? 'win' : 'loss'}>{duel.user >= duel.rival ? '¡Ganaste el duelo! 🔵' : 'El rival se impuso. Ajusta tu pizarra.'}</b></div> : <div className="duel-empty">Juega el duelo cuando sientas que tu once está listo.</div>}</div>
+    </aside></section>
+    <section className="shell manager-footnote"><span>PROTOTIPO JUGABLE</span><p>Tu once y tu resultado se guardan en este navegador. El ranking entre usuarios queda listo para conectar a una base de datos cuando quieras convertirlo en competencia real.</p></section>
+  </div>;
 }
 
 function MemoryPage({ saved, onSave }) {
@@ -279,18 +468,32 @@ function ArticlePage({ article, saved, onSave, saveError }) {
     catch { setMessage('Copia la dirección del navegador para compartir este artículo.'); }
   }
   if (!article) return <div className="page shell empty-state"><h1>No encontramos ese artículo.</h1><RouteLink to="/actualidad">Volver a la actualidad →</RouteLink></div>;
-  return <article className="article-page shell"><RouteLink to="/actualidad" className="back-link">← Volver a actualidad</RouteLink><div className="article-heading"><span className="eyebrow">{article.category} / {article.type}</span><h1 tabIndex="-1">{article.title}</h1><p>{article.excerpt}</p><div>REDACCIÓN EL SENDERO AZUL <span>•</span> {article.date}</div></div><figure><img src={article.image} alt={article.credit} /><figcaption><Credit article={article} /></figcaption></figure><div className="article-content"><div className="article-actions"><button aria-pressed={saved} onClick={() => onSave(article.id)}>{saved ? '♥ Guardado' : '♡ Guardar artículo'}</button><button onClick={share}>Copiar enlace ↗</button></div><p className="feedback" aria-live="polite">{message}{saveError ? ' No pudimos guardar el cambio.' : ''}</p>{article.body.map((paragraph, index) => <p key={index}>{paragraph}</p>)}<aside className="source-box"><b>Sobre esta publicación</b><p>Texto original de El Sendero Azul. {article.type === 'Análisis' ? 'Interpretación editorial basada en los hechos del encuentro.' : 'Información redactada a partir de la fuente indicada.'}</p>{article.source.url ? <a href={article.source.url} target="_blank" rel="noreferrer">{article.source.label} ↗</a> : <span>{article.source.label}</span>}</aside><h2>Sigue por el Sendero</h2>{articles.filter((item) => item.id !== article.id).slice(0, 3).map((item) => <ArticleLink key={item.id} article={item} className="related-link" />)}</div></article>;
+  return <article className="article-page shell"><RouteLink to="/actualidad" className="back-link">← Volver a actualidad</RouteLink><div className="article-heading"><span className="eyebrow">{article.category} / {article.type}</span><h1 tabIndex="-1">{article.title}</h1><p>{article.excerpt}</p><div>REDACCIÓN EL SENDERO DEL SOCCER <span>•</span> {article.date}</div></div><figure><img src={article.image} alt={article.credit} /><figcaption><Credit article={article} /></figcaption></figure><div className="article-content"><div className="article-actions"><button aria-pressed={saved} onClick={() => onSave(article.id)}>{saved ? '♥ Guardado' : '♡ Guardar artículo'}</button><button onClick={share}>Copiar enlace ↗</button></div><p className="feedback" aria-live="polite">{message}{saveError ? ' No pudimos guardar el cambio.' : ''}</p>{article.body.map((paragraph, index) => <p key={index}>{paragraph}</p>)}<aside className="source-box"><b>Sobre esta publicación</b><p>Texto original de El Sendero del Soccer. {article.type === 'Análisis' ? 'Interpretación editorial basada en los hechos del encuentro.' : 'Información redactada a partir de la fuente indicada.'}</p>{article.source.url ? <a href={article.source.url} target="_blank" rel="noreferrer">{article.source.label} ↗</a> : <span>{article.source.label}</span>}</aside><h2>Sigue por el Sendero</h2>{articles.filter((item) => item.id !== article.id).slice(0, 3).map((item) => <ArticleLink key={item.id} article={item} className="related-link" />)}</div></article>;
 }
 
 function App() {
   const [route, setRoute] = useState(getRoute);
   const [saved, setSaved, saveError] = useStored('sendero-saved-v1', []);
+  const [favoriteTeamId, setFavoriteTeamId] = useStored('sendero-favorite-team-v1', '');
+  const [teamPickerOpen, setTeamPickerOpen] = useState(() => !favoriteTeamId);
+  const favoriteTeam = teamChoices.find((team) => team.id === favoriteTeamId);
   const articleId = route.startsWith('/articulo/') ? route.slice('/articulo/'.length) : null;
   const article = articles.find((item) => item.id === articleId);
   useEffect(() => { const handleRoute = () => setRoute(getRoute()); window.addEventListener('hashchange', handleRoute); return () => window.removeEventListener('hashchange', handleRoute); }, []);
   useEffect(() => {
-    const titles = { '/': 'El Sendero Azul | La casa del hincha', '/actualidad': 'Actualidad | El Sendero Azul', '/datos': 'Partido & data | El Sendero Azul', '/memoria': 'Memoria azul | El Sendero Azul', '/comunidad': 'La tribuna | El Sendero Azul', '/soy-dt': 'Soy DT | El Sendero Azul' };
-    document.title = article ? `${article.title} | El Sendero Azul` : titles[route] || 'El Sendero Azul';
+    if (!favoriteTeam) return;
+    const root = document.documentElement;
+    root.style.setProperty('--navy', favoriteTeam.navy);
+    root.style.setProperty('--navy-2', favoriteTeam.navy);
+    root.style.setProperty('--blue', favoriteTeam.primary);
+    root.style.setProperty('--blue-light', favoriteTeam.light);
+    root.style.setProperty('--red', favoriteTeam.accent);
+    root.style.setProperty('--gold', favoriteTeam.accent);
+    root.dataset.favoriteTeam = favoriteTeam.id;
+  }, [favoriteTeam]);
+  useEffect(() => {
+    const titles = { '/': 'El Sendero del Soccer | Pasión por el juego', '/actualidad': 'Noticias | El Sendero del Soccer', '/datos': 'Partidos | El Sendero del Soccer', '/memoria': 'El Club | El Sendero del Soccer', '/comunidad': 'Comunidad | El Sendero del Soccer', '/soy-dt': 'Último Minuto | El Sendero del Soccer' };
+    document.title = article ? `${article.title} | El Sendero del Soccer` : titles[route] || 'El Sendero del Soccer';
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [route, article]);
   const toggleSave = (id) => setSaved(saved.includes(id) ? saved.filter((item) => item !== id) : [...saved, id]);
@@ -302,7 +505,8 @@ function App() {
   else if (route === '/comunidad') page = <CommunityPage />;
   else if (route === '/soy-dt') page = <ManagerPage />;
   else page = <HomePage saved={saved} onSave={toggleSave} />;
-  return <><a className="skip-link" href="#main">Saltar al contenido</a><Header route={route} /><main id="main">{page}</main><Footer /></>;
+  const chooseTeam = (teamId) => { setFavoriteTeamId(teamId); setTeamPickerOpen(false); };
+  return <><a className="skip-link" href="#main">Saltar al contenido</a><Header route={route} favoriteTeam={favoriteTeam} onChooseTeam={() => setTeamPickerOpen(true)} /><main id="main">{page}</main><Footer />{teamPickerOpen && <TeamPicker selectedTeam={favoriteTeam} onSelect={chooseTeam} />}</>;
 }
 
 createRoot(document.getElementById('root')).render(<React.StrictMode><App /></React.StrictMode>);
