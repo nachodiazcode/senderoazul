@@ -36,24 +36,35 @@ const teamChoices = [
   { id: 'la-calera', name: 'Unión La Calera', mark: 'ULC', primary: '#b72f3c', navy: '#651b26', light: '#efaab1', accent: '#f5f5f5' },
 ];
 
-const clubSnapshots = {
-  'colo-colo': { position: 1, points: 54, city: 'Macul', played: 23 },
-  'u-catolica': { position: 2, points: 42, city: 'Santiago', played: 23 },
-  'u-de-chile': { position: 3, points: 42, city: 'Santiago', played: 23 },
-  everton: { position: 4, points: 36, city: 'Viña del Mar', played: 23 },
-  palestino: { position: 5, points: 36, city: 'La Cisterna', played: 23 },
-  'deportes-limache': { position: 6, points: 33, city: 'Limache', played: 23 },
-  nublense: { position: 7, points: 32, city: 'Chillán', played: 23 },
-  'deportes-concepcion': { position: 8, points: 31, city: 'Concepción', played: 23 },
-  'la-serena': { position: 9, points: 30, city: 'La Serena', played: 23 },
-  coquimbo: { position: 10, points: 29, city: 'Coquimbo', played: 23 },
-  audax: { position: 11, points: 28, city: 'La Florida', played: 23 },
-  huachipato: { position: 12, points: 28, city: 'Talcahuano', played: 22 },
-  ohiggins: { position: 13, points: 27, city: 'Rancagua', played: 23 },
-  cobresal: { position: 14, points: 24, city: 'El Salvador', played: 23 },
-  'u-de-concepcion': { position: 15, points: 22, city: 'Concepción', played: 22 },
-  'la-calera': { position: 16, points: 17, city: 'La Calera', played: 23 },
-};
+const leagueStandings2026 = [
+  { id: 'colo-colo', played: 23, wins: 17, draws: 3, losses: 3, gf: 48, ga: 22, points: 54, city: 'Macul' },
+  { id: 'u-catolica', played: 23, wins: 13, draws: 3, losses: 7, gf: 50, ga: 33, points: 42, city: 'Santiago' },
+  { id: 'u-de-chile', played: 23, wins: 12, draws: 6, losses: 5, gf: 35, ga: 19, points: 42, city: 'Santiago' },
+  { id: 'everton', played: 23, wins: 10, draws: 6, losses: 7, gf: 37, ga: 25, points: 36, city: 'Viña del Mar' },
+  { id: 'palestino', played: 23, wins: 11, draws: 3, losses: 9, gf: 36, ga: 33, points: 36, city: 'La Cisterna' },
+  { id: 'deportes-limache', played: 23, wins: 10, draws: 3, losses: 10, gf: 43, ga: 35, points: 33, city: 'Limache' },
+  { id: 'nublense', played: 23, wins: 8, draws: 8, losses: 7, gf: 28, ga: 31, points: 32, city: 'Chillán' },
+  { id: 'deportes-concepcion', played: 23, wins: 9, draws: 4, losses: 10, gf: 25, ga: 26, points: 31, city: 'Concepción' },
+  { id: 'la-serena', played: 23, wins: 7, draws: 9, losses: 7, gf: 34, ga: 38, points: 30, city: 'La Serena' },
+  { id: 'coquimbo', played: 22, wins: 8, draws: 5, losses: 9, gf: 31, ga: 31, points: 29, city: 'Coquimbo' },
+  { id: 'audax', played: 23, wins: 7, draws: 7, losses: 9, gf: 26, ga: 31, points: 28, city: 'La Florida' },
+  { id: 'ohiggins', played: 23, wins: 8, draws: 3, losses: 12, gf: 28, ga: 36, points: 27, city: 'Rancagua' },
+  { id: 'huachipato', played: 21, wins: 7, draws: 4, losses: 10, gf: 29, ga: 39, points: 25, city: 'Talcahuano' },
+  { id: 'cobresal', played: 23, wins: 7, draws: 3, losses: 13, gf: 34, ga: 44, points: 24, city: 'El Salvador' },
+  { id: 'u-de-concepcion', played: 22, wins: 6, draws: 4, losses: 12, gf: 17, ga: 37, points: 22, city: 'Concepción' },
+  { id: 'la-calera', played: 23, wins: 4, draws: 5, losses: 14, gf: 19, ga: 40, points: 17, city: 'La Calera' },
+].map((club, index) => ({ ...club, position: index + 1, goalDifference: club.gf - club.ga }));
+
+const clubSnapshots = Object.fromEntries(leagueStandings2026.map(({ id, position, points, played, city }) => [id, { position, points, played, city }]));
+
+const copaChileSchedule = [
+  { date: 'MIÉ 23 SEP', matches: [['Curicó Unido', 'Deportes Concepción', '18:00'], ['Deportes Iquique', 'Deportes Antofagasta', '20:30'], ['Unión La Calera', 'Universidad Católica', '20:30']] },
+  { date: 'JUE 24 SEP', matches: [["O’Higgins", 'Deportes Santa Cruz', '18:00'], ['Everton', 'Universidad de Chile', '20:30']] },
+];
+
+function standingsClubName(id) {
+  return teamChoices.find((team) => team.id === id)?.name || id;
+}
 
 function getClubSearchUrl(team) {
   return `https://news.google.com/search?q=${encodeURIComponent(`${team.name} fútbol Chile`)}&hl=es-419&gl=CL&ceid=CL:es-419`;
@@ -202,9 +213,8 @@ function NewsRadar({ team }) {
     </SectionTitle>
     {lead ? <div className={`radar-grid ${remaining.length ? '' : 'radar-grid-solo'}`}>
       <a className="radar-lead" href={lead.sourceUrl} target="_blank" rel="noreferrer">
-        <img src={lead.image} alt="" />
-        <span className="radar-shade" />
-        <div><span className="radar-topic">{lead.topic}</span><h3>{lead.headline}</h3><p>{lead.summary}</p><small><SourceMark source={lead.source} /> {lead.source} · {lead.publishedLabel} <b>↗</b></small></div>
+        <div className="radar-lead-copy"><span className="radar-topic">{lead.topic}</span><h3>{lead.headline}</h3><p>{lead.summary}</p><small><SourceMark source={lead.source} /> {lead.source} · {lead.publishedLabel} <b>↗</b></small></div>
+        <div className="radar-lead-art" aria-hidden="true"><span className="radar-art-kicker">EL SENDERO · FUENTES</span><div>{lead.clubIds.slice(0, 3).map((clubId) => { const crestTeam = teamChoices.find((item) => item.id === clubId); return crestTeam ? <TeamCrest key={clubId} team={crestTeam} className="radar-art-crest" /> : null; })}</div><b>90<span>′</span></b></div>
       </a>
       {remaining.length > 0 && <aside className="radar-stream" aria-label="Más titulares del radar"><div className="radar-stream-heading"><div><span>AL DÍA</span><b>Más del radar</b></div><strong>{remaining.length}<small> TITULARES</small></strong></div><div className="radar-stream-list">{sideStories.map((item, index) => <a key={item.id} href={item.sourceUrl} target="_blank" rel="noreferrer" className="radar-item"><i className="radar-item-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</i><span><small>{item.topic} · {item.publishedLabel}</small><b>{item.headline}</b><em>{item.source} ↗</em></span></a>)}</div><div className="radar-stream-footer"><span>{hiddenStories ? `+ ${hiddenStories} titulares más` : `Más sobre ${activeTeam.name}`}</span><a href={getClubSearchUrl(activeTeam)} target="_blank" rel="noreferrer">Buscar actualidad ↗</a></div></aside>}
     </div> : state === 'loading' ? <div className="radar-skeleton" aria-hidden="true"><span /><span /><span /></div> : <div className="team-news-empty"><TeamCrest team={activeTeam} className="empty-crest" /><div><b>Aún no hay notas verificadas de {activeTeam.name} en nuestro catálogo.</b><p>Para no mostrarte noticias de otro club, dejamos este radar listo para las fuentes de tu equipo.</p></div><a href={getClubSearchUrl(activeTeam)} target="_blank" rel="noreferrer">Buscar actualidad ↗</a></div>}
@@ -280,6 +290,11 @@ function NewsCard({ article, saved, onSave, featured = false }) {
   return <article className={featured ? 'news-card featured' : 'news-card'}><ArticleLink article={article} className="card-image"><img src={article.image} alt={article.credit} loading="lazy" /></ArticleLink><div className="card-body"><div className="card-meta"><span>{article.category}</span><small>{article.type}</small></div><h3><ArticleLink article={article}>{article.title}</ArticleLink></h3><p>{article.excerpt}</p><div className="card-footer"><small>{article.date}</small><button onClick={() => onSave(article.id)} aria-pressed={saved} aria-label={`${saved ? 'Quitar de guardados' : 'Guardar'}: ${article.title}`}>{saved ? '♥' : '♡'}</button></div></div></article>;
 }
 
+function SourceNewsCard({ item }) {
+  const taggedTeam = teamChoices.find((team) => item.clubIds?.includes(team.id));
+  return <article className="source-news-card"><div className="source-news-top"><span>{item.topic}</span><time>{item.publishedLabel}</time></div><div className="source-news-main">{taggedTeam && <TeamCrest team={taggedTeam} className="source-news-crest" />}<div><h3>{item.headline}</h3><p>{item.summary}</p></div></div><div className="source-news-footer"><span><SourceMark source={item.source} /> Resumen editorial · {item.source}</span><a href={item.sourceUrl} target="_blank" rel="noreferrer">Leer la fuente ↗</a></div></article>;
+}
+
 function HomePage({ saved, onSave, favoriteTeam }) {
   const activeTeam = favoriteTeam || teamChoices.find((item) => item.id === 'u-de-chile');
   const clubArticles = useMemo(() => articles.filter((article) => article.clubIds?.includes(activeTeam.id)), [activeTeam.id]);
@@ -301,20 +316,24 @@ function HomePage({ saved, onSave, favoriteTeam }) {
 
 function NewsPage({ saved, onSave, saveError, favoriteTeam }) {
   const activeTeam = favoriteTeam || teamChoices.find((item) => item.id === 'u-de-chile');
+  const { items: sourceItems, updatedAt, state } = useNewsFeed(20, activeTeam.id);
   const clubArticles = useMemo(() => articles.filter((article) => article.clubIds?.includes(activeTeam.id)), [activeTeam.id]);
-  const categories = useMemo(() => ['Todo', ...new Set(clubArticles.map((article) => article.category))], [clubArticles]);
+  const categories = useMemo(() => ['Todo', ...new Set([...sourceItems.map((item) => item.topic), ...clubArticles.map((article) => article.category)])], [sourceItems, clubArticles]);
   const [category, setCategory] = useState('Todo');
   const [query, setQuery] = useState('');
   const [onlySaved, setOnlySaved] = useState(false);
   useEffect(() => { setCategory('Todo'); setQuery(''); setOnlySaved(false); }, [activeTeam.id]);
   const normalize = (value) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   const filtered = useMemo(() => clubArticles.filter((article) => (category === 'Todo' || article.category === category) && normalize(`${article.title} ${article.excerpt}`).includes(normalize(query)) && (!onlySaved || saved.includes(article.id))), [clubArticles, category, query, onlySaved, saved]);
+  const filteredSource = useMemo(() => sourceItems.filter((item) => (category === 'Todo' || item.topic === category) && normalize(`${item.headline} ${item.summary} ${item.source}`).includes(normalize(query))), [sourceItems, category, query]);
   const savedForTeam = saved.filter((id) => clubArticles.some((article) => article.id === id));
-  return <div className="page shell"><div className="page-heading editorial-heading"><span className="eyebrow">ACTUALIDAD DE {activeTeam.mark}</span><h1>Todo sobre<br />{activeTeam.name}.</h1><p>Noticias y archivo etiquetados para tu club. Si aún no tenemos una fuente verificada, te lo diremos con claridad.</p></div><div className="news-toolbar"><label className="search-box"><span aria-hidden="true">⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} aria-label={`Buscar artículos de ${activeTeam.name}`} placeholder={`Buscar en ${activeTeam.name}…`} /></label><div className="category-filter" role="group" aria-label="Filtrar por categoría">{categories.map((item) => <button key={item} aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</button>)}</div><button className="saved-button" aria-pressed={onlySaved} onClick={() => setOnlySaved(!onlySaved)}>{onlySaved ? '♥' : '♡'} Mis guardados ({savedForTeam.length})</button></div>{filtered.length ? <div className="news-grid">{filtered.map((article, index) => <NewsCard key={article.id} article={article} featured={index === 0 && category === 'Todo' && !query && !onlySaved} saved={saved.includes(article.id)} onSave={onSave} />)}</div> : <div className="empty-state"><h2>{clubArticles.length ? 'No encontramos artículos con esos filtros.' : `Aún no hay artículos verificados sobre ${activeTeam.name}.`}</h2><p>{clubArticles.length ? 'Prueba con otra categoría o quita la búsqueda.' : 'No mostramos contenido de otro club para llenar este espacio.'}</p>{clubArticles.length ? <button onClick={() => { setQuery(''); setCategory('Todo'); setOnlySaved(false); }}>Ver archivo del club</button> : <a href={getClubSearchUrl(activeTeam)} target="_blank" rel="noreferrer">Buscar actualidad de {activeTeam.name} ↗</a>}</div>}<p className="data-note">Los guardados viven solo en este navegador.{saveError ? ' No pudimos guardar el último cambio.' : ''}</p>{activeTeam.id === 'u-de-chile' && <BookBanner />}</div>;
+  return <div className="page shell"><div className="page-heading editorial-heading"><span className="eyebrow">ACTUALIDAD DE {activeTeam.mark}</span><h1>Todo sobre<br />{activeTeam.name}.</h1><p>Actualidad deportiva y archivo editorial de tu club. Los datos externos se enlazan a su fuente; los textos de esta página son resúmenes originales.</p></div><div className="news-toolbar"><label className="search-box"><span aria-hidden="true">⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} aria-label={`Buscar artículos de ${activeTeam.name}`} placeholder={`Buscar en ${activeTeam.name}…`} /></label><div className="category-filter" role="group" aria-label="Filtrar por categoría">{categories.map((item) => <button key={item} aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</button>)}</div><button className="saved-button" aria-pressed={onlySaved} onClick={() => setOnlySaved(!onlySaved)}>{onlySaved ? '♥' : '♡'} Mis guardados ({savedForTeam.length})</button></div>{!onlySaved && <section className="source-news-section"><div className="source-news-heading"><div><span className="eyebrow">FUENTES VERIFICABLES</span><h2>Lo más reciente para {activeTeam.name}.</h2></div><small>{state === 'loading' ? 'Actualizando…' : `ESPN Chile · corte ${updatedAt ? new Intl.DateTimeFormat('es-CL', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(updatedAt)).toUpperCase() : 'editorial'}`}</small></div>{filteredSource.length ? <div className="source-news-grid">{filteredSource.map((item) => <SourceNewsCard key={item.id} item={item} />)}</div> : <div className="empty-state"><h2>{sourceItems.length ? 'No hay titulares con esos filtros.' : `Todavía no hay resúmenes verificados para ${activeTeam.name}.`}</h2><p>No completamos esta sección con noticias de otros equipos.</p>{!sourceItems.length && <a href={getClubSearchUrl(activeTeam)} target="_blank" rel="noreferrer">Buscar actualidad ↗</a>}</div>}</section>}{(filtered.length > 0 || onlySaved) && <section className="club-archive"><div className="source-news-heading"><div><span className="eyebrow">ARCHIVO PROPIO</span><h2>Historias del Sendero.</h2></div><small>Reportajes y análisis originales</small></div>{filtered.length ? <div className="news-grid">{filtered.map((article, index) => <NewsCard key={article.id} article={article} featured={index === 0 && category === 'Todo' && !query && !onlySaved} saved={saved.includes(article.id)} onSave={onSave} />)}</div> : <div className="empty-state"><h2>No tienes historias guardadas de este equipo.</h2><p>Prueba con otra categoría o quita la búsqueda.</p><button onClick={() => setOnlySaved(false)}>Volver a actualidad</button></div>}</section>}<p className="data-note">Los guardados viven solo en este navegador.{saveError ? ' No pudimos guardar el último cambio.' : ''}</p>{activeTeam.id === 'u-de-chile' && <BookBanner />}</div>;
 }
 
-function DataPage() {
-  return <div className="page shell"><div className="page-heading data-heading"><span className="eyebrow">PARTIDO & DATA</span><h1>La alegría<br />tiene marcador.</h1><p>Los momentos que explican el 3–0 de la U en La Portada.</p></div><div className="data-hero"><ScorePanel /><div className="data-cards"><article><strong>42</strong><h3>Puntos de la U</h3><p>39 antes del encuentro más los tres puntos del triunfo.</p></article><article><strong>8<small>min</small></strong><h3>Para cambiar la tarde</h3><p>Entre el primer gol de Arce y el segundo de Hormazábal.</p></article><article><strong>3</strong><h3>Goleadores distintos</h3><p>Arce, Hormazábal y Lichnovsky construyeron la victoria.</p></article><article><strong>0</strong><h3>Goles recibidos</h3><p>Castellón, Fernández y Lichnovsky protegieron el arco.</p></article></div></div><section className="match-story"><SectionTitle eyebrow="LA PELÍCULA DEL PARTIDO" title="Noventa minutos en cuatro escenas." /><div className="event-list"><article><span>25′–28′</span><div><b>La U resiste</b><p>Castellón responde y Nicolás Fernández evita una apertura granate.</p></div></article><article><span>47′</span><div><b>Arce rompe el cero</b><p>Recuperación alta, entrada al área y zurdazo cruzado para el 1–0.</p></div></article><article><span>54′</span><div><b>Hormazábal inventa una definición</b><p>Guerrero desborda por la derecha y el lateral convierte de taco.</p></div></article><article><span>79′–90+4′</span><div><b>Lichnovsky en las dos áreas</b><p>Primero salva sobre la línea; después cierra la goleada de cabeza.</p></div></article></div></section><div className="data-disclaimer"><b>Cómo trabajamos estos datos</b><p>Corte: final del partido del 13/09/2026. Minutos y acciones tomados del seguimiento de AS proporcionado a la redacción. No inventamos posesión, remates ni métricas avanzadas que no podamos verificar.</p><ArticleLink article={articles[1]}>Leer el análisis del triunfo →</ArticleLink></div></div>;
+function DataPage({ favoriteTeam }) {
+  const activeTeam = favoriteTeam || teamChoices.find((item) => item.id === 'u-de-chile');
+  const activeStanding = leagueStandings2026.find((club) => club.id === activeTeam.id);
+  return <div className="page shell data-page"><div className="page-heading data-heading"><span className="eyebrow">LIGA DE PRIMERA · CHILE</span><h1>La tabla<br />al día.</h1><p>Posiciones, diferencia de gol y próximos cruces de Copa Chile. Seleccionamos a {activeTeam.name} para ubicarlo de inmediato.</p></div><section className="standings-panel"><div className="standings-heading"><div><span className="eyebrow">CAMPEONATO NACIONAL 2026</span><h2>Tabla de posiciones</h2></div><span className="standings-cut">CORTE ESPN · 15 SEP 2026</span></div><div className="standings-scroll"><table className="standings-table"><thead><tr><th scope="col">#</th><th scope="col">Club</th><th scope="col">PJ</th><th scope="col">G</th><th scope="col">E</th><th scope="col">P</th><th scope="col">GF</th><th scope="col">GC</th><th scope="col">DG</th><th scope="col">Pts</th></tr></thead><tbody>{leagueStandings2026.map((club) => { const clubTeam = teamChoices.find((team) => team.id === club.id); return <tr key={club.id} className={club.id === activeTeam.id ? 'favorite-row' : ''} aria-current={club.id === activeTeam.id ? 'true' : undefined}><td>{club.position}</td><td><span className="standing-club">{clubTeam && <TeamCrest team={clubTeam} className="standing-crest" />}<b>{standingsClubName(club.id)}</b>{club.id === activeTeam.id && <small>MI EQUIPO</small>}</span></td><td>{club.played}</td><td>{club.wins}</td><td>{club.draws}</td><td>{club.losses}</td><td>{club.gf}</td><td>{club.ga}</td><td className={club.goalDifference > 0 ? 'positive-difference' : club.goalDifference < 0 ? 'negative-difference' : ''}>{club.goalDifference > 0 ? '+' : ''}{club.goalDifference}</td><td><b>{club.points}</b></td></tr>; })}</tbody></table></div><div className="standings-footer"><span>{activeTeam.name}: <b>{activeStanding?.position}°</b> · {activeStanding?.points} puntos · {activeStanding?.played} PJ</span><a href="https://www.espn.cl/futbol/chile/nota/_/id/16246027/tabla-de-posiciones-campeonato-nacional-liga-de-primera-chile" target="_blank" rel="noreferrer">Ver tabla y fuente en ESPN ↗</a></div></section><section className="cup-schedule"><div className="source-news-heading"><div><span className="eyebrow">COPA CHILE · OCTAVOS DE FINAL</span><h2>Lo que viene esta semana.</h2></div><a href="https://www.espn.cl/futbol/chile/nota/_/id/17290575/la-programacion-de-los-partidos-de-ida-de-octavos-de-final-de-la-copa-chile-2026" target="_blank" rel="noreferrer">Programación ESPN ↗</a></div><div className="schedule-days">{copaChileSchedule.map((day) => <article key={day.date} className="schedule-day"><h3>{day.date}<span>IDA · COPA CHILE</span></h3>{day.matches.map(([home, away, time]) => <div className="schedule-match" key={`${home}-${away}`}><span>{home}</span><b>{time}</b><span>{away}</span></div>)}</article>)}</div><p className="data-note">La tabla muestra el último corte publicado por ESPN (15/09/2026); los horarios de Copa Chile corresponden a la programación del 22/09/2026. Revisa las fuentes por si hay modificaciones.</p></section></div>;
 }
 
 function ManagerPage() {
@@ -541,7 +560,7 @@ function App() {
   let page;
   if (articleId) page = <ArticlePage article={article} saved={saved.includes(articleId)} onSave={toggleSave} saveError={saveError} />;
   else if (route === '/actualidad') page = <NewsPage saved={saved} onSave={toggleSave} saveError={saveError} favoriteTeam={favoriteTeam} />;
-  else if (route === '/datos') page = <DataPage />;
+  else if (route === '/datos') page = <DataPage favoriteTeam={favoriteTeam} />;
   else if (route === '/memoria') page = <MemoryPage saved={saved} onSave={toggleSave} />;
   else if (route === '/comunidad') page = <CommunityPage />;
   else if (route === '/soy-dt') page = <ManagerPage />;
