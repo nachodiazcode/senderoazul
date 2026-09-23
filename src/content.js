@@ -1,6 +1,7 @@
 export const articles = [
   {
     "id": "goleada-en-la-portada",
+    "clubIds": ["u-de-chile", "la-serena"],
     "category": "Primer equipo",
     "title": "La U golpea en La Portada y se trae un 3–0 para seguir arriba",
     "excerpt": "Arce, Hormazábal y Lichnovsky sellaron una victoria visitante que se armó en el segundo tiempo y deja a la U con impulso para la Copa Chile.",
@@ -24,6 +25,7 @@ export const articles = [
   },
   {
     "id": "claves-del-triunfo",
+    "clubIds": ["u-de-chile", "la-serena"],
     "category": "Análisis",
     "title": "Tres goles nacen de una defensa que nunca se quebró",
     "excerpt": "La pizarra del 3–4–3 y las coberturas de Castellón explican cómo la U convirtió una tarde áspera en goleada.",
@@ -44,6 +46,7 @@ export const articles = [
   },
   {
     "id": "mariano-puyol-capitan",
+    "clubIds": ["u-de-chile"],
     "category": "Cultura azul",
     "title": "El capitán que todavía ordena nuestra memoria",
     "excerpt": "Mariano Puyol vuelve a escena en “Simplemente un Capitán”, el libro de Omar Soto Díaz sobre un referente eterno.",
@@ -64,6 +67,7 @@ export const articles = [
   },
   {
     "id": "sudamericana-2011",
+    "clubIds": ["u-de-chile"],
     "category": "Historia",
     "title": "La noche en que la U hizo historia sin pedir permiso",
     "excerpt": "El 14 de diciembre de 2011, el equipo de Sampaoli levantó la Sudamericana invicto y cambió para siempre la escala del orgullo azul.",
@@ -84,6 +88,7 @@ export const articles = [
   },
   {
     "id": "99-anos-de-identidad",
+    "clubIds": ["u-de-chile"],
     "category": "Historia",
     "title": "99 años de una camiseta que nunca camina sola",
     "excerpt": "Del origen universitario al Ballet Azul y las nuevas generaciones: la historia de una identidad que se hereda en la tribuna.",

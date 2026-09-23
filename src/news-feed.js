@@ -9,6 +9,7 @@ export const newsFeed = [
     publishedLabel: 'Hace 1 día',
     publishedAt: '2026-09-13T23:10:00-03:00',
     image: '/assets/triunfo-la-portada-2026.jpg',
+    clubIds: ['u-de-chile', 'la-serena'],
   },
   {
     id: 'estados-financieros-2026',
@@ -20,6 +21,7 @@ export const newsFeed = [
     publishedLabel: 'Hace 4 horas',
     publishedAt: '2026-09-14T09:30:00-03:00',
     image: '/assets/hinchada.png',
+    clubIds: ['u-de-chile', 'colo-colo', 'u-catolica'],
   },
   {
     id: 'calendario-clasico-universitario',
@@ -31,6 +33,7 @@ export const newsFeed = [
     publishedLabel: 'Hace 12 horas',
     publishedAt: '2026-09-14T01:20:00-03:00',
     image: '/assets/previa.png',
+    clubIds: ['u-de-chile', 'u-catolica'],
   },
   {
     id: 'libertadores-femenina-grupo',
@@ -42,6 +45,7 @@ export const newsFeed = [
     publishedLabel: 'Hace 5 horas',
     publishedAt: '2026-09-14T08:20:00-03:00',
     image: '/assets/tifo.png',
+    clubIds: ['u-de-chile'],
   },
   {
     id: 'batalla-chile-2',
@@ -53,6 +57,7 @@ export const newsFeed = [
     publishedLabel: 'Hace 12 horas',
     publishedAt: '2026-09-14T01:05:00-03:00',
     image: '/assets/chile2.png',
+    clubIds: ['u-de-chile', 'u-catolica'],
   },
   {
     id: 'jugador-otra-velocidad',
@@ -64,6 +69,7 @@ export const newsFeed = [
     publishedLabel: 'Hace 10 horas',
     publishedAt: '2026-09-14T03:15:00-03:00',
     image: '/assets/u-la-serena-accion.jpg',
+    clubIds: ['u-de-chile'],
   },
 ];
 
@@ -78,6 +84,7 @@ export function getNewsPayload(url = 'http://localhost/api/news') {
   const requestUrl = new URL(url, 'http://localhost');
   const topic = requestUrl.searchParams.get('topic');
   const source = requestUrl.searchParams.get('source');
+  const club = requestUrl.searchParams.get('club');
   const query = normalize(requestUrl.searchParams.get('q'));
   const requestedLimit = Number(requestUrl.searchParams.get('limit'));
   const limit = Number.isFinite(requestedLimit) && requestedLimit > 0
@@ -87,6 +94,7 @@ export function getNewsPayload(url = 'http://localhost/api/news') {
   const items = newsFeed
     .filter((item) => !topic || normalize(item.topic) === normalize(topic))
     .filter((item) => !source || normalize(item.source) === normalize(source))
+    .filter((item) => !club || item.clubIds?.includes(club))
     .filter((item) => !query || normalize(`${item.headline} ${item.summary} ${item.source}`).includes(query))
     .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
     .slice(0, limit);
