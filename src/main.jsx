@@ -581,7 +581,9 @@ function ScorePanel({ compact = false }) {
 
 function ClubHero({ team, storyCount }) {
   const snapshot = clubSnapshots[team.id];
-  const media = clubMedia[team.id];
+  const media = team.id === 'u-de-chile'
+    ? { ...clubMedia[team.id], image: '/assets/hinchada.png', alt: 'Hinchada de Universidad de Chile alentando con banderas azules y rojas', caption: 'LA HINCHADA' }
+    : clubMedia[team.id];
   const profile = clubProfiles[team.id];
   return <section className="club-hero" aria-label={`Portada de ${team.name}`}>
     <div className="shell club-hero-grid">
