@@ -1,5 +1,60 @@
 export const newsFeed = [
   {
+    id: 'colo-colo-audax-copa-chile-ida-sep22',
+    source: 'ESPN',
+    sourceUrl: 'https://www.espn.cl/futbol/chile/nota/_/id/17287550/cuando-juegan-audax-italiano-vs-colo-colo-por-la-copa-chile-equipo-fecha-y-hora',
+    headline: 'Colo-Colo y Audax dejaron abierta su llave de Copa Chile',
+    summary: 'El primer cruce terminó igualado. ESPN destaca que Colo-Colo tuvo las ocasiones más claras, pero Audax sostuvo el empate y la serie sigue por resolverse.',
+    topic: 'Copa Chile',
+    publishedLabel: '23 SEP 2026',
+    publishedAt: '2026-09-23T00:15:00-03:00',
+    clubIds: ['colo-colo', 'audax'],
+  },
+  {
+    id: 'gonzalo-reyna-llega-a-la-u-sep22',
+    source: 'ESPN Chile',
+    sourceUrl: 'https://www.espn.cl/futbol/chile/nota/_/id/17292116/gonzalo-reyna-contrato-firma-universidad-de-chile-espn-f90',
+    headline: 'Gonzalo Reyna explicó su decisión de sumarse a la U',
+    summary: 'El jugador contó que rescindió su vínculo anterior al conocer la posibilidad de llegar a Universidad de Chile, según la entrevista recogida por ESPN.',
+    topic: 'Equipo',
+    publishedLabel: '22 SEP 2026',
+    publishedAt: '2026-09-22T23:08:00-03:00',
+    clubIds: ['u-de-chile'],
+  },
+  {
+    id: 'garnero-anticipa-llave-la-calera-sep22',
+    source: 'ESPN Chile',
+    sourceUrl: 'https://www.espn.cl/futbol/chile/nota/_/id/17291771/garnero-declaraciones-previa-universidad-catolica-vs-union-la-calera-copa-chile',
+    headline: 'Garnero pide cautela antes de la visita de la UC a La Calera',
+    summary: 'El técnico cruzado recordó que la llave se define en 180 minutos, valoró al rival y reconoció que su equipo afrontaba el partido con varias ausencias.',
+    topic: 'Copa Chile',
+    publishedLabel: '22 SEP 2026 · 19:08',
+    publishedAt: '2026-09-22T19:08:00-03:00',
+    clubIds: ['u-catolica', 'la-calera'],
+  },
+  {
+    id: 'palestino-alianza-lima-amistoso-sep22',
+    source: 'ESPN',
+    sourceUrl: 'https://www.espn.cl/futbol/peru/nota/_/id/17291680/alianza-lima-amistoso-vs-palestino-fecha-fifa-liga-1-de-peru',
+    headline: 'Palestino prepara un amistoso internacional durante el receso',
+    summary: 'El cuadro árabe enfrentará a Alianza Lima en un partido de preparación. La noticia aparece entre las últimas publicaciones de ESPN sobre fútbol chileno.',
+    topic: 'Club',
+    publishedLabel: '22 SEP 2026',
+    publishedAt: '2026-09-22T20:08:00-03:00',
+    clubIds: ['palestino'],
+  },
+  {
+    id: 'reinhart-everton-copa-chile-sep22',
+    source: 'ESPN Chile',
+    sourceUrl: 'https://www.espn.cl/futbol/chile/nota/_/id/17291054/tobias-reinhart-palpita-duelo-de-ida-de-la-copa-chile-entre-universidad-de-chile-y-everton',
+    headline: 'Reinhart ve el cruce con Everton como un primer paso para la U',
+    summary: 'En la previa de la ida por Copa Chile, el volante puso el foco en el objetivo colectivo de Universidad de Chile y en la importancia de iniciar bien la llave.',
+    topic: 'Equipo',
+    publishedLabel: '22 SEP 2026',
+    publishedAt: '2026-09-22T17:08:00-03:00',
+    clubIds: ['u-de-chile', 'everton'],
+  },
+  {
     id: 'copa-chile-octavos-septiembre',
     source: 'ESPN Chile',
     sourceUrl: 'https://www.espn.cl/futbol/chile/nota/_/id/17290575/la-programacion-de-los-partidos-de-ida-de-octavos-de-final-de-la-copa-chile-2026',
@@ -67,7 +122,7 @@ export const newsFeed = [
   },
 ];
 
-export const feedUpdatedAt = '2026-09-22T13:02:00-03:00';
+export const feedUpdatedAt = '2026-09-23T01:08:00-03:00';
 
 const normalize = (value = '') => String(value ?? '')
   .normalize('NFD')
