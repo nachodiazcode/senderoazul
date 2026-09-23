@@ -10,10 +10,10 @@ const navItems = [
   ['/datos', 'Equipos'],
   ['/memoria', 'El Club'],
   ['/actualidad', 'Noticias'],
-  ['/comunidad', 'Escuelas'],
-  ['/comunidad', 'Abonos'],
-  ['/actualidad', 'Tienda'],
-  ['/actualidad', 'Prensa'],
+  ['/escuelas', 'Escuelas'],
+  ['/abonos', 'Abonos'],
+  ['/tienda', 'Tienda'],
+  ['/prensa', 'Prensa'],
   ['/soy-dt', 'Último Minuto'],
 ];
 
@@ -28,7 +28,7 @@ const teamChoices = [
   { id: 'nublense', name: 'Ñublense', mark: 'ÑU', primary: '#c9343b', navy: '#682025', light: '#f2b1b6', accent: '#171c26' },
   { id: 'deportes-concepcion', name: 'Deportes Concepción', mark: 'DC', primary: '#7b4ab6', navy: '#3d266d', light: '#d6bdf2', accent: '#f3ce54' },
   { id: 'la-serena', name: 'Deportes La Serena', mark: 'LS', primary: '#9b2e52', navy: '#4f1830', light: '#e9b7c8', accent: '#74a9dc' },
-  { id: 'coquimbo', name: 'Coquimbo Unido', mark: 'CQ', primary: '#be9830', navy: '#2c2b24', light: '#ead895', accent: '#171a20' },
+  { id: 'coquimbo', name: 'Coquimbo Unido', mark: 'CQ', primary: '#ad7d12', navy: '#191811', light: '#f2d678', accent: '#efbd39' },
   { id: 'audax', name: 'Audax Italiano', mark: 'AI', primary: '#2d9a60', navy: '#174c35', light: '#b8e0c5', accent: '#d64545' },
   { id: 'huachipato', name: 'Huachipato', mark: 'HU', primary: '#4a9bd8', navy: '#173e6a', light: '#b8dcf5', accent: '#1d2634' },
   { id: 'ohiggins', name: "O'Higgins", mark: 'OH', primary: '#49a9df', navy: '#1f527b', light: '#b9e1f6', accent: '#e2c73e' },
@@ -49,6 +49,341 @@ const clubMedia = {
   nublense: { image: '/assets/club-media/nublense.webp', alt: 'Jugadores de Ñublense celebrando en cancha', caption: 'PRIMER EQUIPO' },
   'deportes-concepcion': { image: '/assets/club-media/deportes-concepcion.webp', alt: 'Hinchada de Deportes Concepción en Collao', caption: 'LA HINCHADA' },
   audax: { image: '/assets/club-media/audax.webp', alt: 'Jugadores de Audax Italiano en cancha', caption: 'PRIMER EQUIPO' },
+  'la-serena': {
+    image: '/assets/club-media/la-serena.webp',
+    alt: 'Jugadores de Deportes La Serena celebran durante un partido ante Deportes Temuco en 2020',
+    caption: 'EL GRANATE · 2020',
+    credit: 'Foto: Carlos Figueroa',
+    creditUrl: 'https://commons.wikimedia.org/wiki/File:Deportes_La_Serena_v_Deportes_Temuco_20200124_51.jpg',
+    licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+    licenseLabel: 'CC BY-SA 4.0',
+  },
+  'u-de-concepcion': {
+    image: '/assets/club-media/u-de-concepcion.webp',
+    alt: 'Hinchada de Universidad de Concepción en la tribuna durante un partido de 2018',
+    caption: 'EL CAMPANIL · SU GENTE',
+    credit: 'Foto: Carlos Figueroa',
+    creditUrl: 'https://commons.wikimedia.org/wiki/File:Palestino_-_Universidad_de_Concepci%C3%B3n,_2018-05-06_-_Hinchada_de_Universidad_de_Concepci%C3%B3n_-_01.jpg',
+    licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+    licenseLabel: 'CC BY-SA 4.0',
+  },
+  'la-calera': {
+    image: '/assets/club-media/la-calera.webp',
+    alt: 'Formación de Unión La Calera antes de un partido frente a Universidad de Chile en 2018',
+    caption: 'FORMACIÓN CEMENTERA · 2018',
+    credit: 'Foto: Carlos Figueroa',
+    creditUrl: 'https://commons.wikimedia.org/wiki/File:Uni%C3%B3n_La_Calera_-_Universidad_de_Chile,_2018-04-22_-_Formaci%C3%B3n_de_Uni%C3%B3n_La_Calera.jpg',
+    licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+    licenseLabel: 'CC BY-SA 4.0',
+  },
+  ohiggins: {
+    image: '/assets/club-media/ohiggins.webp',
+    alt: 'Hinchada de O’Higgins en el Estadio El Teniente, Rancagua',
+    caption: 'LA CELESTE · EL TENIENTE',
+    credit: 'Foto: Carlos yo (Carlos Figueroa)',
+    creditUrl: 'https://commons.wikimedia.org/wiki/File:Hinchada_O%27Higgins_O%27Higgins_v_%C3%91ublense_20230728_01.jpg',
+    licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+    licenseLabel: 'CC BY-SA 4.0',
+  },
+  huachipato: {
+    image: '/assets/club-media/huachipato.webp',
+    alt: 'Futbolistas de Huachipato compartiendo con su hinchada antes de la final de Copa Chile 2025',
+    caption: 'ACERO Y TRIBUNA · 2025',
+    credit: 'Foto: Coqqe',
+    creditUrl: 'https://commons.wikimedia.org/wiki/File:Futbolistas_con_la_barra_acerera.jpg',
+    licenseUrl: 'https://creativecommons.org/publicdomain/zero/1.0/',
+    licenseLabel: 'CC0',
+  },
+  coquimbo: {
+    image: '/assets/club-media/coquimbo-unido.webp',
+    alt: 'Coquimbo Unido celebra con el trofeo de la Liga de Primera 2025',
+    caption: 'CAMPEONES · 2025',
+    credit: 'Foto: Cristian Avilés',
+    creditUrl: 'https://commons.wikimedia.org/wiki/File:Coquimbo_Unido_campe%C3%B3n_2025.jpg',
+    licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+    licenseLabel: 'CC BY-SA 4.0',
+  },
+};
+
+// Identidad breve basada en referencias de los clubes y la ANFP; el resto del tono es copy editorial.
+const clubProfiles = {
+  'colo-colo': {
+    identity: 'CACIQUE · MACUL',
+    tagline: 'BLANCO Y NEGRO · CASA MONUMENTAL',
+    description: 'La memoria de David Arellano y la energía del Monumental: el Cacique vive en blanco y negro, con Macul como su casa.',
+    clubNote: 'Una identidad alba hecha de historia, tribuna y noches grandes en el Estadio Monumental David Arellano.',
+    coverCaption: 'CASA ALBA',
+    historyTitle: 'Una historia que late en blanco y negro.',
+    historyLead: 'La memoria del Cacique vive en su gente, en Macul y en el Estadio Monumental David Arellano, inaugurado en 1989.',
+    sourceLabel: 'Colo-Colo · Estadio Monumental',
+    sourceUrl: 'https://www.colocolo.cl/historia/fundacion/la-fundacion-del-club-1920-1930/',
+    facts: [
+      ['1925', 'Nace Colo-Colo', 'David Arellano y un grupo de jugadores fundaron el club en Santiago.'],
+      ['MACUL', 'La casa alba', 'El Estadio Monumental David Arellano fue inaugurado en 1989.'],
+      ['1991', 'Una noche continental', 'Colo-Colo conquistó la Copa Libertadores, un hito para el fútbol chileno.'],
+      ['BLANCO Y NEGRO', 'Colores que hablan', 'La camiseta y el emblema sostienen una identidad reconocible en todo el país.'],
+    ],
+  },
+  'u-catolica': {
+    identity: 'LA FRANJA · PRECORDILLERA',
+    tagline: 'TRADICIÓN CRUZADA · NUEVA CASA',
+    description: 'La franja cruza generaciones. En Claro Arena, la UC abre un nuevo capítulo junto a su gente en San Carlos de Apoquindo.',
+    clubNote: 'Blanco y azul, espíritu cruzado y una nueva etapa en Claro Arena.',
+    coverCaption: 'LA FRANJA',
+    historyTitle: 'La franja, una historia que cruza generaciones.',
+    historyLead: 'Universidad Católica nació en 1937 y construyó una identidad cruzada que hoy abre una nueva etapa en Claro Arena.',
+    sourceLabel: 'Cruzados · orígenes del club',
+    sourceUrl: 'https://cruzados.cl/origenes/',
+    facts: [
+      ['1937', 'Fundación', 'Universidad Católica fue fundada el 21 de abril.'],
+      ['LA FRANJA', 'Seña cruzada', 'El diseño blanco y azul distingue históricamente su camiseta.'],
+      ['SAN CARLOS', 'Un hogar en la precordillera', 'El club construyó una relación especial con su estadio en Las Condes.'],
+      ['CLARO ARENA', 'Nueva etapa', 'El recinto renovado abre otro capítulo para la comunidad cruzada.'],
+    ],
+  },
+  'la-serena': {
+    identity: 'GRANATE · PAPAYEROS',
+    tagline: 'ORGULLO SERENENSE · DESDE 1955',
+    description: 'El Granate lleva el pulso de su ciudad desde 1955. La Portada es el punto de encuentro de una identidad que mira al norte.',
+    clubNote: 'Historia serenense, alma papayera y granate como bandera en La Portada.',
+    coverCaption: 'EL GRANATE',
+    historyTitle: 'La ciudad se reconoce en granate.',
+    historyLead: 'Desde 1955, Deportes La Serena representa a la capital regional. La Portada reúne a los papayeros en el corazón de la ciudad.',
+    sourceLabel: 'Deportes La Serena · 65 años de historia',
+    sourceUrl: 'https://www.cdlaserena.cl/65-anos-cdls/',
+    facts: [
+      ['1955', 'Fundación', 'El club fue fundado el 9 de diciembre y comenzó a representar a La Serena.'],
+      ['GRANATE', 'Identidad papayera', 'Los colores y el apodo conectan al equipo con la cultura local.'],
+      ['LA PORTADA', 'La casa serenense', 'El estadio municipal es el punto de encuentro de su hinchada.'],
+      ['NORTE', 'Una voz regional', 'Deportes La Serena representa a la Región de Coquimbo en el fútbol profesional.'],
+    ],
+  },
+  huachipato: {
+    identity: 'ACERO · TALCAHUANO',
+    tagline: 'FORJADO EN EL PUERTO',
+    description: 'Una historia ligada al acero y a Talcahuano. Los Acereros llevan esa raíz industrial a cada jornada en el CAP Acero.',
+    clubNote: 'Orgullo acerero nacido junto a la siderúrgica y hecho parte de Talcahuano.',
+    coverCaption: 'LOS ACEREROS',
+    historyTitle: 'El acero también se hace camiseta.',
+    historyLead: 'Huachipato está ligado a la vida siderúrgica de Talcahuano. Su identidad acerera lleva el puerto industrial a la cancha.',
+    sourceLabel: 'Huachipato FC · nuestra historia',
+    sourceUrl: 'https://cdhuachipato.cl/nosotros/historia/',
+    facts: [
+      ['1947', 'Fundación', 'La fecha reconocida por el club es el 7 de junio de 1947.'],
+      ['TALCAHUANO', 'Raíz industrial', 'La historia del club está vinculada al desarrollo de la siderúrgica Huachipato.'],
+      ['ACERO', 'Un apodo con origen', 'Los Acereros toman su nombre de la industria que marcó a la ciudad.'],
+      ['CAP ACERO', 'La casa del puerto', 'El estadio en Talcahuano mantiene al club cerca de su origen.'],
+      ['AZUL Y NEGRO', 'Colores acereros', 'Una identidad de puerto, trabajo y fútbol acompaña a Huachipato.'],
+    ],
+  },
+  'u-de-concepcion': {
+    identity: 'CAMPANIL · CONCEPCIÓN',
+    tagline: 'AZUL Y ORO PENQUISTA',
+    description: 'Azul y amarillo, raíz universitaria y carácter penquista: el Campanil escribe su propia historia desde Concepción.',
+    clubNote: 'El azul y amarillo universitario acompaña al Campanil y a toda la ciudad de Concepción.',
+    coverCaption: 'EL CAMPANIL',
+    historyTitle: 'Azul y oro, voz universitaria de Concepción.',
+    historyLead: 'El Campanil reúne el vínculo universitario con la ciudad penquista; sus colores azul y amarillo también aparecen en los símbolos de la UdeC.',
+    sourceLabel: 'Universidad de Concepción · símbolos universitarios',
+    sourceUrl: 'https://www.udec.cl/sobre-la-udec/simbolos-universitarios/',
+    facts: [
+      ['CONCEPCIÓN', 'Raíz universitaria', 'El club representa a la Universidad de Concepción y a la ciudad que lo vio crecer.'],
+      ['AZUL Y AMARILLO', 'Colores del Campanil', 'La bandera institucional de la universidad combina ambos colores.'],
+      ['EL CAMPANIL', 'Un símbolo penquista', 'El apodo remite a uno de los hitos más reconocibles de la Universidad de Concepción.'],
+      ['ESTER ROA', 'Casa en Collao', 'El estadio de Concepción es escenario de sus partidos como local.'],
+    ],
+  },
+  'la-calera': {
+    identity: 'CEMENTEROS · LA CALERA',
+    tagline: 'ROJO NACIDO DE LA UNIÓN',
+    description: 'Una unión de la ciudad dio forma al club. El rojo calerano y el orgullo cementero siguen reuniendo a su gente.',
+    clubNote: 'Rojo en la camiseta, espíritu de unión y raíces cementeras en La Calera.',
+    coverCaption: 'ORGULLO CALERANO',
+    historyTitle: 'Una unión que se hizo club.',
+    historyLead: 'Unión La Calera nació de la unión de clubes de la ciudad. Su historia cementera quedó ligada al rojo y al Nicolás Chahuán Nazar.',
+    sourceLabel: 'Unión La Calera · historia oficial',
+    sourceUrl: 'https://ulc.cl/historia/',
+    facts: [
+      ['1954', 'Unión calerana', 'Unión La Calera nació el 26 de enero a partir de la fusión de cinco clubes locales.'],
+      ['ROJO', 'Identidad cementera', 'El color de su camiseta y el apodo conectan al club con la historia local.'],
+      ['NICOLÁS CHAHUÁN', 'Casa en La Calera', 'El estadio lleva el nombre de una figura vinculada a la comunidad calerana.'],
+      ['LA CALERA', 'Un equipo de ciudad', 'El club mantiene una fuerte relación con su ciudad y su gente.'],
+    ],
+  },
+  'u-de-chile': {
+    identity: 'EL BULLA · SANTIAGO',
+    tagline: 'AZUL Y ROJO · UNA HINCHADA QUE NO CAMINA SOLA',
+    description: 'La U se reconoce en su azul, su gente y una historia universitaria que se transformó en pasión popular. Este Sendero sigue al club, no al ruido.',
+    clubNote: 'Azul y rojo, raíz universitaria y una hinchada que acompaña en cualquier cancha.',
+    coverCaption: 'EL BULLA',
+    historyTitle: 'Una historia que se canta en azul.',
+    historyLead: 'De la vida universitaria a una comunidad que cruza generaciones: la historia de la U se cuenta tanto en la cancha como en la tribuna.',
+    sourceLabel: 'Universidad de Chile · historia institucional',
+    sourceUrl: 'https://www.udechile.cl/noticias/99-anos-de-historia-azul-este-domingo-universidad-de-chile-celebra-un-nuevo-aniversario',
+    facts: [
+      ['1927', 'El origen', 'El Club Universitario de Deportes nace como raíz institucional de Universidad de Chile.'],
+      ['1940', 'Primera estrella', 'La U consigue su primer campeonato profesional.'],
+      ['1960s', 'Ballet Azul', 'Una generación convierte su fútbol en una referencia para el país.'],
+      ['1994', 'Regreso a la cima', 'Una nueva generación vuelve a coronarse tras 25 años.'],
+      ['2011', 'Noche continental', 'La U gana invicta la Copa Sudamericana y levanta su primer título internacional.'],
+      ['2027', 'Cien años', 'El club se acerca a su centenario, con nuevas historias todavía por escribir.'],
+    ],
+  },
+  cobresal: {
+    identity: 'MINEROS · EL SALVADOR',
+    tagline: 'COBRE, DESIERTO Y ORGULLO ALBIRANJA',
+    description: 'Desde El Salvador, Cobresal lleva el pulso minero del desierto a cada partido. El Cobre no es sólo una cancha: es el punto de encuentro de una comunidad.',
+    clubNote: 'Raíz minera, vida de altura y orgullo de El Salvador: Cobresal tiene el desierto como casa.',
+    coverCaption: 'EL SALVADOR · ATACAMA',
+    historyTitle: 'Un club nacido a pulso en el desierto.',
+    historyLead: 'Cobresal nació en El Salvador en 1979. Su historia y su estadio crecieron al ritmo de la comunidad minera que lo acompaña.',
+    sourceLabel: 'Club Deportes Cobresal · reseña histórica',
+    sourceUrl: 'https://cdcobresal.cl/wp-content/uploads/2018/09/Memoria-2011.pdf',
+    facts: [
+      ['1979', 'Fundación', 'El club fue fundado el 5 de mayo en El Salvador, Región de Atacama.'],
+      ['1979', 'El Cobre', 'Ese mismo año comenzó la construcción del estadio que hoy es su casa.'],
+      ['1980', 'Fútbol profesional', 'Cobresal inició su camino profesional en abril de 1980.'],
+      ['HOY', 'Orgullo minero', 'El equipo representa a una ciudad y una historia estrechamente ligadas a la minería.'],
+    ],
+  },
+  everton: {
+    identity: 'RULETEROS · VIÑA DEL MAR',
+    tagline: 'ORO Y AZUL · IDENTIDAD VIÑAMARINA',
+    description: 'Oro y azul, Viña del Mar y el horizonte de Sausalito: Everton mezcla tradición y ciudad jardín en una identidad que se reconoce desde lejos.',
+    clubNote: 'El oro y azul ruletero tiene a Viña del Mar y Sausalito como parte de su paisaje futbolero.',
+    coverCaption: 'SAUSALITO · VIÑA',
+    historyTitle: 'El oro y azul de la ciudad jardín.',
+    historyLead: 'Fundado en 1909, Everton representa a Viña del Mar. Sus colores oro y azul y el Estadio Sausalito forman parte del paisaje ruletero.',
+    sourceLabel: 'ANFP · ficha de Everton',
+    sourceUrl: 'https://www.anfp.cl/clubes/everton/',
+    facts: [
+      ['1909', 'Fundación', 'Everton fue fundado el 24 de junio de 1909.'],
+      ['ORO', 'Color de identidad', 'El oro y azul son las señas cromáticas del club ruletero.'],
+      ['SAUSALITO', 'La casa viñamarina', 'El Estadio Sausalito es el recinto asociado a sus partidos como local.'],
+      ['VIÑA DEL MAR', 'La ciudad en la camiseta', 'El club lleva el nombre de la ciudad jardín en el fútbol nacional.'],
+    ],
+  },
+  palestino: {
+    identity: 'TRICOLORES · LA CISTERNA',
+    tagline: 'PALESTINA EN EL CORAZÓN · CHILE EN LA CANCHA',
+    description: 'Palestino convierte el fútbol en un puente entre raíces y generaciones. Su historia, fundada por la comunidad palestina en Chile, se expresa en tres colores y una identidad singular.',
+    clubNote: 'Un club social, cultural y deportivo que desde 1920 conecta a una comunidad con el fútbol chileno.',
+    coverCaption: 'ORGULLO TRICOLOR',
+    historyTitle: 'Una camiseta que lleva una historia.',
+    historyLead: 'Desde 1920, Palestino enlaza deporte, memoria y comunidad; su identidad trasciende los noventa minutos.',
+    sourceLabel: 'Palestino · historia institucional',
+    sourceUrl: 'https://palestino.cl/club/',
+    facts: [
+      ['1920', 'Nace una comunidad', 'El club fue fundado por la comunidad palestina en Chile.'],
+      ['1955', 'Primera estrella', 'Palestino obtuvo su primer campeonato de Primera División.'],
+      ['1978', 'Una segunda corona', 'El equipo volvió a ser campeón del torneo nacional.'],
+      ['LA CISTERNA', 'Un punto de encuentro', 'La sede del club está en La Cisterna, Santiago.'],
+    ],
+  },
+  'deportes-limache': {
+    identity: 'TOMATEROS · LIMACHE',
+    tagline: 'ROJO LIMACHINO · UN ASCENSO A PULSO',
+    description: 'Deportes Limache llevó a su ciudad hasta la máxima categoría siguiendo el camino peldaño a peldaño. El orgullo tomatero se construye con comunidad, trabajo y ambición.',
+    clubNote: 'Fundado en 2012, el club avanzó por las categorías hasta alcanzar la Liga de Primera.',
+    coverCaption: 'EL SUEÑO TOMATERO',
+    historyTitle: 'De Limache a Primera, paso a paso.',
+    historyLead: 'En poco más de una década, Deportes Limache recorrió varias categorías antes de llegar al fútbol de Primera.',
+    sourceLabel: 'Deportes Limache · historia oficial',
+    sourceUrl: 'https://www.deporteslimache.cl/historia-1.html',
+    facts: [
+      ['2012', 'Fundación', 'Club de Deportes Limache fue fundado el 8 de noviembre.'],
+      ['2013', 'Primer ascenso', 'En su primera temporada competitiva, el equipo ganó la Tercera B y subió a Tercera A.'],
+      ['2023', 'Campeón de Segunda', 'La institución consiguió el título de Segunda División Profesional.'],
+      ['2024', 'Llegada a Primera', 'Limache ganó la liguilla de ascenso de Primera B y llegó a la categoría máxima.'],
+    ],
+  },
+  nublense: {
+    identity: 'DIABLOS ROJOS · CHILLÁN',
+    tagline: 'ROJO Y NEGRO · ÑUBLE EN LA TRIBUNA',
+    description: 'En Chillán, el rojo tiene casa y nombre propio. Ñublense reúne a Ñuble alrededor de una camiseta intensa y un estadio que honra a uno de sus entrenadores más recordados.',
+    clubNote: 'El Estadio Nelson Oyarzún guarda el vínculo de Ñublense con Chillán y con una figura imborrable de su historia.',
+    coverCaption: 'EL ROJO DE ÑUBLE',
+    historyTitle: 'Chillán late en rojo.',
+    historyLead: 'La historia de Ñublense está anclada en Chillán y en el recinto que lleva el nombre de Nelson Oyarzún.',
+    sourceLabel: 'Ñublense · historia del estadio Nelson Oyarzún',
+    sourceUrl: 'https://www.losdiablosrojos.cl/estadio-nelson-oyarzun/',
+    facts: [
+      ['CHILLÁN', 'Casa roja', 'Ñublense representa a Chillán y a la Región de Ñuble.'],
+      ['1935', 'Un estadio con historia', 'El recinto de Chillán fue inaugurado originalmente el 4 de noviembre de 1935.'],
+      ['1978', 'Nelson Oyarzún', 'El estadio tomó el nombre del entrenador ese año, en homenaje a su vínculo con el club.'],
+      ['ROJO', 'Una identidad reconocible', 'El club es conocido en la ciudad como el Rojo y también como los Diablos Rojos.'],
+    ],
+  },
+  'deportes-concepcion': {
+    identity: 'LEÓN DE COLLAO · CONCEPCIÓN',
+    tagline: 'LILA · ORGULLO PENQUISTA',
+    description: 'El León de Collao vuelve a rugir con el lila como bandera. Deportes Concepción es una historia de ciudad, fusión y una hinchada que sostuvo vivo el vínculo con su equipo.',
+    clubNote: 'Fundado en 1966 por la unión de varios clubes de la ciudad, Deportes Concepción es parte del paisaje futbolero penquista.',
+    coverCaption: 'EL LEÓN DE COLLAO',
+    historyTitle: 'El lila que representa a Concepción.',
+    historyLead: 'El club nació de una unión local y su camiseta lila quedó ligada a la ciudad y al Estadio Ester Roa Rebolledo.',
+    sourceLabel: 'Campeonato Chileno · historia de Deportes Concepción',
+    sourceUrl: 'https://www.campeonatochileno.cl/aniversario/concepcion-se-tine-de-lila-59-anos-del-leon-de-collao/',
+    facts: [
+      ['1966', 'Fusión penquista', 'La institución se fundó el 25 de enero, a partir de la fusión de clubes de Concepción.'],
+      ['LILA', 'Una camiseta propia', 'El color lila se convirtió en la seña que identifica al León de Collao.'],
+      ['COLLAO', 'La casa del León', 'El Estadio Ester Roa Rebolledo es parte de su historia deportiva.'],
+      ['2024', 'Regreso a la ruta', 'El equipo ganó la Segunda División y volvió a la Liga de Ascenso.'],
+    ],
+  },
+  audax: {
+    identity: 'TANOS · LA FLORIDA',
+    tagline: 'VERDE, BLANCO Y ROJO · HERENCIA ITÁLICA',
+    description: 'Audax Italiano lleva una raíz itálica al fútbol de La Florida. Su escudo enlaza los colores de Italia con una historia que comenzó como club deportivo y encontró casa en Santiago.',
+    clubNote: 'El emblema audino reúne la bandera italiana y una rueda de bicicleta, recuerdo de los orígenes del club.',
+    coverCaption: 'FORZA AUDAX',
+    historyTitle: 'Herencia itálica, corazón floridano.',
+    historyLead: 'Audax Italiano conserva en su escudo símbolos de Italia y del origen deportivo de la institución.',
+    sourceLabel: 'Audax Italiano · historia de sus escudos',
+    sourceUrl: 'https://audaxitaliano.cl/escudos',
+    facts: [
+      ['1910', 'Fundación', 'Audax Italiano fue fundado el 30 de noviembre de 1910.'],
+      ['ITALIA', 'Los colores del escudo', 'Verde, blanco y rojo remiten a la bandera italiana.'],
+      ['BICICLETA', 'Una raíz deportiva', 'La rueda en el emblema recuerda los orígenes ciclistas de la institución.'],
+      ['LA FLORIDA', 'Casa audina', 'Desde 1999, el nombre de La Florida acompaña la camiseta del club.'],
+    ],
+  },
+  ohiggins: {
+    identity: 'CELESTES · RANCAGUA',
+    tagline: 'CELESTE DE PROVINCIA · ORGULLO REGIONAL',
+    description: 'O’Higgins representa a Rancagua y a su región con el celeste por delante. El Teniente, la memoria de sus hinchas y la estrella de 2013 forman parte de su paisaje futbolero.',
+    clubNote: 'Rancagua, El Teniente y la histórica consagración de 2013 marcan el horizonte celeste.',
+    coverCaption: 'EL CAPO DE PROVINCIA',
+    historyTitle: 'La provincia también sueña en celeste.',
+    historyLead: 'Fundado en 1955 tras la unión de O’Higgins Braden y América, el club alcanzó su primer título nacional en 2013.',
+    sourceLabel: 'O’Higgins FC · historia oficial',
+    sourceUrl: 'https://www.ohigginsfc.cl/pagina.php?id=18',
+    facts: [
+      ['1955', 'Nace O’Higgins', 'El club se fundó el 7 de abril tras la fusión de O’Higgins Braden y América de Rancagua.'],
+      ['RANCAGUA', 'Orgullo de la región', 'O’Higgins es parte de la identidad deportiva de Rancagua y la Región de O’Higgins.'],
+      ['EL TENIENTE', 'Casa celeste', 'El estadio rancagüino es uno de los escenarios centrales de la historia del club.'],
+      ['2013', 'Primera estrella', 'El equipo obtuvo su primer título nacional el 10 de diciembre de 2013.'],
+      ['MONASTERIO', 'Trabajo formativo', 'El club abrió su Centro Deportivo Monasterio Celeste en esta etapa de su historia.'],
+    ],
+  },
+  coquimbo: {
+    identity: 'PIRATAS · PUERTO AURINEGRO',
+    tagline: 'NEGRO, AMARILLO Y MAR',
+    description: 'El aurinegro del puerto iza la bandera pirata en el Francisco Sánchez Rumoroso. Coquimbo juega con el carácter de su gente.',
+    clubNote: 'Amarillo y negro, espíritu pirata y puerto: Coquimbo lleva su identidad a cada rincón del Sánchez Rumoroso.',
+    coverCaption: 'TIERRA PIRATA',
+    historyTitle: 'El puerto iza la bandera pirata.',
+    historyLead: 'Coquimbo Unido expresa el carácter de su ciudad entre amarillo y negro. El Francisco Sánchez Rumoroso es su gran punto de encuentro.',
+    sourceLabel: 'Coquimbo Unido · sitio oficial',
+    sourceUrl: 'https://www.coquimbounido.cl/club',
+    facts: [
+      ['1958', 'Fundación', 'La fecha oficial de fundación es el 11 de julio de 1958.'],
+      ['PIRATAS', 'Un apodo con identidad', 'La imagen pirata es parte del lenguaje y del imaginario de su hinchada.'],
+      ['AURINEGRO', 'Amarillo y negro', 'Los colores tradicionales distinguen a Coquimbo Unido.'],
+      ['1991', 'Primera Copa Libertadores', 'Coquimbo Unido alcanzó el subcampeonato nacional y su primera participación en la Libertadores.'],
+      ['FRANCISCO SÁNCHEZ RUMOROSO', 'Casa pirata', 'El estadio de Coquimbo es escenario de sus grandes jornadas como local.'],
+    ],
+  },
 };
 
 const leagueStandings2026 = [
@@ -84,12 +419,6 @@ function standingsClubName(id) {
 function getClubSearchUrl(team) {
   return `https://news.google.com/search?q=${encodeURIComponent(`${team.name} fútbol Chile`)}&hl=es-419&gl=CL&ceid=CL:es-419`;
 }
-
-const quiz = [
-  { q: '¿En qué año llegó la primera Copa Sudamericana de la U?', options: ['1994', '2011', '2017'], correct: '2011', why: 'La U conquistó su primer título internacional el 14 de diciembre de 2011.' },
-  { q: '¿En qué año ganó la U su primer campeonato profesional?', options: ['1938', '1940', '1959'], correct: '1940', why: 'El debut profesional fue en 1938; el primer título llegó en 1940.' },
-  { q: '¿Quién dirigía a la U campeona de la Sudamericana?', options: ['Jorge Sampaoli', 'Martín Lasarte', 'Fernando Gago'], correct: 'Jorge Sampaoli', why: 'Jorge Sampaoli estaba al frente del equipo campeón de 2011.' },
-];
 
 const dtPlayers = [
   { id: 'castellon', name: 'Gabriel Castellón', short: 'Castellón', role: 'POR', rating: 82, points: 86, note: 'Arco en cero' },
@@ -172,7 +501,7 @@ function MatchdayStrip({ team }) {
 function Header({ route, favoriteTeam, onChooseTeam }) {
   const [open, setOpen] = useState(false);
   const edition = new Intl.DateTimeFormat('es-CL', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date()).replace('.', '').toUpperCase();
-  return <><div className="topline"><div className="shell"><span>EL CLUB DE TODOS · MÁS QUE UNA PASIÓN</span><span>SANTIAGO, CHILE <b>•</b> EDICIÓN {edition}</span></div></div><header className="site-header"><div className="shell header-row"><Brand /><button className="menu-toggle" aria-label="Abrir navegación" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? '×' : '☰'}</button><nav className={open ? 'open' : ''} aria-label="Principal">{navItems.map(([path, label], index) => <RouteLink key={`${path}-${label}`} to={path} className={`${route === path && index < 5 ? 'active ' : ''}${path === '/soy-dt' ? 'nav-dt' : ''}`} onClick={() => setOpen(false)}>{label}</RouteLink>)}<button className="mobile-team-switch" onClick={() => { setOpen(false); onChooseTeam(); }}>Mi equipo: {favoriteTeam?.name || 'Elegir'}</button></nav><div className="header-actions"><button className="team-switch" onClick={onChooseTeam} aria-label={`Cambiar mi equipo favorito: ${favoriteTeam?.name || 'elegir equipo'}`}><TeamCrest team={favoriteTeam || { id: 'u-de-chile' }} className="header-crest" /><small>{favoriteTeam?.name || 'Mi equipo'}</small></button><RouteLink to="/actualidad" className="header-search" aria-label="Buscar noticias"><span>⌕</span><small>BUSCAR</small></RouteLink></div></div></header><MatchdayStrip team={favoriteTeam} /></>;
+  return <><div className="topline"><div className="shell"><span>EL CLUB DE TODOS · MÁS QUE UNA PASIÓN</span><span>SANTIAGO, CHILE <b>•</b> EDICIÓN {edition}</span></div></div><header className="site-header"><div className="shell header-row"><Brand /><button className="menu-toggle" aria-label="Abrir navegación" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? '×' : '☰'}</button><nav className={open ? 'open' : ''} aria-label="Principal">{navItems.map(([path, label]) => <RouteLink key={`${path}-${label}`} to={path} className={`${route === path ? 'active ' : ''}${path === '/soy-dt' ? 'nav-dt' : ''}`} onClick={() => setOpen(false)}>{label}</RouteLink>)}<button className="mobile-team-switch" onClick={() => { setOpen(false); onChooseTeam(); }}>Mi equipo: {favoriteTeam?.name || 'Elegir'}</button></nav><div className="header-actions"><button className="team-switch" onClick={onChooseTeam} aria-label={`Cambiar mi equipo favorito: ${favoriteTeam?.name || 'elegir equipo'}`}><TeamCrest team={favoriteTeam || { id: 'u-de-chile' }} className="header-crest" /><small>{favoriteTeam?.name || 'Mi equipo'}</small></button><RouteLink to="/actualidad" className="header-search" aria-label="Buscar noticias"><span>⌕</span><small>BUSCAR</small></RouteLink></div></div></header><MatchdayStrip team={favoriteTeam} /></>;
 }
 
 function Footer({ favoriteTeam }) {
@@ -209,6 +538,11 @@ function useNewsFeed(limit = 6, clubId = '') {
 
 function SourceMark({ source }) {
   return <span className="source-mark" aria-hidden="true">{source.trim().slice(0, 1)}</span>;
+}
+
+function MediaCredit({ media }) {
+  if (!media?.credit) return null;
+  return <small className="media-attribution"><a href={media.creditUrl} target="_blank" rel="noreferrer">{media.credit}</a><span> · </span><a href={media.licenseUrl} target="_blank" rel="noreferrer">{media.licenseLabel || 'Licencia'}</a><span> · imagen adaptada</span></small>;
 }
 
 function NewsRadar({ team }) {
@@ -248,18 +582,20 @@ function ScorePanel({ compact = false }) {
 function ClubHero({ team, storyCount }) {
   const snapshot = clubSnapshots[team.id];
   const media = clubMedia[team.id];
+  const profile = clubProfiles[team.id];
   return <section className="club-hero" aria-label={`Portada de ${team.name}`}>
     <div className="shell club-hero-grid">
       <div className={`club-cover ${media ? 'has-photo' : 'crest-cover'}`}>
         {media ? <img className="club-cover-image" src={media.image} alt={media.alt} fetchPriority="high" /> : <div className="club-cover-fallback" aria-hidden="true"><span>EL SENDERO</span><TeamCrest team={team} className="club-cover-fallback-crest" /><b>{team.mark}</b></div>}
         <div className="club-cover-shade" aria-hidden="true" />
-        <div className="club-cover-top"><span>EL SENDERO <i>·</i> CLUB</span><span>TEMPORADA 2026</span></div>
+        <div className="club-cover-top"><span>EL SENDERO <i>·</i> {profile?.identity || 'CLUB'}</span><span>TEMPORADA 2026</span></div>
         <TeamCrest team={team} className="club-cover-crest" />
-        <div className="club-cover-caption"><span>{media?.caption || 'TU CLUB · TU CASA'}</span><b>{snapshot?.city || 'CHILE'}</b></div>
+        {media?.credit && <div className="club-cover-credit"><span>{media.credit}</span><span>·</span><a href={media.creditUrl} target="_blank" rel="noreferrer">Fuente</a><span>·</span><a href={media.licenseUrl} target="_blank" rel="noreferrer">{media.licenseLabel || 'Licencia'}</a><span>· adaptación WebP</span></div>}
+        <div className="club-cover-caption"><span>{media?.caption || profile?.coverCaption || 'TU CLUB · TU CASA'}</span><b>{snapshot?.city || 'CHILE'}</b></div>
       </div>
       <div className="club-hero-copy">
         <div className="club-hero-overline"><span>AHORA EN TU SENDERO</span><span><i /> {team.name.toUpperCase()}</span></div>
-        <div className="club-hero-heading"><span className="eyebrow">TU CARÁTULA DE TEMPORADA</span><h1>{team.name}</h1><p>La portada cambia contigo: sus colores, su gente y las historias de tu club, reunidas en un solo lugar.</p></div>
+        <div className="club-hero-heading"><span className="eyebrow">{profile?.tagline || 'TU CARÁTULA DE TEMPORADA'}</span><h1>{team.name}</h1><p>{profile?.description || 'La portada cambia contigo: sus colores, su gente y las historias de tu club, reunidas en un solo lugar.'}</p></div>
         <div className="club-hero-metrics" aria-label={`Resumen de ${team.name}`}>
           <span><small>POSICIÓN</small><b>{snapshot?.position ? `${snapshot.position}°` : '—'}</b></span>
           <span><small>PUNTOS</small><b>{snapshot?.points ?? '—'}</b></span>
@@ -273,6 +609,7 @@ function ClubHero({ team, storyCount }) {
 
 function ClubDesk({ team, storyCount }) {
   const snapshot = clubSnapshots[team.id];
+  const profile = clubProfiles[team.id];
   return <section className="shell club-desk" aria-label={`Resumen de ${team.name}`}>
     <SectionTitle eyebrow="TU CLUB, EN FOCO" title={`${team.name}.`}>
       <a className="section-link" href={getClubSearchUrl(team)} target="_blank" rel="noreferrer">Buscar actualidad ↗</a>
@@ -292,7 +629,7 @@ function ClubDesk({ team, storyCount }) {
       </article>
       <article className="club-desk-card club-identity-card">
         <span className="club-card-label">TU IDENTIDAD</span>
-        <div><TeamCrest team={team} className="club-card-mark" /><p>Los colores, el radar y el archivo siguen a <b>{team.name}</b>.</p></div>
+        <div><TeamCrest team={team} className="club-card-mark" /><p>{profile?.clubNote || <>Los colores, el radar y el archivo siguen a <b>{team.name}</b>.</>}</p></div>
         <span className="club-card-city">{snapshot?.city || 'Chile'} · Chile</span>
       </article>
     </div>
@@ -323,7 +660,7 @@ function HomePage({ saved, onSave, favoriteTeam }) {
     <NewsRadar team={activeTeam} />
     <section className="shell home-latest">
       <SectionTitle eyebrow="ARCHIVO DEL CLUB" title={`Historias de ${activeTeam.name}.`}><RouteLink to="/actualidad" className="section-link">Ver toda la actualidad →</RouteLink></SectionTitle>
-      {clubArticles.length ? <div className="home-news-grid">{clubArticles.slice(0, 3).map((article) => <NewsCard key={article.id} article={article} saved={saved.includes(article.id)} onSave={onSave} />)}</div> : <div className="club-stories-empty"><TeamCrest team={activeTeam} className="empty-crest" /><div><b>Tu portada no se rellena con historias de otros clubes.</b><p>Cuando sumemos contenido verificado de {activeTeam.name}, aparecerá aquí.</p></div><a href={getClubSearchUrl(activeTeam)} target="_blank" rel="noreferrer">Buscar noticias del club ↗</a></div>}
+      {clubArticles.length ? <div className="home-news-grid">{clubArticles.slice(0, 3).map((article) => <NewsCard key={article.id} article={article} saved={saved.includes(article.id)} onSave={onSave} />)}</div> : <div className="club-history-teaser"><img src={clubMedia[activeTeam.id]?.image} alt={clubMedia[activeTeam.id]?.alt || `Imagen de ${activeTeam.name}`} loading="lazy" /><div><span className="eyebrow">IDENTIDAD E HISTORIA · {activeTeam.mark}</span><h3>{clubProfiles[activeTeam.id]?.historyTitle}</h3><p>{clubProfiles[activeTeam.id]?.historyLead}</p><RouteLink to="/memoria">Conocer la historia del club →</RouteLink></div><TeamCrest team={activeTeam} className="empty-crest" /></div>}
     </section>
     <section className="shell home-split">
       <div className="home-data"><span className="eyebrow">LECTURA CON CONTEXTO</span><h2>El dato sirve cuando habla de <em>{activeTeam.name}.</em></h2><p>La portada conserva sólo lo que se relaciona con tu club: noticias, archivo y un punto de referencia para seguir su temporada.</p><RouteLink to="/actualidad" className="button">Explorar su actualidad →</RouteLink></div>
@@ -352,10 +689,27 @@ function NewsPage({ saved, onSave, saveError, favoriteTeam }) {
 function DataPage({ favoriteTeam }) {
   const activeTeam = favoriteTeam || teamChoices.find((item) => item.id === 'u-de-chile');
   const activeStanding = leagueStandings2026.find((club) => club.id === activeTeam.id);
-  return <div className="page shell data-page"><div className="page-heading data-heading"><span className="eyebrow">LIGA DE PRIMERA · CHILE</span><h1>La tabla<br />al día.</h1><p>Posiciones, diferencia de gol y próximos cruces de Copa Chile. Seleccionamos a {activeTeam.name} para ubicarlo de inmediato.</p></div><section className="standings-panel"><div className="standings-heading"><div><span className="eyebrow">CAMPEONATO NACIONAL 2026</span><h2>Tabla de posiciones</h2></div><span className="standings-cut">ESPN · CONSULTA 23 SEP 2026</span></div><div className="standings-scroll"><table className="standings-table"><thead><tr><th scope="col">#</th><th scope="col">Club</th><th scope="col">PJ</th><th scope="col">G</th><th scope="col">E</th><th scope="col">P</th><th scope="col">DG</th><th scope="col">Pts</th></tr></thead><tbody>{leagueStandings2026.map((club) => { const clubTeam = teamChoices.find((team) => team.id === club.id); return <tr key={club.id} className={club.id === activeTeam.id ? 'favorite-row' : ''} aria-current={club.id === activeTeam.id ? 'true' : undefined}><td>{club.position}</td><td><span className="standing-club">{clubTeam && <TeamCrest team={clubTeam} className="standing-crest" />}<b>{standingsClubName(club.id)}</b>{club.id === activeTeam.id && <small>MI EQUIPO</small>}</span></td><td>{club.played}</td><td>{club.wins}</td><td>{club.draws}</td><td>{club.losses}</td><td className={club.goalDifference > 0 ? 'positive-difference' : club.goalDifference < 0 ? 'negative-difference' : ''}>{club.goalDifference > 0 ? '+' : ''}{club.goalDifference}</td><td><b>{club.points}</b></td></tr>; })}</tbody></table></div><div className="standings-footer"><span>{activeTeam.name}: <b>{activeStanding?.position}°</b> · {activeStanding?.points} puntos · {activeStanding?.played} PJ</span><a href="https://www.espn.cl/futbol/liga/_/nombre/chi.1" target="_blank" rel="noreferrer">Ver posiciones actualizadas en ESPN ↗</a></div></section><section className="cup-schedule"><div className="source-news-heading"><div><span className="eyebrow">COPA CHILE · OCTAVOS DE FINAL</span><h2>Lo que viene esta semana.</h2></div><a href="https://www.espn.cl/futbol/chile/nota/_/id/17290575/la-programacion-de-los-partidos-de-ida-de-octavos-de-final-de-la-copa-chile-2026" target="_blank" rel="noreferrer">Programación ESPN ↗</a></div><div className="schedule-days">{copaChileSchedule.map((day) => <article key={day.date} className="schedule-day"><h3>{day.date}<span>IDA · COPA CHILE</span></h3>{day.matches.map(([home, away, time]) => <div className="schedule-match" key={`${home}-${away}`}><span>{home}</span><b>{time}</b><span>{away}</span></div>)}</article>)}</div><p className="data-note">Posiciones: consulta de ESPN Chile del 23/09/2026 (PJ, G-E-P, diferencia y puntos). Horarios de Copa Chile: programación ESPN del 22/09/2026; confirma posibles cambios en la fuente.</p></section></div>;
+  const normalizeClub = (value) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[’']/g, '').toLowerCase();
+  const teamKey = normalizeClub(activeTeam.name);
+  const teamCupSchedule = copaChileSchedule.map((day) => ({ ...day, matches: day.matches.filter(([home, away]) => [home, away].some((club) => normalizeClub(club) === teamKey)) })).filter((day) => day.matches.length);
+  return <div className="page shell data-page"><div className="page-heading data-heading"><span className="eyebrow">LIGA DE PRIMERA · CHILE</span><h1>La tabla<br />al día.</h1><p>Posiciones, diferencia de gol y próximos cruces de Copa Chile. Seleccionamos a {activeTeam.name} para ubicarlo de inmediato.</p></div><section className="standings-panel"><div className="standings-heading"><div><span className="eyebrow">CAMPEONATO NACIONAL 2026</span><h2>Tabla de posiciones</h2></div><span className="standings-cut">ESPN · CONSULTA 23 SEP 2026</span></div><div className="standings-scroll"><table className="standings-table"><thead><tr><th scope="col">#</th><th scope="col">Club</th><th scope="col">PJ</th><th scope="col">G</th><th scope="col">E</th><th scope="col">P</th><th scope="col">DG</th><th scope="col">Pts</th></tr></thead><tbody>{leagueStandings2026.map((club) => { const clubTeam = teamChoices.find((team) => team.id === club.id); return <tr key={club.id} className={club.id === activeTeam.id ? 'favorite-row' : ''} aria-current={club.id === activeTeam.id ? 'true' : undefined}><td>{club.position}</td><td><span className="standing-club">{clubTeam && <TeamCrest team={clubTeam} className="standing-crest" />}<b>{standingsClubName(club.id)}</b>{club.id === activeTeam.id && <small>MI EQUIPO</small>}</span></td><td>{club.played}</td><td>{club.wins}</td><td>{club.draws}</td><td>{club.losses}</td><td className={club.goalDifference > 0 ? 'positive-difference' : club.goalDifference < 0 ? 'negative-difference' : ''}>{club.goalDifference > 0 ? '+' : ''}{club.goalDifference}</td><td><b>{club.points}</b></td></tr>; })}</tbody></table></div><div className="standings-footer"><span>{activeTeam.name}: <b>{activeStanding?.position}°</b> · {activeStanding?.points} puntos · {activeStanding?.played} PJ</span><a href="https://www.espn.cl/futbol/liga/_/nombre/chi.1" target="_blank" rel="noreferrer">Ver posiciones actualizadas en ESPN ↗</a></div></section><section className="cup-schedule"><div className="source-news-heading"><div><span className="eyebrow">COPA CHILE · OCTAVOS DE FINAL</span><h2>Agenda de {activeTeam.name}.</h2></div><a href="https://www.espn.cl/futbol/chile/nota/_/id/17290575/la-programacion-de-los-partidos-de-ida-de-octavos-de-final-de-la-copa-chile-2026" target="_blank" rel="noreferrer">Programación ESPN ↗</a></div>{teamCupSchedule.length ? <div className="schedule-days">{teamCupSchedule.map((day) => <article key={day.date} className="schedule-day"><h3>{day.date}<span>IDA · COPA CHILE</span></h3>{day.matches.map(([home, away, time]) => <div className="schedule-match" key={`${home}-${away}`}><span>{home}</span><b>{time}</b><span>{away}</span></div>)}</article>)}</div> : <div className="empty-state"><h2>No hay un cruce de {activeTeam.name} en esta programación.</h2><p>Mostramos el calendario sólo cuando su club aparece en la fuente enlazada.</p></div>}<p className="data-note">Posiciones: consulta de ESPN Chile del 23/09/2026 (PJ, G-E-P, diferencia y puntos). Horarios de Copa Chile: programación ESPN del 22/09/2026; confirma posibles cambios en la fuente.</p></section></div>;
 }
 
-function ManagerPage() {
+function ManagerPage({ favoriteTeam }) {
+  const team = favoriteTeam || teamChoices[0];
+  if (team.id === 'u-de-chile') return <UniversityManagerPage />;
+  return <ClubManagerPage team={team} />;
+}
+
+function ClubManagerPage({ team }) {
+  const [players, setPlayers, lineupError] = useStored(`sendero-lineup-${team.id}-v1`, Array(11).fill(''));
+  const roles = ['ARQ', 'DEF', 'DEF', 'DEF', 'VOL', 'VOL', 'VOL', 'VOL', 'DEL', 'DEL', 'DEL'];
+  const media = clubMedia[team.id];
+  const safePlayers = Array.isArray(players) && players.length === 11 ? players : Array(11).fill('');
+  return <div className="page manager-page club-manager-page"><section className="shell manager-heading"><div><span className="eyebrow">TU PIZARRA · {team.mark}</span><h1>Arma tu once.<br /><em>Con tu club.</em></h1><p>Una pizarra abierta para {team.name}. Completa los nombres que conoces; no mostramos planteles ni valoraciones inventadas.</p><div className="manager-auth"><TeamCrest team={team} className="header-crest" /><span><b>Tu formación se guarda aquí</b><small>Sólo en este dispositivo · 3–4–3</small></span></div></div><div className="manager-heading-art">{media && <img src={media.image} alt={media.alt} />}<span>{team.name.toUpperCase()}<br />TU ONCE, TU LECTURA</span></div></section><section className="shell custom-lineup-section"><div className="custom-lineup-intro"><span className="eyebrow">FORMACIÓN EDITABLE · 3–4–3</span><h2>¿A quién pondrías en cancha?</h2><p>Escribe los nombres según tu propio seguimiento. La pizarra no representa una alineación oficial.</p></div><div className="custom-lineup"><div className="custom-lineup-pitch">{safePlayers.map((player, index) => <label key={index} className={`custom-slot custom-slot-${index}`}><span>{roles[index]} · {String(index + 1).padStart(2, '0')}</span><input value={player} maxLength="38" placeholder={roles[index] === 'ARQ' ? 'Arquero' : 'Nombre del jugador'} aria-label={`${roles[index]} posición ${index + 1}`} onChange={(event) => { const next = [...safePlayers]; next[index] = event.target.value; setPlayers(next); }} /></label>)}</div><aside className="custom-lineup-side"><TeamCrest team={team} className="custom-lineup-crest" /><span className="eyebrow">IDEA DE PARTIDO</span><h3>Elige desde lo que has visto.</h3><p>Completa esta propuesta personal y vuelve a editarla cuando quieras.</p><button className="text-button" onClick={() => setPlayers(Array(11).fill(''))}>Limpiar pizarra ↻</button>{lineupError && <small role="status">No se pudo guardar la pizarra en este dispositivo.</small>}</aside></div></section><section className="shell manager-footnote"><span>ESPACIO PERSONAL</span><p>El Sendero no publica estos nombres ni los presenta como convocatoria oficial. La formación se guarda localmente.</p></section></div>;
+}
+
+function UniversityManagerPage() {
   const [lineup, setLineup, lineupError] = useStored('sendero-dt-lineup-v1', initialLineup);
   const [jwtToken, setJwtToken, jwtTokenError] = useStored('sendero-jwt-v1', '');
   const [jwtUser, setJwtUser] = useState(null);
@@ -515,39 +869,75 @@ function ManagerPage() {
   </div>;
 }
 
-function MemoryPage({ saved, onSave }) {
-  const memoryArticles = articles.filter((article) => ['Historia', 'Cultura azul'].includes(article.category));
-  return <div className="page"><section className="memory-hero shell"><div className="memory-image"><img src="/assets/hinchada.png" alt="Arte editorial de una hinchada azul" /><span>NO ES SOLO<br />FÚTBOL.</span></div><div className="memory-intro"><span className="eyebrow">EL AZUL SE HEREDA</span><h1>Antes de nosotros.<br />Después de nosotros.<br /><em>Siempre la U.</em></h1><p>Un club vive en las historias que te contaron, en la primera camiseta y en ese abrazo que todavía recuerdas.</p></div></section><section className="shell timeline-section"><SectionTitle eyebrow="UN SENDERO DE CASI UN SIGLO" title="Hitos que nos trajeron hasta acá." /><div className="history-timeline"><article><b>1927</b><span>El origen</span><p>Nace el Club Universitario de Deportes, raíz institucional de Universidad de Chile.</p></article><article><b>1940</b><span>Primera estrella</span><p>La U conquista su primer campeonato profesional.</p></article><article><b>1960s</b><span>El Ballet Azul</span><p>Una generación transforma al club en protagonista y símbolo popular.</p></article><article><b>1994</b><span>Volver a celebrar</span><p>Tras 25 años, la U se corona con una generación inolvidable.</p></article><article><b>2011</b><span>América es azul</span><p>La Copa Sudamericana llega de forma invicta y cambia la escala del sueño.</p></article><article><b>2027</b><span>El centenario</span><p>La historia continúa con una comunidad que ya mira hacia sus cien años.</p></article></div><p className="data-note">Fuente histórica: Club Universidad de Chile. El centenario corresponde al cumplimiento de 100 años desde 1927.</p></section><section className="shell memory-reading"><SectionTitle eyebrow="ARCHIVO DEL SENDERO" title="Leer también es recordar." /><div className="news-grid memory-grid">{memoryArticles.map((article) => <NewsCard key={article.id} article={article} saved={saved.includes(article.id)} onSave={onSave} />)}</div></section><div className="shell"><BookBanner /></div></div>;
+function MemoryPage({ saved, onSave, favoriteTeam }) {
+  const team = favoriteTeam || teamChoices[0];
+  const profile = clubProfiles[team.id];
+  const media = clubMedia[team.id];
+  const memoryArticles = articles.filter((article) => ['Historia', 'Cultura azul'].includes(article.category) && article.clubIds?.includes(team.id));
+  return <div className="page"><section className="memory-hero shell"><div className="memory-art-wrap"><div className="memory-image"><img src={media?.image} alt={media?.alt || `Imagen de ${team.name}`} /><span>{profile.identity.split(' · ')[0]}<br />EN LA PIEL</span></div><MediaCredit media={media} /></div><div className="memory-intro"><span className="eyebrow">HISTORIA · {team.name.toUpperCase()}</span><h1>{profile.historyTitle}</h1><p>{profile.historyLead}</p><a className="inline-link" href={profile.sourceUrl} target="_blank" rel="noreferrer">{profile.sourceLabel} ↗</a></div></section><section className="shell timeline-section"><SectionTitle eyebrow={`HISTORIA DE ${team.mark}`} title="Hitos que le dieron forma." /><div className="history-timeline">{profile.facts.map(([year, title, description]) => <article key={`${year}-${title}`}><b>{year}</b><span>{title}</span><p>{description}</p></article>)}</div><p className="data-note">Reseña breve preparada por El Sendero. Consulta la <a href={profile.sourceUrl} target="_blank" rel="noreferrer">fuente institucional o histórica: {profile.sourceLabel} ↗</a>.</p></section><section className="shell memory-reading"><SectionTitle eyebrow={`ARCHIVO DE ${team.mark}`} title={`Leer más de ${team.name}.`} />{memoryArticles.length ? <div className="news-grid memory-grid">{memoryArticles.map((article) => <NewsCard key={article.id} article={article} saved={saved.includes(article.id)} onSave={onSave} />)}</div> : <div className="club-history-teaser"><TeamCrest team={team} className="empty-crest" /><div><span className="eyebrow">DEL ARCHIVO DEL CLUB</span><h3>{profile.historyTitle}</h3><p>{profile.historyLead}</p><a href={profile.sourceUrl} target="_blank" rel="noreferrer">Seguir leyendo en {profile.sourceLabel} ↗</a></div></div>}</section>{team.id === 'u-de-chile' && <div className="shell"><BookBanner /></div>}</div>;
 }
 
-function CommunityPage() {
-  const [mvp, setMvp, mvpError] = useStored('sendero-mvp-2026-09-13', '');
-  const [answers, setAnswers, quizError] = useStored('sendero-trivia-v1', {});
-  const [memories, setMemories, memoriesError] = useStored('sendero-memories-v1', []);
-  const [step, setStep] = useState(0);
+function CommunityPage({ favoriteTeam }) {
+  const team = favoriteTeam || teamChoices[0];
+  const profile = clubProfiles[team.id];
+  const [favorite, setFavorite, favoriteError] = useStored(`sendero-tribuna-${team.id}-v1`, '');
+  const [memories, setMemories, memoriesError] = useStored(`sendero-memories-${team.id}-v1`, []);
   const [memory, setMemory] = useState('');
   const [name, setName] = useState('');
-  const question = quiz[step];
-  const answer = answers[step];
-  const score = quiz.filter((item, index) => answers[index] === item.correct).length;
+  const waysToSupport = [
+    ['La camiseta', `Los colores de ${team.name}`],
+    ['La gente', 'La hinchada y sus generaciones'],
+    ['La ciudad', `El vínculo con ${clubSnapshots[team.id]?.city || 'su ciudad'}`],
+  ];
   function addMemory(event) {
     event.preventDefault();
     const clean = memory.trim();
     if (clean.length < 12) return;
-    setMemories([{ id: Date.now(), name: name.trim() || 'Hincha azul', text: clean }, ...memories].slice(0, 8));
+    setMemories([{ id: Date.now(), name: name.trim() || `Hincha de ${team.mark}`, text: clean }, ...memories].slice(0, 8));
     setMemory(''); setName('');
   }
-  return <div className="community-page"><section className="shell community-heading"><span className="eyebrow">LA TRIBUNA ES TUYA</span><h1>El partido termina.<br /><em>La conversación sigue.</em></h1><p>Un espacio para participar, jugar y guardar los recuerdos que hacen única tu historia con la U.</p></section><section className="shell participation-grid"><article className="participation-card vote-card"><span className="tag">TU FIGURA · LA SERENA 0–3 U</span><h2>¿Quién se lleva tus aplausos?</h2><p>Elige al jugador que más te representó en La Portada.</p><div className="player-options">{[['Agustín Arce', 'Abrió el marcador · 47′'], ['Fabián Hormazábal', 'Definición de taco · 54′'], ['Igor Lichnovsky', 'Salvó y convirtió · 90+4′']].map(([player, description], index) => <button key={player} className={mvp === player ? 'selected' : ''} aria-pressed={mvp === player} onClick={() => setMvp(player)}><span>0{index + 1}</span><span><b>{player}</b><small>{description}</small></span><i>{mvp === player ? '✓' : '+'}</i></button>)}</div><p className="feedback" aria-live="polite">{mvp ? `Tu figura: ${mvp}. Puedes cambiar tu elección.` : 'Tu elección es personal y se guarda en este navegador.'}</p>{mvpError && <small>No pudimos guardar la elección fuera de esta sesión.</small>}</article><article className="participation-card quiz-card"><span className="tag">DESAFÍO AZUL · {step + 1} / {quiz.length}</span><h2>¿Cuánto azul llevas dentro?</h2><p className="question">{question.q}</p><div className="quiz-options">{question.options.map((option) => <button key={`${step}-${option}`} disabled={Boolean(answer)} className={answer && option === question.correct ? 'correct' : answer === option ? 'incorrect' : ''} onClick={() => setAnswers({ ...answers, [step]: option })}>{option}</button>)}</div><div className="quiz-feedback" aria-live="polite">{answer && <p>{answer === question.correct ? '¡Correcto! ' : 'Esta vez no. '}{question.why}</p>}</div><div className="quiz-progress"><span>{score} / {quiz.length} aciertos</span>{step < quiz.length - 1 ? <button disabled={!answer} onClick={() => setStep(step + 1)}>Siguiente →</button> : <button onClick={() => { setAnswers({}); setStep(0); }}>Volver a jugar ↻</button>}</div><small>Preguntas basadas en la historia oficial del club.{quizError ? ' No pudimos guardar tu progreso.' : ''}</small></article></section><section className="shell memory-wall"><div className="wall-intro"><span className="eyebrow">TU HISTORIA AZUL</span><h2>¿Cuál es el recuerdo que te hizo de la U?</h2><p>Escríbelo para conservarlo en este dispositivo. No se publica ni se envía a ningún servidor.</p><form onSubmit={addMemory}><label>Tu nombre o apodo <input value={name} onChange={(event) => setName(event.target.value)} maxLength="30" placeholder="Hincha azul" /></label><label>Tu recuerdo <textarea value={memory} onChange={(event) => setMemory(event.target.value)} minLength="12" maxLength="280" placeholder="Ese día en que…" required /></label><div><small>{memory.length} / 280</small><button className="button" disabled={memory.trim().length < 12}>Guardar mi recuerdo</button></div></form>{memoriesError && <p role="status">No pudimos guardar el recuerdo en este dispositivo.</p>}</div><div className="saved-memories" aria-live="polite"><span className="eyebrow">MI MURO AZUL</span>{memories.length ? memories.map((item) => <blockquote key={item.id}><p>“{item.text}”</p><footer>{item.name}</footer><button onClick={() => setMemories(memories.filter((memoryItem) => memoryItem.id !== item.id))}>Eliminar</button></blockquote>) : <div className="wall-empty"><b>Este muro todavía espera tu primera historia.</b><p>Puede ser un partido, una persona o una camiseta.</p></div>}</div></section></div>;
+  return <div className="community-page"><section className="shell community-heading"><span className="eyebrow">LA TRIBUNA · {team.mark}</span><h1>El partido termina.<br /><em>La conversación sigue.</em></h1><p>Un espacio de {team.name} para elegir lo que te representa y guardar recuerdos en tu dispositivo.</p></section><section className="shell participation-grid"><article className="participation-card vote-card"><span className="tag">IDENTIDAD {team.mark} · ELECCIÓN PERSONAL</span><h2>¿Qué te conecta más con el club?</h2><p>No es una encuesta pública: tu elección queda guardada sólo en este navegador.</p><div className="player-options">{waysToSupport.map(([label, description], index) => <button key={label} className={favorite === label ? 'selected' : ''} aria-pressed={favorite === label} onClick={() => setFavorite(label)}><span>0{index + 1}</span><span><b>{label}</b><small>{description}</small></span><i>{favorite === label ? '✓' : '+'}</i></button>)}</div><p className="feedback" aria-live="polite">{favorite ? `Elegiste: ${favorite}. Puedes cambiarlo cuando quieras.` : `¿Qué significa ser parte de ${team.name} para ti?`}</p>{favoriteError && <small>No se pudo guardar la elección en este navegador.</small>}</article><article className="participation-card quiz-card"><span className="tag">CUADERNO DEL HINCHA</span><h2>{profile.historyTitle}</h2><p className="question">{profile.historyLead}</p><a className="button" href={profile.sourceUrl} target="_blank" rel="noreferrer">Conocer su historia ↗</a><p className="quiz-feedback">{profile.facts[0][0]} · {profile.facts[0][1]}</p><small>Ficha resumida por El Sendero · {profile.sourceLabel}</small></article></section><section className="shell memory-wall"><div className="wall-intro"><span className="eyebrow">MI HISTORIA · {team.mark}</span><h2>¿Cuál es tu recuerdo de {team.name}?</h2><p>Guárdalo en este dispositivo. No se publica ni se envía a un servidor.</p><form onSubmit={addMemory}><label>Tu nombre o apodo <input value={name} onChange={(event) => setName(event.target.value)} maxLength="30" placeholder={`Hincha de ${team.mark}`} /></label><label>Tu recuerdo <textarea value={memory} onChange={(event) => setMemory(event.target.value)} minLength="12" maxLength="280" placeholder="Ese partido, esa camiseta o esa persona…" required /></label><div><small>{memory.length} / 280</small><button className="button" disabled={memory.trim().length < 12}>Guardar mi recuerdo</button></div></form>{memoriesError && <p role="status">No pudimos guardar el recuerdo en este dispositivo.</p>}</div><div className="saved-memories" aria-live="polite"><span className="eyebrow">MIS RECUERDOS · {team.mark}</span>{memories.length ? memories.map((item) => <blockquote key={item.id}><p>“{item.text}”</p><footer>{item.name}</footer><button onClick={() => setMemories(memories.filter((memoryItem) => memoryItem.id !== item.id))}>Eliminar</button></blockquote>) : <div className="wall-empty"><b>Este muro todavía espera tu primera historia.</b><p>Un partido, una persona, una camiseta: tu club también vive en lo que recuerdas.</p></div>}</div></section></div>;
 }
 
-function ArticlePage({ article, saved, onSave, saveError }) {
+function ClubSectionPage({ route, favoriteTeam }) {
+  const team = favoriteTeam || teamChoices[0];
+  const profile = clubProfiles[team.id];
+  const media = clubMedia[team.id];
+  const topic = {
+    '/escuelas': {
+      label: 'ESCUELAS', title: 'El fútbol empieza en comunidad.',
+      copy: `La identidad de ${team.name} también se transmite entre generaciones. Aquí reunimos una ficha de su historia y un acceso para revisar la información formativa vigente publicada por el club.`,
+      search: `${team.name} fútbol formativo escuela oficial`, action: 'Buscar fútbol formativo oficial', note: 'Revisa edades, cupos y fechas directamente con la institución; esta guía no representa una inscripción.'
+    },
+    '/abonos': {
+      label: 'ABONOS', title: 'Tu lugar en la tribuna.',
+      copy: `El estadio, la ciudad y los colores hacen especial cada regreso a casa. Consulta directamente los canales de ${team.name} para ver disponibilidad y condiciones de abonos.`,
+      search: `${team.name} abonos entradas 2026 sitio oficial`, action: 'Consultar abonos y entradas', note: 'No mostramos precios ni disponibilidad porque cambian durante la temporada. Confirma siempre en el canal oficial.'
+    },
+    '/tienda': {
+      label: 'TIENDA', title: 'Colores para llevar.',
+      copy: `La camiseta acompaña la historia de ${team.name}. Encuentra la tienda o distribución oficial y confirma modelo, tallas y autenticidad antes de comprar.`,
+      search: `${team.name} tienda oficial camisetas`, action: 'Buscar la tienda oficial', note: 'El Sendero no vende productos. Comprueba que el vendedor esté reconocido por el club.'
+    },
+    '/prensa': {
+      label: 'PRENSA', title: 'El club, contado desde su fuente.',
+      copy: `Sigue la cobertura y los comunicados de ${team.name}. Nuestra guía enlaza la información institucional y una búsqueda de noticias centrada en tu equipo.`,
+      search: `${team.name} fútbol Chile`, action: 'Abrir noticias del club', note: 'Las notas externas abren en sus propios sitios; los resúmenes del Sendero se identifican y enlazan a su fuente.'
+    },
+  }[route];
+  const destination = route === '/prensa' ? getClubSearchUrl(team) : `https://www.google.com/search?q=${encodeURIComponent(topic.search)}`;
+  return <div className="page shell club-guide-page"><section className="club-guide-hero"><div className="club-guide-art"><img src={media.image} alt={media.alt} /><span>{topic.label} · {team.mark}</span><MediaCredit media={media} /></div><div className="club-guide-copy"><span className="eyebrow">{topic.label} · {profile.identity}</span><h1>{topic.title}</h1><p>{topic.copy}</p><a className="button" href={destination} target="_blank" rel="noreferrer">{topic.action} ↗</a>{route === '/escuelas' && <RouteLink className="club-guide-community-link" to="/comunidad">Compartir un recuerdo de la tribuna →</RouteLink>}</div></section><section className="club-guide-info"><div><span className="eyebrow">UNA GUÍA DE EL SENDERO</span><h2>{profile.historyTitle}</h2><p>{profile.historyLead}</p><a href={profile.sourceUrl} target="_blank" rel="noreferrer">{profile.sourceLabel} ↗</a></div><div className="club-guide-facts">{profile.facts.slice(0, 3).map(([year, title, description]) => <article key={`${year}-${title}`}><b>{year}</b><span><strong>{title}</strong><small>{description}</small></span></article>)}</div></section><p className="data-note club-guide-note">{topic.note}</p></div>;
+}
+
+function ArticlePage({ article, saved, onSave, saveError, favoriteTeam }) {
   const [message, setMessage] = useState('');
   async function share() {
-    try { await navigator.clipboard.writeText(window.location.href); setMessage('Enlace copiado. ¡Compártelo con otro azul!'); }
+    try { await navigator.clipboard.writeText(window.location.href); setMessage('Enlace copiado. ¡Compártelo con otro hincha!'); }
     catch { setMessage('Copia la dirección del navegador para compartir este artículo.'); }
   }
   if (!article) return <div className="page shell empty-state"><h1>No encontramos ese artículo.</h1><RouteLink to="/actualidad">Volver a la actualidad →</RouteLink></div>;
-  return <article className="article-page shell"><RouteLink to="/actualidad" className="back-link">← Volver a actualidad</RouteLink><div className="article-heading"><span className="eyebrow">{article.category} / {article.type}</span><h1 tabIndex="-1">{article.title}</h1><p>{article.excerpt}</p><div>REDACCIÓN EL SENDERO DEL SOCCER <span>•</span> {article.date}</div></div><figure><img src={article.image} alt={article.credit} /><figcaption><Credit article={article} /></figcaption></figure><div className="article-content"><div className="article-actions"><button aria-pressed={saved} onClick={() => onSave(article.id)}>{saved ? '♥ Guardado' : '♡ Guardar artículo'}</button><button onClick={share}>Copiar enlace ↗</button></div><p className="feedback" aria-live="polite">{message}{saveError ? ' No pudimos guardar el cambio.' : ''}</p>{article.body.map((paragraph, index) => <p key={index}>{paragraph}</p>)}<aside className="source-box"><b>Sobre esta publicación</b><p>Texto original de El Sendero del Soccer. {article.type === 'Análisis' ? 'Interpretación editorial basada en los hechos del encuentro.' : 'Información redactada a partir de la fuente indicada.'}</p>{article.source.url ? <a href={article.source.url} target="_blank" rel="noreferrer">{article.source.label} ↗</a> : <span>{article.source.label}</span>}</aside><h2>Sigue por el Sendero</h2>{articles.filter((item) => item.id !== article.id).slice(0, 3).map((item) => <ArticleLink key={item.id} article={item} className="related-link" />)}</div></article>;
+  const related = articles.filter((item) => item.id !== article.id && (!favoriteTeam || item.clubIds?.includes(favoriteTeam.id))).slice(0, 3);
+  return <article className="article-page shell"><RouteLink to="/actualidad" className="back-link">← Volver a actualidad</RouteLink><div className="article-heading"><span className="eyebrow">{article.category} / {article.type}</span><h1 tabIndex="-1">{article.title}</h1><p>{article.excerpt}</p><div>REDACCIÓN EL SENDERO DEL SOCCER <span>•</span> {article.date}</div></div><figure><img src={article.image} alt={article.credit} /><figcaption><Credit article={article} /></figcaption></figure><div className="article-content"><div className="article-actions"><button aria-pressed={saved} onClick={() => onSave(article.id)}>{saved ? '♥ Guardado' : '♡ Guardar artículo'}</button><button onClick={share}>Copiar enlace ↗</button></div><p className="feedback" aria-live="polite">{message}{saveError ? ' No pudimos guardar el cambio.' : ''}</p>{article.body.map((paragraph, index) => <p key={index}>{paragraph}</p>)}<aside className="source-box"><b>Sobre esta publicación</b><p>Texto original de El Sendero del Soccer. {article.type === 'Análisis' ? 'Interpretación editorial basada en los hechos del encuentro.' : 'Información redactada a partir de la fuente indicada.'}</p>{article.source.url ? <a href={article.source.url} target="_blank" rel="noreferrer">{article.source.label} ↗</a> : <span>{article.source.label}</span>}</aside>{related.length > 0 && <><h2>Sigue por el Sendero</h2>{related.map((item) => <ArticleLink key={item.id} article={item} className="related-link" />)}</>}</div></article>;
 }
 
 function App() {
@@ -574,18 +964,19 @@ function App() {
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', favoriteTeam.navy);
   }, [favoriteTeam]);
   useEffect(() => {
-    const titles = { '/': 'El Sendero del Soccer | Pasión por el juego', '/actualidad': 'Noticias | El Sendero del Soccer', '/datos': 'Partidos | El Sendero del Soccer', '/memoria': 'El Club | El Sendero del Soccer', '/comunidad': 'Comunidad | El Sendero del Soccer', '/soy-dt': 'Último Minuto | El Sendero del Soccer' };
+    const titles = { '/': 'El Sendero del Soccer | Pasión por el juego', '/actualidad': 'Noticias | El Sendero del Soccer', '/datos': 'Partidos | El Sendero del Soccer', '/memoria': 'El Club | El Sendero del Soccer', '/comunidad': 'Comunidad | El Sendero del Soccer', '/escuelas': 'Escuelas | El Sendero del Soccer', '/abonos': 'Abonos | El Sendero del Soccer', '/tienda': 'Tienda | El Sendero del Soccer', '/prensa': 'Prensa | El Sendero del Soccer', '/soy-dt': 'Último Minuto | El Sendero del Soccer' };
     document.title = article ? `${article.title} | El Sendero del Soccer` : titles[route] || 'El Sendero del Soccer';
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [route, article]);
   const toggleSave = (id) => setSaved(saved.includes(id) ? saved.filter((item) => item !== id) : [...saved, id]);
   let page;
-  if (articleId) page = <ArticlePage article={article} saved={saved.includes(articleId)} onSave={toggleSave} saveError={saveError} />;
+  if (articleId) page = <ArticlePage article={article} saved={saved.includes(articleId)} onSave={toggleSave} saveError={saveError} favoriteTeam={favoriteTeam} />;
   else if (route === '/actualidad') page = <NewsPage saved={saved} onSave={toggleSave} saveError={saveError} favoriteTeam={favoriteTeam} />;
   else if (route === '/datos') page = <DataPage favoriteTeam={favoriteTeam} />;
-  else if (route === '/memoria') page = <MemoryPage saved={saved} onSave={toggleSave} />;
-  else if (route === '/comunidad') page = <CommunityPage />;
-  else if (route === '/soy-dt') page = <ManagerPage />;
+  else if (route === '/memoria') page = <MemoryPage key={favoriteTeam?.id} saved={saved} onSave={toggleSave} favoriteTeam={favoriteTeam} />;
+  else if (route === '/comunidad') page = <CommunityPage key={favoriteTeam?.id} favoriteTeam={favoriteTeam} />;
+  else if (['/escuelas', '/abonos', '/tienda', '/prensa'].includes(route)) page = <ClubSectionPage route={route} favoriteTeam={favoriteTeam} />;
+  else if (route === '/soy-dt') page = <ManagerPage key={favoriteTeam?.id} favoriteTeam={favoriteTeam} />;
   else page = <HomePage saved={saved} onSave={toggleSave} favoriteTeam={favoriteTeam} />;
   const chooseTeam = (teamId) => { setFavoriteTeamId(teamId); setTeamPickerOpen(false); };
   return <><a className="skip-link" href="#main">Saltar al contenido</a><Header route={route} favoriteTeam={favoriteTeam} onChooseTeam={() => setTeamPickerOpen(true)} /><main id="main">{page}</main><Footer favoriteTeam={favoriteTeam} />{teamPickerOpen && <TeamPicker selectedTeam={favoriteTeam} onSelect={chooseTeam} />}</>;
