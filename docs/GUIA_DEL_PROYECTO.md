@@ -76,6 +76,8 @@ Busca las reglas de la vista en `src/styles.css`. Los valores del equipo activo 
 
 El hook `useStored` de `src/main.jsx` guarda preferencias y elementos de Soy DT en `localStorage`. Las claves incluyen club favorito, artículos guardados, recuerdos y alineaciones. Es simple y funciona sin servidor, pero los datos viven sólo en ese navegador: no se sincronizan con otros dispositivos.
 
+Soy DT 2.0 permite alternar entre 3–4–3, 4–3–3 y 4–4–2. En la pizarra de la U se reasignan jugadores según su posición cuando cambia el esquema; para otros clubes los nombres escritos se guardan por equipo y formación. Los esquemas del juego no convierten las valoraciones de demostración en estadísticas oficiales.
+
 La autenticación está en Firebase, no en una función casera que almacena contraseñas. Un usuario autenticado puede acceder al flujo de duelo de demostración. Esto todavía no es un sistema de permisos del lado servidor ni guarda alineaciones en la nube.
 
 La configuración cliente de Firebase (`VITE_FIREBASE_*`) se necesita al compilar, pero no es una contraseña. `.env.local` no se comparte. Nunca publiques claves privadas del Admin SDK, contraseñas de prueba ni secretos propios en el código o en variables `VITE_*`: esas variables se incluyen en el navegador.

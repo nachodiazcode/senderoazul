@@ -13,6 +13,7 @@ Sitio editorial de fútbol chileno con personalización por club, noticias, dato
 - Buscador en vivo y filtros por categoría.
 - Ticker de noticias y módulo del próximo partido.
 - Tabla de posiciones de demostración.
+- Soy DT 2.0: pizarra táctica con esquemas 3–4–3, 4–3–3 y 4–4–2.
 - Secciones de videos, historia e identidad del club.
 - Bloque visual de newsletter y recursos gráficos locales.
 

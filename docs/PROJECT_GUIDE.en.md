@@ -76,6 +76,8 @@ Find the relevant rules in `src/styles.css`. The active club's values come from 
 
 The `useStored` hook in `src/main.jsx` saves preferences and Soy DT items in `localStorage`. Keys cover the favorite club, saved articles, memories, and lineups. This is simple and needs no server, but the data stays in that browser and is not synced across devices.
 
+Soy DT 2.0 lets users switch between 3–4–3, 4–3–3, and 4–4–2. On the Universidad de Chile board, players are reassigned by position when the formation changes. For other clubs, typed names are saved separately for each team and formation. Demo ratings are not presented as official statistics.
+
 Authentication is handled by Firebase, not by a custom function storing passwords. A signed-in user can access the demo duel flow. This is not yet a server-side authorization system, and it does not save lineups to the cloud.
 
 Firebase client configuration (`VITE_FIREBASE_*`) is needed at build time, but it is not a password. Do not share `.env.local`. Never publish Firebase Admin SDK private keys, test passwords, or custom secrets in the code or in `VITE_*` variables—those variables are included in the browser bundle.

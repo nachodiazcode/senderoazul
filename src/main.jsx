@@ -493,21 +493,50 @@ const dtPlayers = [
   { id: 'lucero', name: 'Juan Martín Lucero', short: 'Lucero', role: 'DEL', rating: 81, points: 80, note: 'Juego aéreo' },
 ];
 
-const dtSlots = [
-  { key: 'POR', label: 'Arquero' },
-  { key: 'DFC-1', label: 'Central' },
-  { key: 'DFC-2', label: 'Central' },
-  { key: 'DFC-3', label: 'Central' },
-  { key: 'MED-1', label: 'Volante' },
-  { key: 'MED-2', label: 'Volante' },
-  { key: 'MED-3', label: 'Volante' },
-  { key: 'MED-4', label: 'Volante' },
-  { key: 'DEL-1', label: 'Delantero' },
-  { key: 'DEL-2', label: 'Delantero' },
-  { key: 'DEL-3', label: 'Delantero' },
-];
+const dtFormations = {
+  '3-4-3': {
+    label: '3–4–3',
+    slots: [
+      { key: 'POR', role: 'POR', label: 'Arquero', gridColumn: '5 / span 4', gridRow: '4' },
+      ...[2, 5, 8].map((column, index) => ({ key: `DFC-${index + 1}`, role: 'DFC', label: 'Central', gridColumn: `${column} / span 3`, gridRow: '3' })),
+      ...[1, 4, 7, 10].map((column, index) => ({ key: `MED-${index + 1}`, role: 'MED', label: 'Volante', gridColumn: `${column} / span 3`, gridRow: '2' })),
+      ...[2, 5, 8].map((column, index) => ({ key: `DEL-${index + 1}`, role: 'DEL', label: 'Delantero', gridColumn: `${column} / span 3`, gridRow: '1' })),
+    ],
+  },
+  '4-3-3': {
+    label: '4–3–3',
+    slots: [
+      { key: 'POR', role: 'POR', label: 'Arquero', gridColumn: '5 / span 4', gridRow: '4' },
+      ...[1, 4, 7, 10].map((column, index) => ({ key: `DFC-${index + 1}`, role: 'DFC', label: index === 0 ? 'Lateral' : index === 3 ? 'Lateral' : 'Central', gridColumn: `${column} / span 3`, gridRow: '3' })),
+      ...[2, 5, 8].map((column, index) => ({ key: `MED-${index + 1}`, role: 'MED', label: 'Volante', gridColumn: `${column} / span 3`, gridRow: '2' })),
+      ...[2, 5, 8].map((column, index) => ({ key: `DEL-${index + 1}`, role: 'DEL', label: index === 1 ? 'Centrodelantero' : 'Extremo', gridColumn: `${column} / span 3`, gridRow: '1' })),
+    ],
+  },
+  '4-4-2': {
+    label: '4–4–2',
+    slots: [
+      { key: 'POR', role: 'POR', label: 'Arquero', gridColumn: '5 / span 4', gridRow: '4' },
+      ...[1, 4, 7, 10].map((column, index) => ({ key: `DFC-${index + 1}`, role: 'DFC', label: index === 0 ? 'Lateral' : index === 3 ? 'Lateral' : 'Central', gridColumn: `${column} / span 3`, gridRow: '3' })),
+      ...[1, 4, 7, 10].map((column, index) => ({ key: `MED-${index + 1}`, role: 'MED', label: 'Volante', gridColumn: `${column} / span 3`, gridRow: '2' })),
+      ...[3, 7].map((column, index) => ({ key: `DEL-${index + 1}`, role: 'DEL', label: 'Delantero', gridColumn: `${column} / span 3`, gridRow: '1' })),
+    ],
+  },
+};
 
 const initialLineup = ['castellon', 'ramirez', 'zaldivia', 'tamayo', 'hormazabal', 'poblete', 'reinhart', 'guerrero', 'reyna', 'vargas', 'arce'];
+
+function fitLineupToFormation(lineup, nextSlots) {
+  const currentPlayers = lineup.map((id) => dtPlayers.find((player) => player.id === id)).filter(Boolean);
+  const available = [...currentPlayers, ...dtPlayers.filter((player) => !currentPlayers.some((selected) => selected.id === player.id))];
+  const used = new Set();
+  return nextSlots.map((slot) => {
+    const player = available.find((candidate) => !used.has(candidate.id) && candidate.role === slot.role)
+      || available.find((candidate) => !used.has(candidate.id));
+    if (!player) return '';
+    used.add(player.id);
+    return player.id;
+  });
+}
 
 const getRoute = () => {
   const hash = window.location.hash.replace(/^#/, '') || '/';
@@ -810,14 +839,26 @@ function CupManagerContext({ team }) {
 
 function ClubManagerPage({ team }) {
   const [players, setPlayers, lineupError] = useStored(`sendero-lineup-${team.id}-v1`, Array(11).fill(''));
-  const roles = ['ARQ', 'DEF', 'DEF', 'DEF', 'VOL', 'VOL', 'VOL', 'VOL', 'DEL', 'DEL', 'DEL'];
+  const [formationId, setFormationId] = useStored(`sendero-lineup-formation-${team.id}-v2`, '3-4-3');
+  const [lineupsByFormation, setLineupsByFormation] = useStored(`sendero-lineups-${team.id}-v2`, {});
+  const activeFormationId = dtFormations[formationId] ? formationId : '3-4-3';
+  const activeFormation = dtFormations[activeFormationId];
   const media = clubMedia[team.id];
-  const safePlayers = Array.isArray(players) && players.length === 11 ? players : Array(11).fill('');
-  return <div className="page manager-page club-manager-page"><section className="shell manager-heading"><div><span className="eyebrow">TU PIZARRA · {team.mark}</span><h1>Arma tu once.<br /><em>Con tu club.</em></h1><p>Una pizarra abierta para {team.name}. Completa los nombres que conoces; no mostramos planteles ni valoraciones inventadas.</p><div className="manager-auth"><TeamCrest team={team} className="header-crest" /><span><b>Tu formación se guarda aquí</b><small>Sólo en este dispositivo · 3–4–3</small></span></div></div><div className="manager-heading-art">{media && <img src={media.image} alt={media.alt} />}<span>{team.name.toUpperCase()}<br />TU ONCE, TU LECTURA</span></div></section><section className="shell custom-lineup-section"><div className="custom-lineup-intro"><span className="eyebrow">FORMACIÓN EDITABLE · 3–4–3</span><h2>¿A quién pondrías en cancha?</h2><p>Escribe los nombres según tu propio seguimiento. La pizarra no representa una alineación oficial.</p></div><div className="custom-lineup"><div className="custom-lineup-pitch">{safePlayers.map((player, index) => <label key={index} className={`custom-slot custom-slot-${index}`}><span>{roles[index]} · {String(index + 1).padStart(2, '0')}</span><input value={player} maxLength="38" placeholder={roles[index] === 'ARQ' ? 'Arquero' : 'Nombre del jugador'} aria-label={`${roles[index]} posición ${index + 1}`} onChange={(event) => { const next = [...safePlayers]; next[index] = event.target.value; setPlayers(next); }} /></label>)}</div><aside className="custom-lineup-side"><TeamCrest team={team} className="custom-lineup-crest" /><span className="eyebrow">IDEA DE PARTIDO</span><h3>Elige desde lo que has visto.</h3><p>Completa esta propuesta personal y vuelve a editarla cuando quieras.</p><button className="text-button" onClick={() => setPlayers(Array(11).fill(''))}>Limpiar pizarra ↻</button>{lineupError && <small role="status">No se pudo guardar la pizarra en este dispositivo.</small>}</aside></div></section><section className="shell manager-footnote"><span>ESPACIO PERSONAL</span><p>El Sendero no publica estos nombres ni los presenta como convocatoria oficial. La formación se guarda localmente.</p></section></div>;
+  const safePlayers = Array.isArray(lineupsByFormation?.[activeFormationId]) && lineupsByFormation[activeFormationId].length === 11
+    ? lineupsByFormation[activeFormationId]
+    : activeFormationId === '3-4-3' && Array.isArray(players) && players.length === 11 ? players : Array(11).fill('');
+  const updatePlayers = (next) => {
+    setLineupsByFormation({ ...lineupsByFormation, [activeFormationId]: next });
+    if (activeFormationId === '3-4-3') setPlayers(next);
+  };
+  const resetPlayers = () => updatePlayers(Array(11).fill(''));
+  const roleName = (role) => ({ POR: 'ARQ', DFC: 'DEF', MED: 'VOL', DEL: 'DEL' })[role];
+  return <div className="page manager-page club-manager-page"><section className="shell manager-heading"><div><span className="eyebrow manager-version">TU PIZARRA · {team.mark} <b>VERSIÓN 2.0.0</b></span><h1>Arma tu once.<br /><em>Con tu club.</em></h1><p>Prueba distintos sistemas para {team.name}. Escribe los nombres que conoces; no inventamos planteles ni valoraciones.</p><div className="manager-auth"><TeamCrest team={team} className="header-crest" /><span><b>Tu formación se guarda aquí</b><small>Sólo en este dispositivo · {activeFormation.label}</small></span></div></div><div className="manager-heading-art">{media && <img src={media.image} alt={media.alt} />}<span>{team.name.toUpperCase()}<br />TU ONCE, TU LECTURA</span></div></section><section className="shell custom-lineup-section"><div className="custom-lineup-intro"><span className="eyebrow">ARMA TU ONCE · VERSIÓN 2.0.0</span><h2>¿A quién pondrías en cancha?</h2><p>Elige esquema y completa la pizarra. La propuesta es personal; no representa una alineación oficial.</p><label className="formation-control custom-formation-control"><span>ESQUEMA TÁCTICO</span><select aria-label="Elegir formación" value={activeFormationId} onChange={(event) => setFormationId(event.target.value)}><option value="3-4-3">3–4–3 · Ofensivo</option><option value="4-3-3">4–3–3 · Equilibrado</option><option value="4-4-2">4–4–2 · Clásico</option></select></label></div><div className="custom-lineup"><div className="custom-lineup-pitch" aria-label={`Pizarra para ${activeFormation.label}`}>{activeFormation.slots.map((slot, index) => { const role = roleName(slot.role); return <label key={slot.key} className="custom-slot" style={{ gridColumn: slot.gridColumn, gridRow: slot.gridRow }}><span>{role} · {String(index + 1).padStart(2, '0')}</span><input value={safePlayers[index]} maxLength="38" placeholder={role === 'ARQ' ? 'Arquero' : 'Nombre del jugador'} aria-label={`${role} posición ${index + 1}`} onChange={(event) => { const next = [...safePlayers]; next[index] = event.target.value; updatePlayers(next); }} /></label>; })}</div><aside className="custom-lineup-side"><TeamCrest team={team} className="custom-lineup-crest" /><span className="eyebrow">IDEA DE PARTIDO</span><h3>Elige desde lo que has visto.</h3><p>Completa esta propuesta personal y vuelve a editarla cuando quieras.</p><button className="text-button" onClick={resetPlayers}>Limpiar pizarra ↻</button>{lineupError && <small role="status">No se pudo guardar la pizarra en este dispositivo.</small>}</aside></div></section><section className="shell manager-footnote"><span>ESPACIO PERSONAL</span><p>El Sendero no publica estos nombres ni los presenta como convocatoria oficial. Tus esquemas se guardan localmente por equipo.</p></section></div>;
 }
 
 function UniversityManagerPage() {
   const [lineup, setLineup, lineupError] = useStored('sendero-dt-lineup-v1', initialLineup);
+  const [formationId, setFormationId] = useStored('sendero-dt-formation-v2', '3-4-3');
   const [authMode, setAuthMode] = useState('register');
   const [authForm, setAuthForm] = useState({ name: '', email: '', password: '' });
   const [authOpen, setAuthOpen] = useState(false);
@@ -828,13 +869,15 @@ function UniversityManagerPage() {
   const [authBusy, setAuthBusy] = useState(false);
   const [authMessage, setAuthMessage] = useState('');
   const playerById = useMemo(() => Object.fromEntries(dtPlayers.map((player) => [player.id, player])), []);
+  const activeFormationId = dtFormations[formationId] ? formationId : '3-4-3';
+  const activeFormation = dtFormations[activeFormationId];
+  const dtSlots = activeFormation.slots;
   const activeLineup = Array.isArray(lineup) && lineup.length === dtSlots.length ? lineup : initialLineup;
   const bench = dtPlayers.filter((player) => !activeLineup.includes(player.id));
   const selectedPlayer = selected?.startsWith('bench:') ? playerById[selected.slice(6)] : selected?.startsWith('lineup:') ? playerById[activeLineup[Number(selected.slice(7))]] : playerById[activeLineup[10]];
   const roleFit = activeLineup.reduce((sum, playerId, index) => {
     const player = playerById[playerId];
-    const slotRole = dtSlots[index].key.split('-')[0];
-    return sum + (player?.role === slotRole ? 1 : 0);
+    return sum + (player?.role === dtSlots[index].role ? 1 : 0);
   }, 0);
   const totalPoints = activeLineup.reduce((sum, playerId) => sum + (playerById[playerId]?.points || 0), 0) + roleFit * 2;
   const rivalPoints = 846;
@@ -939,7 +982,7 @@ function UniversityManagerPage() {
   }
 
   function resetLineup() {
-    setLineup(initialLineup);
+    setLineup(fitLineupToFormation(initialLineup, dtSlots));
     setSelected(null);
     setDuel(null);
   }
@@ -956,9 +999,9 @@ function UniversityManagerPage() {
   return <div className="page manager-page">
     <section className="shell manager-heading">
       <div>
-        <span className="eyebrow">SOY DT · COPA CHILE</span>
+        <span className="eyebrow manager-version">SOY DT · COPA CHILE <b>VERSIÓN 2.0.0</b></span>
         <h1>Arma tu once.<br /><em>Defiende la U.</em></h1>
-        <p>Elige tu 3–4–3 para el próximo partido ante Everton. Arrastra a cada jugador, ajusta tu idea y compite contra otro hincha.</p>
+        <p>Prueba distintos sistemas, mueve tus cartas y encuentra el once que llevarías a la cancha. Tu pizarra queda guardada en este dispositivo.</p>
         <div className="manager-auth">
           {activeUser ? <><span className="auth-avatar">{(activeUser.displayName || activeUser.email || 'U').slice(0, 1).toUpperCase()}</span><span><b>{activeUser.displayName || 'Hincha azul'}</b><small>{activeUser.email || 'Sesión iniciada con Google'}</small></span><button className="auth-link" onClick={handleLogout}>Salir</button></> : <><span className="google-mark">U</span><span><b>Tu pizarra, a tu manera</b><small>Acceso gratuito con Google o email</small></span><button className="auth-button" onClick={openRegister}>Crear cuenta</button><button className="auth-link" onClick={openLogin}>Entrar</button>{!isFirebaseConfigured && !authMessage && <small className="auth-note" role="status">Falta conectar Firebase para activar las cuentas.</small>}{authMessage && !authOpen && <small className="auth-message" role="status">{authMessage}</small>}</>}
         </div>
@@ -977,9 +1020,9 @@ function UniversityManagerPage() {
       <div className="manager-heading-art"><img src="/assets/tifo.png" alt="Mosaico azul de la hinchada de Universidad de Chile" /><span>LA PIZARRA<br />ES TUYA</span></div>
     </section>
     <section className="shell manager-layout"><div className="manager-main">
-      <div className="manager-toolbar"><div><span className="eyebrow">TU PIZARRA</span><h2>Once titular · 3–4–3</h2></div><div className="manager-score"><small>VALORACIÓN</small><strong>{totalPoints}</strong><span>{roleFit}/11 posiciones naturales</span></div></div>
-      <p className="manager-help">Arrastra una carta al campo o selecciónala y toca una posición. Los puntos combinan rendimiento, forma y encaje táctico.</p>
-      <div className="football-pitch" aria-label="Campo para armar la formación titular">{dtSlots.map((slot, index) => <div key={slot.key} className={`pitch-slot slot-${index} ${selected === `lineup:${index}` ? 'targeted' : ''}`} onDragOver={(event) => event.preventDefault()} onDrop={() => handleDrop(index)} onClick={() => handleSlotClick(index)}><span className="slot-label">{slot.label}</span>{activeLineup[index] ? playerCard(playerById[activeLineup[index]], 'lineup', index) : <span className="empty-slot">+</span>}</div>)}</div>
+      <div className="manager-toolbar"><div><span className="eyebrow">TU PIZARRA · SOY DT 2.0</span><h2>Once titular · {activeFormation.label}</h2></div><div className="manager-toolbar-controls"><label className="formation-control"><span>ESQUEMA</span><select aria-label="Elegir formación" value={activeFormationId} onChange={(event) => { const nextId = event.target.value; setLineup(fitLineupToFormation(activeLineup, dtFormations[nextId].slots)); setFormationId(nextId); setSelected(null); setDuel(null); }}><option value="3-4-3">3–4–3 · Ofensivo</option><option value="4-3-3">4–3–3 · Equilibrado</option><option value="4-4-2">4–4–2 · Clásico</option></select></label><div className="manager-score"><small>VALORACIÓN</small><strong>{totalPoints}</strong><span>{roleFit}/11 en posición</span></div></div></div>
+      <p className="manager-help">Elige una formación. Arrastra una carta o selecciónala y toca otra posición para cambiarla. Las valoraciones son parte del juego de demostración, no estadísticas oficiales.</p>
+      <div className={`football-pitch formation-${activeFormationId}`} aria-label={`Campo para armar la formación ${activeFormation.label}`}>{dtSlots.map((slot, index) => <div key={slot.key} className={`pitch-slot ${selected === `lineup:${index}` ? 'targeted' : ''}`} style={{ gridColumn: slot.gridColumn, gridRow: slot.gridRow }} onDragOver={(event) => event.preventDefault()} onDrop={() => handleDrop(index)} onClick={() => handleSlotClick(index)}><span className="slot-label">{slot.label}</span>{activeLineup[index] ? playerCard(playerById[activeLineup[index]], 'lineup', index) : <span className="empty-slot">+</span>}</div>)}</div>
       <div className="manager-actions"><button className="button" onClick={playDuel}>Jugar el duelo ↗</button><button className="text-button" onClick={resetLineup}>Restablecer once</button>{lineupError && <small>No pudimos guardar tu once en este dispositivo.</small>}</div>
     </div><aside className="manager-sidebar">
       <div className="bench-panel"><div className="bench-head"><div><span className="eyebrow">BANCA</span><h3>Opciones para cambiar el partido</h3></div><span>{bench.length} jugadores</span></div><div className="bench-list">{bench.map((player, index) => <div key={player.id} draggable onDragStart={() => setDragging(`bench:${player.id}`)} onDragEnd={() => setDragging(null)} onClick={() => setSelected(`bench:${player.id}`)} className={`bench-player ${selected === `bench:${player.id}` ? 'selected' : ''}`} role="button" tabIndex="0"><span className="bench-number">{String(index + 1).padStart(2, '0')}</span><span><b>{player.name}</b><small>{player.role} · {player.note}</small></span><strong>{player.points}</strong></div>)}</div><p className="bench-tip">Consejo: un jugador fuera de su posición pierde parte del bonus táctico.</p></div>
