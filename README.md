@@ -1,6 +1,8 @@
 # El Sendero del Soccer
 
-Prototipo de un sitio editorial deportivo dedicado a Universidad de Chile, desarrollado con React y Vite para `senderoazul.cl`.
+Sitio editorial de fútbol chileno con personalización por club, noticias, datos de competición y el modo de juego Soy DT. Está construido con React y Vite.
+
+> ¿Quieres entender cómo está armado? Parte por la [Guía del proyecto](docs/GUIA_DEL_PROYECTO.md): explica el recorrido desde que abres la página hasta que aparecen los datos, las imágenes, el tema del club y el acceso de Soy DT.
 
 ## Funcionalidades
 
@@ -67,11 +69,11 @@ vite.config.js   Configuración de Vite
 
 ## Alcance
 
-Los artículos, resultados y posiciones son datos editoriales versionados. La API incluida es una primera capa de lectura y no extrae contenido automáticamente de Google ni de los medios: para actualizaciones automáticas todavía se requiere conectar un proveedor de noticias o un CMS con derechos de uso adecuados.
+Los artículos, resultados, posiciones y fixture de Copa Chile son datos editoriales versionados, con sus fuentes y fecha de corte señaladas en la interfaz. La API incluida entrega el catálogo versionado: no extrae contenido automáticamente de Google ni de los medios. Para actualizaciones automáticas se requiere conectar un proveedor autorizado o un CMS.
 
 ## Despliegue en Netlify
 
-Sitio publicado: https://senderoazul.netlify.app
+Sitio publicado: https://elsenderodelsoccer.netlify.app
 
 La configuración de compilación está en `netlify.toml`. Para publicar una actualización con la CLI de Netlify autenticada y el proyecto vinculado:
 
@@ -81,4 +83,4 @@ npm run build
 netlify deploy --prod --dir dist --no-build
 ```
 
-El despliegue inicial se realizó desde la CLI; los pushes a GitHub no generan despliegues automáticos hasta configurar la integración del repositorio en Netlify.
+El despliegue se puede realizar desde la CLI; un push a GitHub sólo dispara despliegue automático si la integración del repositorio está activada en Netlify.
