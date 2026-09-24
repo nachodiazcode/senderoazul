@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { articles } from './content';
 import { feedUpdatedAt, newsFeed } from './news-feed';
-import { auth, googleProvider, isFirebaseConfigured, onAuthStateChanged, signInWithPopup, signOut } from './firebase';
+import { auth, createUserWithEmailAndPassword, googleProvider, isFirebaseConfigured, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from './firebase';
 import './styles.css';
 
 const navItems = [
@@ -405,9 +405,25 @@ const leagueStandings2026 = [
 
 const clubSnapshots = Object.fromEntries(leagueStandings2026.map(({ id, position, points, played, city }) => [id, { position, points, played, city }]));
 
-const copaChileSchedule = [
-  { date: 'MIÉ 23 SEP', matches: [['Curicó Unido', 'Deportes Concepción', '18:00'], ['Deportes Iquique', 'Deportes Antofagasta', '20:30'], ['Unión La Calera', 'Universidad Católica', '20:30']] },
-  { date: 'JUE 24 SEP', matches: [["O’Higgins", 'Deportes Santa Cruz', '18:00'], ['Everton', 'Universidad de Chile', '20:30']] },
+// Fixture de octavos de Copa Chile contrastado con la programación oficial de Campeonato Chileno.
+// Los marcadores sólo se incluyen cuando ya estaban publicados en la fuente al corte indicado.
+const copaChileFixtures = [
+  { id: 'puerto-montt-nublense-ida', tie: 'Puerto Montt / Ñublense', leg: 'IDA', date: '2026-09-22', time: '18:00', home: 'Deportes Puerto Montt', away: 'Ñublense', score: '2–0', venue: 'Bicentenario Chinquihue' },
+  { id: 'cobreloa-coquimbo-ida', tie: 'Cobreloa / Coquimbo Unido', leg: 'IDA', date: '2026-09-22', time: '20:30', home: 'Cobreloa', away: 'Coquimbo Unido', score: '1–2', venue: 'Zorros del Desierto' },
+  { id: 'audax-colo-colo-ida', tie: 'Audax Italiano / Colo-Colo', leg: 'IDA', date: '2026-09-22', time: '20:30', home: 'Audax Italiano', away: 'Colo Colo', score: '0–0', venue: 'Estadio Nacional Julio Martínez Prádanos' },
+  { id: 'curico-concepcion-ida', tie: 'Curicó Unido / Deportes Concepción', leg: 'IDA', date: '2026-09-23', time: '18:00', home: 'Curicó Unido', away: 'Deportes Concepción', score: '0–4', venue: 'Bicentenario La Granja' },
+  { id: 'iquique-antofagasta-ida', tie: 'Iquique / Antofagasta', leg: 'IDA', date: '2026-09-23', time: '20:30', home: 'Deportes Iquique', away: 'Deportes Antofagasta', score: '1–1', venue: 'Tierra de Campeones' },
+  { id: 'calera-catolica-ida', tie: 'Unión La Calera / Universidad Católica', leg: 'IDA', date: '2026-09-23', time: '20:30', home: 'Unión La Calera', away: 'Universidad Católica', score: '1–1', venue: 'Nicolás Chahuán' },
+  { id: 'ohiggins-santa-cruz-ida', tie: "O’Higgins / Santa Cruz", leg: 'IDA', date: '2026-09-24', time: '18:00', home: "O'Higgins", away: 'Deportes Santa Cruz', venue: 'Codelco El Teniente' },
+  { id: 'everton-u-ida', tie: 'Everton / Universidad de Chile', leg: 'IDA', date: '2026-09-24', time: '20:30', home: 'Everton', away: 'Universidad de Chile', venue: 'Sausalito' },
+  { id: 'colo-colo-audax-vuelta', tie: 'Audax Italiano / Colo-Colo', leg: 'VUELTA', date: '2026-09-25', time: '20:00', home: 'Colo Colo', away: 'Audax Italiano', venue: 'Estadio Nacional Julio Martínez Prádanos' },
+  { id: 'nublense-puerto-montt-vuelta', tie: 'Puerto Montt / Ñublense', leg: 'VUELTA', date: '2026-09-26', time: '17:30', home: 'Ñublense', away: 'Deportes Puerto Montt', venue: 'Bicentenario Nelson Oyarzún' },
+  { id: 'catolica-calera-vuelta', tie: 'Unión La Calera / Universidad Católica', leg: 'VUELTA', date: '2026-09-26', time: '20:00', home: 'Universidad Católica', away: 'Unión La Calera', venue: 'Claro Arena' },
+  { id: 'antofagasta-iquique-vuelta', tie: 'Iquique / Antofagasta', leg: 'VUELTA', date: '2026-09-27', time: '12:30', home: 'Deportes Antofagasta', away: 'Deportes Iquique', venue: 'Regional Calvo y Bascuñán' },
+  { id: 'concepcion-curico-vuelta', tie: 'Curicó Unido / Deportes Concepción', leg: 'VUELTA', date: '2026-09-27', time: '15:00', home: 'Deportes Concepción', away: 'Curicó Unido', venue: 'Ester Roa Rebolledo' },
+  { id: 'u-everton-vuelta', tie: 'Everton / Universidad de Chile', leg: 'VUELTA', date: '2026-09-27', time: '17:30', home: 'Universidad de Chile', away: 'Everton', venue: 'Estadio Nacional Julio Martínez Prádanos' },
+  { id: 'santa-cruz-ohiggins-vuelta', tie: "O’Higgins / Santa Cruz", leg: 'VUELTA', date: '2026-09-27', time: '20:00', home: 'Deportes Santa Cruz', away: "O'Higgins", venue: 'Joaquín Muñoz' },
+  { id: 'coquimbo-cobreloa-vuelta', tie: 'Cobreloa / Coquimbo Unido', leg: 'VUELTA', date: '2026-10-07', time: '19:00', home: 'Coquimbo Unido', away: 'Cobreloa', venue: 'Municipal Francisco Sánchez Rumoroso' },
 ];
 
 function standingsClubName(id) {
@@ -508,6 +524,23 @@ function useStored(key, initial) {
     try { localStorage.setItem(key, JSON.stringify(next)); setError(false); } catch { setError(true); }
   }
   return [value, update, error];
+}
+
+function firebaseAuthError(error) {
+  const messages = {
+    'auth/email-already-in-use': 'Ya existe una cuenta con ese email. Prueba iniciar sesión.',
+    'auth/invalid-email': 'Revisa el formato del email.',
+    'auth/weak-password': 'Usa una contraseña de al menos 6 caracteres.',
+    'auth/invalid-credential': 'Email o contraseña incorrectos.',
+    'auth/user-disabled': 'Esta cuenta está deshabilitada.',
+    'auth/too-many-requests': 'Hubo varios intentos seguidos. Espera un momento y vuelve a probar.',
+    'auth/network-request-failed': 'No pudimos conectar con Firebase. Revisa tu conexión.',
+    'auth/popup-closed-by-user': 'Cerraste la ventana de acceso.',
+    'auth/popup-blocked': 'Tu navegador bloqueó la ventana. Permite las ventanas emergentes y vuelve a probar.',
+    'auth/unauthorized-domain': 'Este dominio todavía no está autorizado en Firebase Authentication.',
+    'auth/operation-not-allowed': 'Este método de acceso aún no está activado en Firebase.',
+  };
+  return messages[error?.code] || 'No pudimos completar el acceso. Vuelve a intentarlo.';
 }
 
 function RouteLink({ to, children, className = '', onClick }) {
@@ -757,16 +790,22 @@ function NewsPage({ saved, onSave, saveError, favoriteTeam, latestMode = false }
 function DataPage({ favoriteTeam }) {
   const activeTeam = favoriteTeam || teamChoices.find((item) => item.id === 'u-de-chile');
   const activeStanding = leagueStandings2026.find((club) => club.id === activeTeam.id);
-  const normalizeClub = (value) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[’']/g, '').toLowerCase();
+  const normalizeClub = (value) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
   const teamKey = normalizeClub(activeTeam.name);
-  const teamCupSchedule = copaChileSchedule.map((day) => ({ ...day, matches: day.matches.filter(([home, away]) => [home, away].some((club) => normalizeClub(club) === teamKey)) })).filter((day) => day.matches.length);
-  return <div className="page shell data-page"><div className="page-heading data-heading"><span className="eyebrow">LIGA DE PRIMERA · CHILE</span><h1>La tabla<br />al día.</h1><p>Posiciones, diferencia de gol y próximos cruces de Copa Chile. Seleccionamos a {activeTeam.name} para ubicarlo de inmediato.</p></div><section className="standings-panel"><div className="standings-heading"><div><span className="eyebrow">CAMPEONATO NACIONAL 2026</span><h2>Tabla de posiciones</h2></div><span className="standings-cut">ESPN · CONSULTA 23 SEP 2026</span></div><div className="standings-scroll"><table className="standings-table"><thead><tr><th scope="col">#</th><th scope="col">Club</th><th scope="col">PJ</th><th scope="col">G</th><th scope="col">E</th><th scope="col">P</th><th scope="col">DG</th><th scope="col">Pts</th></tr></thead><tbody>{leagueStandings2026.map((club) => { const clubTeam = teamChoices.find((team) => team.id === club.id); return <tr key={club.id} className={club.id === activeTeam.id ? 'favorite-row' : ''} aria-current={club.id === activeTeam.id ? 'true' : undefined}><td>{club.position}</td><td><span className="standing-club">{clubTeam && <TeamCrest team={clubTeam} className="standing-crest" />}<b>{standingsClubName(club.id)}</b>{club.id === activeTeam.id && <small>MI EQUIPO</small>}</span></td><td>{club.played}</td><td>{club.wins}</td><td>{club.draws}</td><td>{club.losses}</td><td className={club.goalDifference > 0 ? 'positive-difference' : club.goalDifference < 0 ? 'negative-difference' : ''}>{club.goalDifference > 0 ? '+' : ''}{club.goalDifference}</td><td><b>{club.points}</b></td></tr>; })}</tbody></table></div><div className="standings-footer"><span>{activeTeam.name}: <b>{activeStanding?.position}°</b> · {activeStanding?.points} puntos · {activeStanding?.played} PJ</span><a href="https://www.espn.cl/futbol/liga/_/nombre/chi.1" target="_blank" rel="noreferrer">Ver posiciones actualizadas en ESPN ↗</a></div></section><section className="cup-schedule"><div className="source-news-heading"><div><span className="eyebrow">COPA CHILE · OCTAVOS DE FINAL</span><h2>Agenda de {activeTeam.name}.</h2></div><a href="https://www.espn.cl/futbol/chile/nota/_/id/17290575/la-programacion-de-los-partidos-de-ida-de-octavos-de-final-de-la-copa-chile-2026" target="_blank" rel="noreferrer">Programación ESPN ↗</a></div>{teamCupSchedule.length ? <div className="schedule-days">{teamCupSchedule.map((day) => <article key={day.date} className="schedule-day"><h3>{day.date}<span>IDA · COPA CHILE</span></h3>{day.matches.map(([home, away, time]) => <div className="schedule-match" key={`${home}-${away}`}><span>{home}</span><b>{time}</b><span>{away}</span></div>)}</article>)}</div> : <div className="empty-state"><h2>No hay un cruce de {activeTeam.name} en esta programación.</h2><p>Mostramos el calendario sólo cuando su club aparece en la fuente enlazada.</p></div>}<p className="data-note">Posiciones: consulta de ESPN Chile del 23/09/2026 (PJ, G-E-P, diferencia y puntos). Horarios de Copa Chile: programación ESPN del 22/09/2026; confirma posibles cambios en la fuente.</p></section></div>;
+  const teamCupSchedule = copaChileFixtures.filter((fixture) => [fixture.home, fixture.away].some((club) => normalizeClub(club) === teamKey));
+  return <div className="page shell data-page"><div className="page-heading data-heading"><span className="eyebrow">LIGA DE PRIMERA · CHILE</span><h1>La tabla<br />al día.</h1><p>Posiciones, diferencia de gol y Copa Chile. Seleccionamos a {activeTeam.name} para ubicar sus datos y cruces de copa.</p></div><section className="standings-panel"><div className="standings-heading"><div><span className="eyebrow">CAMPEONATO NACIONAL 2026</span><h2>Tabla de posiciones</h2></div><span className="standings-cut">CORTE OFICIAL · 23 SEP 2026</span></div><div className="standings-scroll"><table className="standings-table"><thead><tr><th scope="col">#</th><th scope="col">Club</th><th scope="col">PJ</th><th scope="col">G</th><th scope="col">E</th><th scope="col">P</th><th scope="col">DG</th><th scope="col">Pts</th></tr></thead><tbody>{leagueStandings2026.map((club) => { const clubTeam = teamChoices.find((team) => team.id === club.id); return <tr key={club.id} className={club.id === activeTeam.id ? 'favorite-row' : ''} aria-current={club.id === activeTeam.id ? 'true' : undefined}><td>{club.position}</td><td><span className="standing-club">{clubTeam && <TeamCrest team={clubTeam} className="standing-crest" />}<b>{standingsClubName(club.id)}</b>{club.id === activeTeam.id && <small>MI EQUIPO</small>}</span></td><td>{club.played}</td><td>{club.wins}</td><td>{club.draws}</td><td>{club.losses}</td><td className={club.goalDifference > 0 ? 'positive-difference' : club.goalDifference < 0 ? 'negative-difference' : ''}>{club.goalDifference > 0 ? '+' : ''}{club.goalDifference}</td><td><b>{club.points}</b></td></tr>; })}</tbody></table></div><div className="standings-footer"><span>{activeTeam.name}: <b>{activeStanding?.position}°</b> · {activeStanding?.points} puntos · {activeStanding?.played} PJ</span><a href="https://www.campeonatochileno.cl/ligas/liga-de-primera-mercado-libre/" target="_blank" rel="noreferrer">Ver tabla en Campeonato Chileno ↗</a></div></section><section className="cup-schedule"><div className="source-news-heading"><div><span className="eyebrow">COPA CHILE COCA-COLA ZERO AZÚCAR · 2026</span><h2>Octavos: la llave de {activeTeam.name}.</h2></div><a href="https://www.campeonatochileno.cl/noticias/la-copa-chile-coca-cola-zero-azucar-vuelve-con-los-octavos-de-final/" target="_blank" rel="noreferrer">Programación oficial ↗</a></div>{teamCupSchedule.length ? <div className="schedule-days">{teamCupSchedule.map((fixture) => <article key={fixture.id} className="schedule-day"><h3>{new Intl.DateTimeFormat('es-CL', { weekday: 'short', day: '2-digit', month: 'short' }).format(new Date(`${fixture.date}T12:00:00`)).toUpperCase()}<span>{fixture.leg} · OCTAVOS</span></h3><div className="schedule-match"><span>{fixture.home}</span><b>{fixture.score || fixture.time}</b><span>{fixture.away}</span></div><small className="schedule-venue">{fixture.venue}</small></article>)}</div> : <div className="empty-state"><h2>{activeTeam.name} no disputa estos octavos.</h2><p>Esta sección muestra los cruces oficiales de octavos de final cuando participa tu club.</p></div>}<p className="data-note">Fixture, sedes y horarios: programación publicada por Campeonato Chileno/ANFP. Resultados de ida publicados hasta el 23/09/2026; agenda consultada al 24/09/2026. La tabla de Liga de Primera corresponde al corte oficial del 23/09/2026. Verifica cambios en las <a href="https://www.campeonatochileno.cl/ligas/copa-chile-coca-cola-zero-azucar/" target="_blank" rel="noreferrer">fuentes oficiales del torneo ↗</a>.</p></section></div>;
 }
 
 function ManagerPage({ favoriteTeam }) {
   const team = favoriteTeam || teamChoices[0];
-  if (team.id === 'u-de-chile') return <UniversityManagerPage />;
-  return <ClubManagerPage team={team} />;
+  return <><CupManagerContext team={team} />{team.id === 'u-de-chile' ? <UniversityManagerPage /> : <ClubManagerPage team={team} />}</>;
+}
+
+function CupManagerContext({ team }) {
+  const normalizeClub = (value) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const teamKey = normalizeClub(team.name);
+  const fixtures = copaChileFixtures.filter((fixture) => [fixture.home, fixture.away].some((club) => normalizeClub(club) === teamKey));
+  return <section className="shell manager-cup-context"><div className="manager-cup-heading"><span className="eyebrow">COPA CHILE · OCTAVOS 2026</span><h2>La llave de {team.mark} también se juega en Soy DT.</h2><p>Prepara tu once con el contexto del cruce oficial de ida y vuelta.</p></div>{fixtures.length ? <div className="manager-cup-fixtures">{fixtures.map((fixture) => <article key={fixture.id}><span>{fixture.leg} · {new Intl.DateTimeFormat('es-CL', { day: '2-digit', month: 'short' }).format(new Date(`${fixture.date}T12:00:00`))}</span><b>{fixture.home} <i>{fixture.score || fixture.time}</i> {fixture.away}</b><small>{fixture.venue}</small></article>)}</div> : <p className="manager-cup-empty">No hay un cruce de estos octavos asociado a {team.name}.</p>}<RouteLink to="/datos" className="manager-cup-link">Ver Copa Chile y datos del campeonato <span>↗</span></RouteLink></section>;
 }
 
 function ClubManagerPage({ team }) {
@@ -779,13 +818,9 @@ function ClubManagerPage({ team }) {
 
 function UniversityManagerPage() {
   const [lineup, setLineup, lineupError] = useStored('sendero-dt-lineup-v1', initialLineup);
-  const [jwtToken, setJwtToken, jwtTokenError] = useStored('sendero-jwt-v1', '');
-  const [jwtUser, setJwtUser] = useState(null);
   const [authMode, setAuthMode] = useState('register');
   const [authForm, setAuthForm] = useState({ name: '', email: '', password: '' });
   const [authOpen, setAuthOpen] = useState(false);
-  const [jwtBusy, setJwtBusy] = useState(false);
-  const [jwtMessage, setJwtMessage] = useState('');
   const [dragging, setDragging] = useState(null);
   const [selected, setSelected] = useState(null);
   const [duel, setDuel] = useState(null);
@@ -805,30 +840,21 @@ function UniversityManagerPage() {
   const rivalPoints = 846;
 
   useEffect(() => {
-    if (import.meta.env.PROD) return undefined;
     if (!auth) return undefined;
     return onAuthStateChanged(auth, (nextUser) => setUser(nextUser), () => setAuthMessage('No pudimos comprobar tu sesión.'));
   }, []);
 
-  useEffect(() => {
-    if (import.meta.env.PROD) return undefined;
-    if (!jwtToken) return undefined;
-    fetch('/api/auth', { headers: { Authorization: `Bearer ${jwtToken}` } })
-      .then((response) => { if (!response.ok) throw new Error('expired'); return response.json(); })
-      .then((payload) => setJwtUser(payload.user))
-      .catch(() => { setJwtToken(''); setJwtUser(null); });
-    return undefined;
-  }, [jwtToken]);
-
   async function handleGoogleLogin() {
     if (!auth || !googleProvider) {
-      setAuthMessage('Google Login quedará disponible al conectar el proyecto Firebase.');
+      setAuthMessage('El acceso estará disponible cuando conectemos el proyecto Firebase.');
       return;
     }
     setAuthBusy(true);
     setAuthMessage('');
-    try { await signInWithPopup(auth, googleProvider); }
-    catch (error) { setAuthMessage(error?.code === 'auth/popup-closed-by-user' ? 'Cerraste la ventana de acceso.' : 'No pudimos iniciar sesión con Google.'); }
+    try {
+      await signInWithPopup(auth, googleProvider);
+      setAuthOpen(false);
+    } catch (error) { setAuthMessage(firebaseAuthError(error)); }
     finally { setAuthBusy(false); }
   }
 
@@ -837,29 +863,52 @@ function UniversityManagerPage() {
     try { await signOut(auth); } catch { setAuthMessage('No pudimos cerrar tu sesión.'); }
   }
 
-  async function handleJwtSubmit(event) {
+  async function handleEmailAuthSubmit(event) {
     event.preventDefault();
-    setJwtBusy(true);
-    setJwtMessage('');
+    if (!auth) {
+      setAuthMessage('Firebase todavía no está conectado. Configura sus claves para habilitar el acceso.');
+      return;
+    }
+    setAuthBusy(true);
+    setAuthMessage('');
     try {
-      const response = await fetch('/api/auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: authMode, ...authForm }) });
-      const payload = await response.json();
-      if (!response.ok) throw new Error(payload.error || 'No pudimos completar el acceso.');
-      setJwtToken(payload.token);
-      setJwtUser(payload.user);
+      const email = authForm.email.trim();
+      if (authMode === 'register') {
+        const credential = await createUserWithEmailAndPassword(auth, email, authForm.password);
+        const displayName = authForm.name.trim().slice(0, 40);
+        if (displayName) await updateProfile(credential.user, { displayName });
+      } else {
+        await signInWithEmailAndPassword(auth, email, authForm.password);
+      }
       setAuthOpen(false);
       setAuthForm({ name: '', email: '', password: '' });
     } catch (error) {
-      setJwtMessage(error.message);
+      setAuthMessage(firebaseAuthError(error));
     } finally {
-      setJwtBusy(false);
+      setAuthBusy(false);
     }
   }
 
-  function handleJwtLogout() {
-    setJwtToken('');
-    setJwtUser(null);
-    setJwtMessage('');
+  async function handlePasswordReset() {
+    if (!auth) {
+      setAuthMessage('Firebase todavía no está conectado.');
+      return;
+    }
+    const email = authForm.email.trim();
+    if (!email) {
+      setAuthMessage('Escribe tu email para enviarte el enlace de recuperación.');
+      return;
+    }
+    setAuthBusy(true);
+    setAuthMessage('');
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setAuthMessage('Te enviamos un enlace para recuperar tu contraseña. Revisa tu correo.');
+    } catch (error) {
+      setAuthMessage(firebaseAuthError(error));
+    } finally {
+      setAuthBusy(false);
+    }
   }
 
   function placePlayer(index, playerId) {
@@ -897,11 +946,11 @@ function UniversityManagerPage() {
 
   const playerCard = (player, origin, index) => <div className={`dt-player ${selected === `${origin}:${index}` ? 'selected' : ''}`} draggable onDragStart={() => setDragging(`${origin}:${index}`)} onDragEnd={() => setDragging(null)} onClick={(event) => { event.stopPropagation(); setSelected(`${origin}:${index}`); }} role="button" tabIndex="0" onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelected(`${origin}:${index}`); } }}><div className="dt-card-top"><span className="dt-rating">{player.rating}</span><span className="dt-role">{player.role}</span></div><span className="dt-card-mark" aria-hidden="true">S</span><span className="dt-player-name">{player.short}</span><div className="dt-card-stats"><span><b>{player.rating}</b>VAL</span><span><b>{player.points}</b>FOR</span><span><b>{player.role}</b>POS</span></div></div>;
 
-  const activeUser = jwtUser || user;
-  const openRegister = () => { setAuthMode('register'); setAuthOpen(true); setJwtMessage(''); };
-  const openLogin = () => { setAuthMode('login'); setAuthOpen(true); setJwtMessage(''); };
+  const activeUser = user;
+  const openRegister = () => { setAuthMode('register'); setAuthOpen(true); setAuthMessage(''); };
+  const openLogin = () => { setAuthMode('login'); setAuthOpen(true); setAuthMessage(''); };
   const playDuel = () => {
-    if (!import.meta.env.PROD && !activeUser) { openRegister(); setJwtMessage('Regístrate para jugar el duelo y guardar tu sesión.'); return; }
+    if (isFirebaseConfigured && !activeUser) { openRegister(); setAuthMessage('Crea una cuenta o inicia sesión para jugar el duelo.'); return; }
     setDuel({ user: totalPoints, rival: rivalPoints });
   };
   return <div className="page manager-page">
@@ -911,14 +960,18 @@ function UniversityManagerPage() {
         <h1>Arma tu once.<br /><em>Defiende la U.</em></h1>
         <p>Elige tu 3–4–3 para el próximo partido ante Everton. Arrastra a cada jugador, ajusta tu idea y compite contra otro hincha.</p>
         <div className="manager-auth">
-          {import.meta.env.PROD ? <><span className="auth-avatar">U</span><span><b>Juega sin registrarte</b><small>Tu once se guarda solo en este dispositivo. El duelo es una demostración.</small></span></> : <>{activeUser ? <><span className="auth-avatar">{(activeUser.displayName || activeUser.name || activeUser.email || 'U').slice(0, 1).toUpperCase()}</span><span><b>{activeUser.displayName || activeUser.name || 'Hincha azul'}</b><small>{jwtUser ? activeUser.email : 'Sesión iniciada con Google'}</small></span><button className="auth-link" onClick={jwtUser ? handleJwtLogout : handleLogout}>Salir</button></> : <><span className="google-mark">G</span><span><b>Guarda tu once y compite</b><small>Regístrate gratis en 20 segundos</small></span><button className="auth-button" onClick={openRegister}>Crear cuenta</button><button className="auth-link" onClick={openLogin}>Entrar</button></>}{!isFirebaseConfigured && !activeUser && <small className="auth-note">Registro simple activo · Google opcional.</small>}{authMessage && <small className="auth-message" role="status">{authMessage}</small>}{jwtMessage && <small className="auth-message" role="status">{jwtMessage}</small>}</>}
+          {activeUser ? <><span className="auth-avatar">{(activeUser.displayName || activeUser.email || 'U').slice(0, 1).toUpperCase()}</span><span><b>{activeUser.displayName || 'Hincha azul'}</b><small>{activeUser.email || 'Sesión iniciada con Google'}</small></span><button className="auth-link" onClick={handleLogout}>Salir</button></> : <><span className="google-mark">U</span><span><b>Tu pizarra, a tu manera</b><small>Acceso gratuito con Google o email</small></span><button className="auth-button" onClick={openRegister}>Crear cuenta</button><button className="auth-link" onClick={openLogin}>Entrar</button>{!isFirebaseConfigured && !authMessage && <small className="auth-note" role="status">Falta conectar Firebase para activar las cuentas.</small>}{authMessage && !authOpen && <small className="auth-message" role="status">{authMessage}</small>}</>}
         </div>
-        {!import.meta.env.PROD && authOpen && <form className="jwt-form" onSubmit={handleJwtSubmit}>
-          <div className="jwt-tabs"><button type="button" className={authMode === 'register' ? 'active' : ''} onClick={() => setAuthMode('register')}>Crear cuenta</button><button type="button" className={authMode === 'login' ? 'active' : ''} onClick={() => setAuthMode('login')}>Entrar</button></div>
+        {authOpen && <form className="auth-form" onSubmit={handleEmailAuthSubmit}>
+          <div className="auth-tabs"><button type="button" className={authMode === 'register' ? 'active' : ''} onClick={() => { setAuthMode('register'); setAuthMessage(''); }}>Crear cuenta</button><button type="button" className={authMode === 'login' ? 'active' : ''} onClick={() => { setAuthMode('login'); setAuthMessage(''); }}>Entrar</button></div>
+          <button className="auth-google-button" type="button" onClick={handleGoogleLogin} disabled={!isFirebaseConfigured || authBusy}><span className="google-mark">G</span>{authBusy ? 'Conectando…' : 'Continuar con Google'}</button>
+          <div className="auth-divider"><span>o con tu email</span></div>
           {authMode === 'register' && <label>Nombre o apodo<input value={authForm.name} onChange={(event) => setAuthForm({ ...authForm, name: event.target.value })} maxLength="40" autoComplete="name" required /></label>}
           <label>Email<input type="email" value={authForm.email} onChange={(event) => setAuthForm({ ...authForm, email: event.target.value })} autoComplete="email" required /></label>
           <label>Contraseña<input type="password" value={authForm.password} onChange={(event) => setAuthForm({ ...authForm, password: event.target.value })} minLength="6" autoComplete={authMode === 'register' ? 'new-password' : 'current-password'} required /></label>
-          <div className="jwt-form-actions"><small>Token de sesión válido por 7 días.</small><button className="auth-button" disabled={jwtBusy}>{jwtBusy ? 'Guardando…' : authMode === 'register' ? 'Registrarme' : 'Entrar'}</button></div>
+          {authMode === 'login' && <button className="auth-reset" type="button" onClick={handlePasswordReset} disabled={authBusy}>¿Olvidaste tu contraseña?</button>}
+          {authMessage && <small className="auth-form-message" role="status">{authMessage}</small>}
+          <div className="auth-form-actions"><small>Firebase protege la sesión y renueva el JWT.</small><button className="auth-button" disabled={authBusy || !isFirebaseConfigured}>{authBusy ? 'Un momento…' : authMode === 'register' ? 'Crear mi cuenta' : 'Iniciar sesión'}</button></div>
         </form>}
       </div>
       <div className="manager-heading-art"><img src="/assets/tifo.png" alt="Mosaico azul de la hinchada de Universidad de Chile" /><span>LA PIZARRA<br />ES TUYA</span></div>
@@ -927,7 +980,7 @@ function UniversityManagerPage() {
       <div className="manager-toolbar"><div><span className="eyebrow">TU PIZARRA</span><h2>Once titular · 3–4–3</h2></div><div className="manager-score"><small>VALORACIÓN</small><strong>{totalPoints}</strong><span>{roleFit}/11 posiciones naturales</span></div></div>
       <p className="manager-help">Arrastra una carta al campo o selecciónala y toca una posición. Los puntos combinan rendimiento, forma y encaje táctico.</p>
       <div className="football-pitch" aria-label="Campo para armar la formación titular">{dtSlots.map((slot, index) => <div key={slot.key} className={`pitch-slot slot-${index} ${selected === `lineup:${index}` ? 'targeted' : ''}`} onDragOver={(event) => event.preventDefault()} onDrop={() => handleDrop(index)} onClick={() => handleSlotClick(index)}><span className="slot-label">{slot.label}</span>{activeLineup[index] ? playerCard(playerById[activeLineup[index]], 'lineup', index) : <span className="empty-slot">+</span>}</div>)}</div>
-      <div className="manager-actions"><button className="button" onClick={playDuel}>Jugar el duelo ↗</button><button className="text-button" onClick={resetLineup}>Restablecer once</button>{lineupError && <small>No pudimos guardar tu once en este dispositivo.</small>}{jwtTokenError && <small>No pudimos guardar tu sesión en este dispositivo.</small>}</div>
+      <div className="manager-actions"><button className="button" onClick={playDuel}>Jugar el duelo ↗</button><button className="text-button" onClick={resetLineup}>Restablecer once</button>{lineupError && <small>No pudimos guardar tu once en este dispositivo.</small>}</div>
     </div><aside className="manager-sidebar">
       <div className="bench-panel"><div className="bench-head"><div><span className="eyebrow">BANCA</span><h3>Opciones para cambiar el partido</h3></div><span>{bench.length} jugadores</span></div><div className="bench-list">{bench.map((player, index) => <div key={player.id} draggable onDragStart={() => setDragging(`bench:${player.id}`)} onDragEnd={() => setDragging(null)} onClick={() => setSelected(`bench:${player.id}`)} className={`bench-player ${selected === `bench:${player.id}` ? 'selected' : ''}`} role="button" tabIndex="0"><span className="bench-number">{String(index + 1).padStart(2, '0')}</span><span><b>{player.name}</b><small>{player.role} · {player.note}</small></span><strong>{player.points}</strong></div>)}</div><p className="bench-tip">Consejo: un jugador fuera de su posición pierde parte del bonus táctico.</p></div>
       <div className="dt-detail"><div className="dt-detail-head"><span className="dt-avatar">{selectedPlayer.short.slice(0, 2).toUpperCase()}</span><div><span className="eyebrow">FICHA DE JUGADOR</span><h3>{selectedPlayer.name}</h3></div><strong>{selectedPlayer.rating}</strong></div><div className="dt-attributes"><span><small>POSICIÓN</small><b>{selectedPlayer.role}</b></span><span><small>FORMA</small><b>{selectedPlayer.points}</b></span><span><small>APORTE</small><b>{selectedPlayer.note}</b></span></div><p>Seleccionado para tu pizarra. Arrástralo para probar otra sociedad.</p></div>

@@ -1,0 +1,15 @@
+{
+  "auth": {
+    "authorizedDomains": [
+      "localhost",
+      "elsenderodelsoccer.netlify.app"
+    ],
+    "providers": {
+      "emailPassword": true,
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "El Sendero del Soccer",
+        "supportEmail": "ignaciosergiodiaz@gmail.com"
+      }
+    }
+  }
+}

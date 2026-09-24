@@ -23,26 +23,25 @@ npm run dev
 
 Abre la dirección que indique Vite en la terminal.
 
-La API queda disponible durante el desarrollo en:
+La API de noticias queda disponible durante el desarrollo en:
 
 ```text
 GET /api/news
 GET /api/news?limit=3
 GET /api/news?topic=Agenda
 GET /api/news?q=Libertadores
-
-POST /api/auth
-{"action":"register","name":"Tu apodo","email":"tu@email.cl","password":"minimo-6"}
-
-POST /api/auth
-{"action":"login","email":"tu@email.cl","password":"minimo-6"}
-
-GET /api/auth (con `Authorization: Bearer <token>`)
 ```
 
-En local la sirve un middleware de Vite; en producción, una Netlify Function. Ambas rutas usan el catálogo versionado de `src/news-feed.js`, por lo que la interfaz conserva un respaldo local si la función no responde.
+En local la sirve un middleware de Vite y en producción una Netlify Function. El acceso de Soy DT usa Firebase Authentication (email/contraseña y Google); Firebase emite y renueva el ID token JWT y mantiene la sesión en el SDK. Las cuentas no dependen de la memoria de una función serverless. El once sigue guardándose en el navegador actual; todavía no se sincroniza entre dispositivos.
 
-El registro de Soy DT firma tokens JWT HS256 y guarda usuarios en memoria para desarrollo local. En el despliegue de producción, el formulario y la función de registro están desactivados: el once y el duelo de demostración funcionan sin cuenta en el navegador. Antes de habilitar cuentas reales hay que implementar persistencia y configurar un secreto seguro.
+### Configurar Firebase Authentication
+
+1. Copia `.env.example` a `.env.local` y completa las seis variables `VITE_FIREBASE_*` desde la configuración de tu app web en Firebase.
+2. En Firebase Console → Authentication → Proveedores, activa **Correo electrónico/contraseña** y **Google**.
+3. En Authentication → Configuración → Dominios autorizados, incluye `localhost` y `elsenderodelsoccer.netlify.app` (más el dominio propio si lo conectas).
+4. Agrega esas mismas seis variables como variables de entorno del sitio en Netlify y vuelve a desplegar.
+
+La configuración web de Firebase se incluye en el cliente y no es una clave privada. No agregues credenciales de Admin SDK ni secretos JWT propios a variables `VITE_*`. Correo/contraseña y Google están disponibles en el plan Spark sin costo, sujetos a los límites vigentes de Firebase.
 
 ## Compilación y vista previa
 
@@ -59,7 +58,7 @@ La compilación genera el directorio `dist/`, listo para un hosting estático. `
 public/assets/   Imágenes y recursos gráficos
 src/main.jsx     Componentes, contenido y filtros
 src/news-feed.js Catálogo y filtros del radar informativo
-server/auth-api.js  Registro, login y validación JWT
+src/firebase.js  Inicio de Firebase Authentication
 src/styles.css   Estilos y diseño responsive
 netlify/functions/news.js  Endpoint de noticias para producción
 index.html       Documento de entrada

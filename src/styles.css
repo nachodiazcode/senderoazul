@@ -476,6 +476,17 @@ nav a.nav-dt.active { background: linear-gradient(120deg, var(--blue), #1f78ff);
 .wall-empty p { margin: 8px 0 0; font-size: 10px; }
 
 /* Soy DT: pizarra jugable con formación 3–4–3 y duelo de hinchas. */
+.manager-cup-context { display: grid; grid-template-columns: minmax(210px, .8fr) minmax(0, 1.7fr) auto; gap: 20px; align-items: center; margin-top: 22px; padding: 20px 23px; border: 1px solid color-mix(in srgb, var(--club-primary) 38%, white); border-radius: 12px; background: linear-gradient(115deg, color-mix(in srgb, var(--club-primary) 13%, white), white 66%, color-mix(in srgb, var(--club-accent) 12%, white)); box-shadow: 0 14px 34px rgba(19,34,60,.08); }
+.manager-cup-heading h2 { margin: 7px 0; color: var(--ink); font-size: 19px; line-height: 1.1; letter-spacing: -.035em; }
+.manager-cup-heading p, .manager-cup-empty { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.55; }
+.manager-cup-fixtures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+.manager-cup-fixtures article { display: grid; gap: 5px; padding: 10px 12px; border: 1px solid rgba(25,45,75,.1); border-radius: 8px; background: rgba(255,255,255,.76); }
+.manager-cup-fixtures article > span { color: var(--club-primary); font-size: 8px; font-weight: 900; letter-spacing: .1em; }
+.manager-cup-fixtures b { color: var(--ink); font-size: 10px; line-height: 1.4; }
+.manager-cup-fixtures i { padding: 0 5px; color: var(--club-primary); font-style: normal; }
+.manager-cup-fixtures small { color: var(--muted); font-size: 8px; }
+.manager-cup-link { color: var(--club-primary); font-size: 9px; font-weight: 900; line-height: 1.5; }
+.manager-cup-link span { padding-left: 4px; }
 .manager-page { position: relative; padding: 0 0 80px; overflow: hidden; background: var(--navy); color: white; }
 .manager-page::before { position: absolute; inset: 0; opacity: .2; pointer-events: none; background-image: repeating-linear-gradient(115deg, transparent 0 18px, rgba(255,255,255,.04) 19px 20px), radial-gradient(circle at 20% 20%, rgba(17,87,232,.45), transparent 32%); content: ''; }
 .manager-heading { display: grid; grid-template-columns: 1fr 1fr; gap: 45px; align-items: center; padding: 62px 0 52px; }
@@ -494,16 +505,23 @@ nav a.nav-dt.active { background: linear-gradient(120deg, var(--blue), #1f78ff);
 .auth-link { margin-left: auto; border: 0; background: transparent; color: var(--blue-light); font-size: 9px; font-weight: 800; }
 .auth-note, .auth-message { position: absolute; right: 12px; bottom: -18px; color: #ffca7d !important; font-size: 8px !important; }
 .auth-message { color: #ff9dad !important; }
-.jwt-form { display: flex; max-width: 560px; margin-top: 12px; padding: 17px; flex-direction: column; gap: 10px; border: 1px solid #315481; border-radius: 4px; background: #0a2148; box-shadow: 0 15px 35px rgba(0,0,0,.2); }
-.jwt-tabs { display: flex; gap: 5px; margin-bottom: 2px; }
-.jwt-tabs button { padding: 7px 10px; border: 1px solid #365b8c; border-radius: 3px; background: transparent; color: #a9c2e7; font-size: 9px; font-weight: 800; }
-.jwt-tabs button.active { border-color: var(--blue-light); background: var(--blue); color: white; }
-.jwt-form label { display: flex; flex-direction: column; gap: 5px; color: #c4d4ec; font-size: 9px; font-weight: 700; }
-.jwt-form input { width: 100%; padding: 9px 10px; border: 1px solid #365b8c; border-radius: 3px; outline: 0; background: #061a3a; color: white; font-size: 11px; }
-.jwt-form input:focus { border-color: var(--blue-light); box-shadow: 0 0 0 2px rgba(141,178,255,.2); }
-.jwt-form-actions { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 3px; }
-.jwt-form-actions small { color: #88a5cf; font-size: 8px; }
-.jwt-form-actions .auth-button { margin-left: auto; }
+.auth-form { display: flex; max-width: 560px; margin-top: 12px; padding: 17px; flex-direction: column; gap: 10px; border: 1px solid #315481; border-radius: 4px; background: #0a2148; box-shadow: 0 15px 35px rgba(0,0,0,.2); }
+.auth-tabs { display: flex; gap: 5px; margin-bottom: 2px; }
+.auth-tabs button { padding: 7px 10px; border: 1px solid #365b8c; border-radius: 3px; background: transparent; color: #a9c2e7; font-size: 9px; font-weight: 800; }
+.auth-tabs button.active { border-color: var(--blue-light); background: var(--blue); color: white; }
+.auth-form label { display: flex; flex-direction: column; gap: 5px; color: #c4d4ec; font-size: 9px; font-weight: 700; }
+.auth-form input { width: 100%; padding: 9px 10px; border: 1px solid #365b8c; border-radius: 3px; outline: 0; background: #061a3a; color: white; font-size: 11px; }
+.auth-form input:focus { border-color: var(--blue-light); box-shadow: 0 0 0 2px rgba(141,178,255,.2); }
+.auth-form-actions { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 3px; }
+.auth-form-actions small { color: #88a5cf; font-size: 8px; }
+.auth-form-actions .auth-button { margin-left: auto; }
+.auth-button:disabled, .auth-google-button:disabled, .auth-reset:disabled { cursor: not-allowed; opacity: .55; }
+.auth-google-button { display: flex; min-height: 38px; align-items: center; justify-content: center; gap: 9px; border: 1px solid #d9e0e9; border-radius: 5px; background: white; color: #263244; font-size: 10px; font-weight: 800; }
+.auth-google-button .google-mark { width: 22px; height: 22px; font-size: 14px; }
+.auth-divider { display: flex; align-items: center; gap: 10px; color: #88a5cf; font-size: 8px; }
+.auth-divider::before, .auth-divider::after { height: 1px; flex: 1; background: #365b8c; content: ''; }
+.auth-reset { align-self: flex-start; border: 0; background: transparent; color: var(--blue-light); font-size: 9px; text-decoration: underline; }
+.auth-form-message { color: #ffd18a; font-size: 9px; line-height: 1.5; }
 .manager-heading-art { position: relative; min-height: 235px; overflow: hidden; border-radius: 5px; background: var(--navy); box-shadow: var(--shadow); transform: rotate(1.5deg); }
 .manager-heading-art img { width: 100%; height: 100%; min-height: 235px; object-fit: cover; object-position: center; opacity: .72; }
 .manager-heading-art::after { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(8,31,76,.12), rgba(5,15,37,.87)); content: ''; }
@@ -562,6 +580,8 @@ nav a.nav-dt.active { background: linear-gradient(120deg, var(--blue), #1f78ff);
 .custom-slot-2 { grid-area: 3 / 2 / 4 / 4; }
 
 @media (max-width: 760px) {
+  .manager-cup-context { grid-template-columns: 1fr; gap: 13px; padding: 17px; }
+  .manager-cup-fixtures { grid-template-columns: 1fr; }
   .club-history-teaser { grid-template-columns: 1fr auto; gap: 16px; }
   .club-history-teaser > img { height: 200px; grid-column: 1 / -1; }
   .club-history-teaser > div { padding: 0 18px 20px; }
@@ -1023,7 +1043,7 @@ nav a.active { background: #263446; box-shadow: none; }
 .manager-page::before { display: none; }
 .manager-heading h1 em { color: var(--blue); }
 .manager-heading p { color: var(--muted); }
-.manager-auth, .jwt-form { border-color: var(--line); border-radius: 8px; background: white; box-shadow: 0 8px 24px rgba(24, 34, 48, .06); }
+.manager-auth, .auth-form { border-color: var(--line); border-radius: 8px; background: white; box-shadow: 0 8px 24px rgba(24, 34, 48, .06); }
 .manager-auth b { color: var(--ink); }
 .manager-auth small { color: var(--muted); }
 .auth-link { color: var(--blue); }
@@ -1043,10 +1063,14 @@ nav a.active { background: #263446; box-shadow: none; }
 .dt-attributes b { color: var(--ink); }
 .duel-panel { background: #263446; color: white; }
 .manager-footnote { border-color: var(--line); }
-.jwt-tabs button { border-color: var(--line); color: var(--muted); }
-.jwt-form label { color: var(--ink); }
-.jwt-form input { border-color: var(--line); border-radius: 6px; background: #fafbfc; color: var(--ink); }
-.jwt-form-actions small { color: var(--muted); }
+.auth-tabs button { border-color: var(--line); color: var(--muted); }
+.auth-form label { color: var(--ink); }
+.auth-form input { border-color: var(--line); border-radius: 6px; background: #fafbfc; color: var(--ink); }
+.auth-form-actions small { color: var(--muted); }
+.auth-google-button { border-color: var(--line); background: #f8f9fb; }
+.auth-divider { color: var(--muted); }
+.auth-divider::before, .auth-divider::after { background: var(--line); }
+.auth-reset { color: var(--blue); }
 .article-page figure img { border-radius: 10px; }
 .source-box { border-left-color: var(--blue); border-radius: 0 8px 8px 0; background: #edf0f4; }
 
@@ -1245,6 +1269,7 @@ main .data-disclaimer { border-left-color: var(--club-primary); background: colo
 .schedule-match { display: grid; grid-template-columns: minmax(0, 1fr) 54px minmax(0, 1fr); gap: 10px; align-items: center; min-height: 46px; border-top: 1px solid #edf0f3; color: #485363; font-size: 10px; }
 .schedule-match span:first-child { text-align: right; }
 .schedule-match b { color: var(--blue); text-align: center; }
+.schedule-venue { display: block; margin-top: 8px; color: var(--muted); font-size: 9px; }
 .cup-schedule .data-note { margin-top: 17px; }
 
 @media (max-width: 760px) {
