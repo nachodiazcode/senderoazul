@@ -2,6 +2,8 @@
 
 Esta guía cuenta cómo está armado el proyecto y dónde mirar para cambiarlo. No necesitas memorizar React: puedes usarla como mapa y avanzar de a poco.
 
+**English version:** [Project guide](PROJECT_GUIDE.en.md).
+
 ## La idea en simple
 
 La web se construye en el navegador. React toma componentes, datos e imágenes y los convierte en páginas. Vite ayuda a desarrollar y compilar. Netlify publica la versión compilada. Firebase Authentication se ocupa del acceso a Soy DT y entrega los tokens de sesión (JWT).

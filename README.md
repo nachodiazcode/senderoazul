@@ -3,6 +3,8 @@
 Sitio editorial de fútbol chileno con personalización por club, noticias, datos de competición y el modo de juego Soy DT. Está construido con React y Vite.
 
 > ¿Quieres entender cómo está armado? Parte por la [Guía del proyecto](docs/GUIA_DEL_PROYECTO.md): explica el recorrido desde que abres la página hasta que aparecen los datos, las imágenes, el tema del club y el acceso de Soy DT.
+>
+> Prefer English? Read the [English project guide](docs/PROJECT_GUIDE.en.md).
 
 ## Funcionalidades
 
