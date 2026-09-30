@@ -796,6 +796,7 @@ function NewsRadar({ team }) {
   const activeTeam = team || teamChoices.find((item) => item.id === 'u-de-chile');
   const { items, updatedAt, state } = useNewsFeed(6, activeTeam.id);
   const lead = items[0];
+  const leadImage = lead?.image || clubMedia[activeTeam.id]?.image;
   const remaining = items.slice(1);
   const sideStories = remaining.slice(0, 3);
   const hiddenStories = Math.max(remaining.length - sideStories.length, 0);
@@ -827,7 +828,7 @@ function NewsRadar({ team }) {
           <small><SourceMark source={lead.source} /> {lead.source} · {lead.publishedLabel} <b>↗</b></small>
         </div>
         <div className="radar-lead-art fc-lead-art" aria-hidden="true">
-          {lead.image && <img className="radar-lead-photo" src={lead.image} alt="" />}
+          {leadImage && <img className="radar-lead-photo" src={leadImage} alt="" />}
           <span className="radar-art-kicker">FC26 HUB · CENTRAL</span>
           <div>{lead.clubIds.slice(0, 3).map((clubId) => { const crestTeam = teamChoices.find((item) => item.id === clubId); return crestTeam ? <TeamCrest key={clubId} team={crestTeam} className="radar-art-crest" /> : null; })}</div>
           <b>90<span>′</span></b>

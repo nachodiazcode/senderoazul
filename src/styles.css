@@ -3431,3 +3431,29 @@ footer.fc-footer::after {
   main { padding-bottom: 88px !important; }
   footer.fc-footer { padding-bottom: 94px !important; }
 }
+
+/* Bloque de cierre de la portada: más compacto para no cortar el ritmo de lectura. */
+.home-split {
+  margin-top: 28px;
+  margin-bottom: clamp(34px, 5vw, 56px);
+}
+
+.home-split > div {
+  min-height: 250px !important;
+  padding: clamp(26px, 3vw, 38px) !important;
+}
+
+.home-split > .home-data { padding-right: clamp(46px, 5vw, 68px) !important; }
+.home-split > .home-tribuna { padding-left: clamp(62px, 6vw, 84px) !important; }
+.home-split h2 { margin: 10px 0 12px; font-size: clamp(28px, 2.55vw, 36px); }
+.home-split p { margin-bottom: 18px; font-size: 13px; line-height: 1.55; }
+.home-split .button { padding: 10px 18px !important; }
+.split-circle { width: 220px; height: 220px; border-width: 28px; bottom: -82px; right: -42px; }
+.split-lines { width: 112px; height: 112px; top: 28px; right: 28px; }
+
+@media (max-width: 760px) {
+  .home-split { margin-top: 20px; }
+  .home-split > .home-data,
+  .home-split > .home-tribuna { padding: 26px !important; clip-path: none; margin-left: 0; }
+  .home-split > .home-tribuna { min-height: 230px !important; }
+}
