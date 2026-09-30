@@ -9,6 +9,8 @@ export const newsFeed = [
     publishedLabel: '27 SEP 2026 · FINAL',
     publishedAt: '2026-09-27T19:40:00-03:00',
     clubIds: ['u-de-chile', 'everton'],
+    image: '/assets/u-de-chile-plantel-retratos.webp',
+    imageAlt: 'Plantel de Universidad de Chile antes de un partido',
   },
   {
     id: 'u-everton-ida-reanudada-sep27',

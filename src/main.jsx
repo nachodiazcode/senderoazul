@@ -827,6 +827,7 @@ function NewsRadar({ team }) {
           <small><SourceMark source={lead.source} /> {lead.source} · {lead.publishedLabel} <b>↗</b></small>
         </div>
         <div className="radar-lead-art fc-lead-art" aria-hidden="true">
+          {lead.image && <img className="radar-lead-photo" src={lead.image} alt="" />}
           <span className="radar-art-kicker">FC26 HUB · CENTRAL</span>
           <div>{lead.clubIds.slice(0, 3).map((clubId) => { const crestTeam = teamChoices.find((item) => item.id === clubId); return crestTeam ? <TeamCrest key={clubId} team={crestTeam} className="radar-art-crest" /> : null; })}</div>
           <b>90<span>′</span></b>
