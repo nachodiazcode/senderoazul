@@ -3457,3 +3457,62 @@ footer.fc-footer::after {
   .home-split > .home-tribuna { padding: 26px !important; clip-path: none; margin-left: 0; }
   .home-split > .home-tribuna { min-height: 230px !important; }
 }
+
+/* El acceso rápido no es el menú del encabezado: se aísla para evitar que los
+   estilos globales de `nav` le asignen un `top` y lo estiren hasta la pantalla. */
+@media (max-width: 1000px) {
+  html, body { overflow-x: hidden; }
+
+  .mobile-bottom-nav {
+    position: fixed !important;
+    z-index: 120 !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: max(12px, env(safe-area-inset-bottom)) !important;
+    left: 50% !important;
+    display: grid !important;
+    width: min(680px, calc(100vw - 24px)) !important;
+    height: 68px !important;
+    min-height: 68px !important;
+    max-height: 68px !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    align-items: stretch !important;
+    gap: 4px !important;
+    margin: 0 !important;
+    padding: 5px !important;
+    border-radius: 22px !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .bottom-nav-item {
+    display: flex !important;
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 4px 2px !important;
+    overflow: hidden !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+  }
+
+  main { padding-bottom: 106px !important; }
+  footer.fc-footer { padding-bottom: 110px !important; }
+}
+
+@media (max-width: 520px) {
+  .mobile-bottom-nav {
+    bottom: max(8px, env(safe-area-inset-bottom)) !important;
+    width: calc(100vw - 16px) !important;
+    height: 64px !important;
+    min-height: 64px !important;
+    max-height: 64px !important;
+    border-radius: 19px !important;
+  }
+
+  .bottom-nav-item { font-size: 8px !important; }
+  main { padding-bottom: 98px !important; }
+  footer.fc-footer { padding-bottom: 102px !important; }
+}

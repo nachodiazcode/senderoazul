@@ -693,10 +693,10 @@ function MobileBottomNav({ route, favoriteTeam, onChooseTeam }) {
     ['/soy-dt', 'Soy DT', 'tactics'],
   ];
   const team = favoriteTeam || { id: 'u-de-chile', name: 'Mi equipo' };
-  return <nav className="mobile-bottom-nav" aria-label="Navegación rápida">
+  return <div className="mobile-bottom-nav" role="navigation" aria-label="Navegación rápida">
     {shortcuts.map(([path, label, icon]) => <RouteLink key={path} to={path} className={`bottom-nav-item ${route === path ? 'active' : ''}`}><BottomNavIcon name={icon} /><span>{label}</span></RouteLink>)}
     <button className="bottom-nav-item bottom-team-item" onClick={onChooseTeam} aria-label={`Cambiar mi equipo favorito: ${team.name}`}><TeamCrest team={team} className="bottom-team-crest" /><span>Mi club</span></button>
-  </nav>;
+  </div>;
 }
 
 function Footer({ favoriteTeam }) {
