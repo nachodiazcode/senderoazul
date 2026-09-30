@@ -1,5 +1,115 @@
 export const newsFeed = [
   {
+    id: 'u-everton-vuelta-final-sep27',
+    source: 'Cooperativa',
+    sourceUrl: 'https://www.cooperativa.cl/noticias/deportes/futbol/copa-chile/la-u-cerro-con-empate-la-jornada-doble-ante-everton-y-avanzo-a-cuartos/2026-09-27/193627.html',
+    headline: 'La U empató 1–1 con Everton y avanzó a cuartos de la Copa Chile',
+    summary: 'Eduardo Vargas abrió a los 45+3 y Nicolás Montiel igualó a los 56. Con el 1–0 de la ida, el global quedó 2–1. En cuartos espera Deportes Antofagasta.',
+    topic: 'Copa Chile',
+    publishedLabel: '27 SEP 2026 · FINAL',
+    publishedAt: '2026-09-27T19:40:00-03:00',
+    clubIds: ['u-de-chile', 'everton'],
+  },
+  {
+    id: 'u-everton-ida-reanudada-sep27',
+    source: 'Emol',
+    sourceUrl: 'https://www.emol.com/noticias/Deportes/2026/09/27/1212554/everton-udechile-copa-chile-ida.html',
+    headline: 'La U cerró 1–0 la ida ante Everton tras reanudar en el Nacional',
+    summary: 'El partido suspendido el jueves en Sausalito se completó este domingo a puertas cerradas y el marcador no se movió. El gol fue de Juan Martín Lucero, a los 62 minutos.',
+    topic: 'Copa Chile',
+    publishedLabel: '27 SEP 2026',
+    publishedAt: '2026-09-27T15:04:00-03:00',
+    clubIds: ['u-de-chile', 'everton'],
+  },
+  {
+    id: 'concepcion-curico-vuelta-2-0-sep27',
+    source: 'Cooperativa',
+    sourceUrl: 'https://www.cooperativa.cl/noticias/deportes/futbol/copa-chile/copa-chile-dep-concepcion-vence-a-curico-por-la-vuelta-de-los-octavos/2026-09-25/135526.html',
+    headline: 'Deportes Concepción avanzó a cuartos tras ganar 2–0 la vuelta',
+    summary: 'Ethan Espinoza y Ariel Cáceres marcaron en el Ester Roa. Con el 4–0 de la ida en Curicó, el León cerró la serie por 6–0.',
+    topic: 'Copa Chile',
+    publishedLabel: '27 SEP 2026',
+    publishedAt: '2026-09-27T17:15:00-03:00',
+    clubIds: ['deportes-concepcion'],
+  },
+  {
+    id: 'antofagasta-iquique-4-1-sep27',
+    source: 'ESPN',
+    sourceUrl: 'https://www.espn.co.uk/football/match/_/gameId/401916343',
+    headline: 'Antofagasta eliminó a Iquique y espera al ganador de la U o Everton',
+    summary: 'La vuelta en el Calvo y Bascuñán terminó 4–1 y el global quedó 5–2. Emol indica que el clasificado de Universidad de Chile y Everton enfrentará a Antofagasta en cuartos.',
+    topic: 'Copa Chile',
+    publishedLabel: '27 SEP 2026',
+    publishedAt: '2026-09-27T16:40:00-03:00',
+    clubIds: ['u-de-chile', 'everton'],
+  },
+  {
+    id: 'ohiggins-santa-cruz-espera-vuelta-sep27',
+    source: 'Cooperativa',
+    sourceUrl: 'https://www.cooperativa.cl/noticias/deportes/futbol/copa-chile/los-resultados-de-los-partidos-de-ida-de-los-octavos-de-la-copa-chile/2026-09-22/134124.html',
+    headline: 'O’Higgins llega 2–1 a la revancha de esta noche ante Santa Cruz',
+    summary: 'Castillo y Yáñez marcaron en El Teniente y Brito descontó para Santa Cruz. La vuelta está fijada para las 20:00 en el Joaquín Muñoz y, al corte de las 18:00, todavía no comenzaba.',
+    topic: 'Agenda',
+    publishedLabel: '27 SEP 2026',
+    publishedAt: '2026-09-27T18:00:00-03:00',
+    clubIds: ['ohiggins'],
+  },
+  {
+    id: 'la-calera-elimina-uc-penales-sep26',
+    source: 'Cooperativa',
+    sourceUrl: 'https://www.cooperativa.cl/noticias/deportes/futbol/copa-chile/copa-chile-dep-concepcion-vence-a-curico-por-la-vuelta-de-los-octavos/2026-09-25/135526.html',
+    headline: 'Unión La Calera eliminó a la UC desde el punto penal',
+    summary: 'La vuelta en Claro Arena terminó 0–0 y el global quedó 1–1. La Calera ganó 4–2 en los penales y avanzó a cuartos de la Copa Chile.',
+    topic: 'Copa Chile',
+    publishedLabel: '26 SEP 2026',
+    publishedAt: '2026-09-26T22:20:00-03:00',
+    clubIds: ['la-calera', 'u-catolica'],
+  },
+  {
+    id: 'puerto-montt-elimina-nublense-sep26',
+    source: 'Cooperativa',
+    sourceUrl: 'https://www.cooperativa.cl/noticias/deportes/futbol/copa-chile/copa-chile-dep-concepcion-vence-a-curico-por-la-vuelta-de-los-octavos/2026-09-25/135526.html',
+    headline: 'Puerto Montt eliminó a Ñublense pese a perder la vuelta',
+    summary: 'Esteban Calderón hizo dos goles y Ñublense ganó 2–1 en Chillán. El 2–0 de la ida en Chinquihue le alcanzó a Puerto Montt para cerrar 3–2 el global.',
+    topic: 'Copa Chile',
+    publishedLabel: '26 SEP 2026',
+    publishedAt: '2026-09-26T19:45:00-03:00',
+    clubIds: ['nublense'],
+  },
+  {
+    id: 'colo-colo-elimina-audax-sep25',
+    source: 'Cooperativa',
+    sourceUrl: 'https://www.cooperativa.cl/noticias/deportes/futbol/copa-chile/copa-chile-dep-concepcion-vence-a-curico-por-la-vuelta-de-los-octavos/2026-09-25/135526.html',
+    headline: 'Colo-Colo avanzó a cuartos con un gol de Gedeón Díaz',
+    summary: 'El Cacique ganó 1–0 la vuelta en el Nacional. Díaz marcó a los 33 minutos y, tras el 0–0 de la ida, la serie quedó 1–0.',
+    topic: 'Copa Chile',
+    publishedLabel: '25 SEP 2026',
+    publishedAt: '2026-09-25T22:05:00-03:00',
+    clubIds: ['colo-colo', 'audax'],
+  },
+  {
+    id: 'coquimbo-espera-vuelta-cobreloa-oct7',
+    source: 'Cooperativa',
+    sourceUrl: 'https://www.cooperativa.cl/noticias/deportes/futbol/copa-chile/los-resultados-de-los-partidos-de-ida-de-los-octavos-de-la-copa-chile/2026-09-22/134124.html',
+    headline: 'Coquimbo Unido espera el 7 de octubre con ventaja ante Cobreloa',
+    summary: 'La ida en Calama terminó 2–1 para los piratas, con goles de Sebastián Cabrera y Ythans Blanco. La vuelta es el miércoles 7, a las 19:00, en el Sánchez Rumoroso.',
+    topic: 'Agenda',
+    publishedLabel: '22 SEP 2026',
+    publishedAt: '2026-09-22T23:40:00-03:00',
+    clubIds: ['coquimbo'],
+  },
+  {
+    id: 'tabla-liga-sin-cambios-sep27',
+    source: 'RedGol',
+    sourceUrl: 'https://redgol.cl/resultados/futbol/competencias/liga-de-primera/c8b5e107-50d8-445c-99b0-57c3b5989ec1',
+    headline: 'La tabla de Primera no se movió durante la semana de Copa Chile',
+    summary: 'Entre el 23 y el 27 de septiembre no hubo fecha de Liga. Colo-Colo sigue con 54 puntos y Universidad Católica y la U comparten 42. Huachipato y la UdeC tienen un partido pendiente.',
+    topic: 'Campeonato',
+    publishedLabel: '27 SEP 2026',
+    publishedAt: '2026-09-27T12:00:00-03:00',
+    clubIds: ['colo-colo', 'u-catolica', 'u-de-chile', 'everton', 'palestino', 'deportes-limache', 'nublense', 'deportes-concepcion', 'la-serena', 'coquimbo', 'audax', 'huachipato', 'ohiggins', 'cobresal', 'u-de-concepcion', 'la-calera'],
+  },
+  {
     id: 'cobresal-coquimbo-3-2-sep12',
     source: 'Campeonato Chileno · ANFP',
     sourceUrl: 'https://www.campeonatochileno.cl/match/cobresal-coquimbo-unido-2026-09-12/',
@@ -177,7 +287,7 @@ export const newsFeed = [
   },
 ];
 
-export const feedUpdatedAt = '2026-09-23T01:08:00-03:00';
+export const feedUpdatedAt = '2026-09-27T19:40:00-03:00';
 
 const normalize = (value = '') => String(value ?? '')
   .normalize('NFD')
@@ -192,7 +302,7 @@ export function getNewsPayload(url = 'http://localhost/api/news') {
   const query = normalize(requestUrl.searchParams.get('q'));
   const requestedLimit = Number(requestUrl.searchParams.get('limit'));
   const limit = Number.isFinite(requestedLimit) && requestedLimit > 0
-    ? Math.min(Math.floor(requestedLimit), 20)
+    ? Math.min(Math.floor(requestedLimit), 40)
     : 10;
 
   const items = newsFeed

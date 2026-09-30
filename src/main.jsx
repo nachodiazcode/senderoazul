@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { articles } from './content';
+import { ascensoStandings2026, terceraAStandings2026 } from './leagues';
 import { feedUpdatedAt, newsFeed } from './news-feed';
 import { auth, createUserWithEmailAndPassword, googleProvider, isFirebaseConfigured, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from './firebase';
 import './styles.css';
@@ -10,6 +11,7 @@ const navItems = [
   ['/datos', 'Equipos'],
   ['/memoria', 'El Club'],
   ['/actualidad', 'Noticias'],
+  ['/soy-dt', 'Soy DT'],
   ['/escuelas', 'Escuelas'],
   ['/abonos', 'Abonos'],
   ['/tienda', 'Tienda'],
@@ -224,6 +226,7 @@ const clubProfiles = {
       ['1960s', 'Ballet Azul', 'Una generación convierte su fútbol en una referencia para el país.'],
       ['1994', 'Regreso a la cima', 'Una nueva generación vuelve a coronarse tras 25 años.'],
       ['2011', 'Noche continental', 'La U gana invicta la Copa Sudamericana y levanta su primer título internacional.'],
+      ['2026', 'Otra vez en copa', 'El 27 de septiembre empató 1–1 con Everton y avanzó a cuartos por 2–1. El rival es Deportes Antofagasta.'],
       ['2027', 'Cien años', 'El club se acerca a su centenario, con nuevas historias todavía por escribir.'],
     ],
   },
@@ -405,26 +408,58 @@ const leagueStandings2026 = [
 
 const clubSnapshots = Object.fromEntries(leagueStandings2026.map(({ id, position, points, played, city }) => [id, { position, points, played, city }]));
 
-// Fixture de octavos de Copa Chile contrastado con la programación oficial de Campeonato Chileno.
-// Los marcadores sólo se incluyen cuando ya estaban publicados en la fuente al corte indicado.
+// Octavos de Copa Chile. Los marcadores finales están tomados de Cooperativa, Emol y ESPN
+// Corte del 27/09/2026, 19:40. La U empató 1–1 la vuelta y avanzó 2–1. Santa Cruz–O'Higgins no tenía marcador cerrado.
 const copaChileFixtures = [
-  { id: 'puerto-montt-nublense-ida', tie: 'Puerto Montt / Ñublense', leg: 'IDA', date: '2026-09-22', time: '18:00', home: 'Deportes Puerto Montt', away: 'Ñublense', score: '2–0', venue: 'Bicentenario Chinquihue' },
-  { id: 'cobreloa-coquimbo-ida', tie: 'Cobreloa / Coquimbo Unido', leg: 'IDA', date: '2026-09-22', time: '20:30', home: 'Cobreloa', away: 'Coquimbo Unido', score: '1–2', venue: 'Zorros del Desierto' },
-  { id: 'audax-colo-colo-ida', tie: 'Audax Italiano / Colo-Colo', leg: 'IDA', date: '2026-09-22', time: '20:30', home: 'Audax Italiano', away: 'Colo Colo', score: '0–0', venue: 'Estadio Nacional Julio Martínez Prádanos' },
-  { id: 'curico-concepcion-ida', tie: 'Curicó Unido / Deportes Concepción', leg: 'IDA', date: '2026-09-23', time: '18:00', home: 'Curicó Unido', away: 'Deportes Concepción', score: '0–4', venue: 'Bicentenario La Granja' },
-  { id: 'iquique-antofagasta-ida', tie: 'Iquique / Antofagasta', leg: 'IDA', date: '2026-09-23', time: '20:30', home: 'Deportes Iquique', away: 'Deportes Antofagasta', score: '1–1', venue: 'Tierra de Campeones' },
-  { id: 'calera-catolica-ida', tie: 'Unión La Calera / Universidad Católica', leg: 'IDA', date: '2026-09-23', time: '20:30', home: 'Unión La Calera', away: 'Universidad Católica', score: '1–1', venue: 'Nicolás Chahuán' },
-  { id: 'ohiggins-santa-cruz-ida', tie: "O’Higgins / Santa Cruz", leg: 'IDA', date: '2026-09-24', time: '18:00', home: "O'Higgins", away: 'Deportes Santa Cruz', venue: 'Codelco El Teniente' },
-  { id: 'everton-u-ida', tie: 'Everton / Universidad de Chile', leg: 'IDA', date: '2026-09-24', time: '20:30', home: 'Everton', away: 'Universidad de Chile', venue: 'Sausalito' },
-  { id: 'colo-colo-audax-vuelta', tie: 'Audax Italiano / Colo-Colo', leg: 'VUELTA', date: '2026-09-25', time: '20:00', home: 'Colo Colo', away: 'Audax Italiano', venue: 'Estadio Nacional Julio Martínez Prádanos' },
-  { id: 'nublense-puerto-montt-vuelta', tie: 'Puerto Montt / Ñublense', leg: 'VUELTA', date: '2026-09-26', time: '17:30', home: 'Ñublense', away: 'Deportes Puerto Montt', venue: 'Bicentenario Nelson Oyarzún' },
-  { id: 'catolica-calera-vuelta', tie: 'Unión La Calera / Universidad Católica', leg: 'VUELTA', date: '2026-09-26', time: '20:00', home: 'Universidad Católica', away: 'Unión La Calera', venue: 'Claro Arena' },
-  { id: 'antofagasta-iquique-vuelta', tie: 'Iquique / Antofagasta', leg: 'VUELTA', date: '2026-09-27', time: '12:30', home: 'Deportes Antofagasta', away: 'Deportes Iquique', venue: 'Regional Calvo y Bascuñán' },
-  { id: 'concepcion-curico-vuelta', tie: 'Curicó Unido / Deportes Concepción', leg: 'VUELTA', date: '2026-09-27', time: '15:00', home: 'Deportes Concepción', away: 'Curicó Unido', venue: 'Ester Roa Rebolledo' },
-  { id: 'u-everton-vuelta', tie: 'Everton / Universidad de Chile', leg: 'VUELTA', date: '2026-09-27', time: '17:30', home: 'Universidad de Chile', away: 'Everton', venue: 'Estadio Nacional Julio Martínez Prádanos' },
-  { id: 'santa-cruz-ohiggins-vuelta', tie: "O’Higgins / Santa Cruz", leg: 'VUELTA', date: '2026-09-27', time: '20:00', home: 'Deportes Santa Cruz', away: "O'Higgins", venue: 'Joaquín Muñoz' },
-  { id: 'coquimbo-cobreloa-vuelta', tie: 'Cobreloa / Coquimbo Unido', leg: 'VUELTA', date: '2026-10-07', time: '19:00', home: 'Coquimbo Unido', away: 'Cobreloa', venue: 'Municipal Francisco Sánchez Rumoroso' },
+  { id: 'puerto-montt-nublense-ida', tie: 'Puerto Montt / Ñublense', leg: 'IDA', date: '2026-09-22', time: '18:00', home: 'Deportes Puerto Montt', away: 'Ñublense', score: '2–0', status: 'final', detail: 'Sabella y Flores', venue: 'Bicentenario Chinquihue' },
+  { id: 'cobreloa-coquimbo-ida', tie: 'Cobreloa / Coquimbo Unido', leg: 'IDA', date: '2026-09-22', time: '20:30', home: 'Cobreloa', away: 'Coquimbo Unido', score: '1–2', status: 'final', detail: 'Cabrera y Blanco; descontó Orellana', venue: 'Zorros del Desierto' },
+  { id: 'audax-colo-colo-ida', tie: 'Audax Italiano / Colo-Colo', leg: 'IDA', date: '2026-09-22', time: '20:30', home: 'Audax Italiano', away: 'Colo Colo', score: '0–0', status: 'final', detail: 'Sin goles en el Nacional', venue: 'Estadio Nacional Julio Martínez Prádanos' },
+  { id: 'curico-concepcion-ida', tie: 'Curicó Unido / Deportes Concepción', leg: 'IDA', date: '2026-09-23', time: '18:00', home: 'Curicó Unido', away: 'Deportes Concepción', score: '0–4', status: 'final', detail: 'Larrivey (2), Rodríguez y Dávila', venue: 'Bicentenario La Granja' },
+  { id: 'iquique-antofagasta-ida', tie: 'Iquique / Antofagasta', leg: 'IDA', date: '2026-09-23', time: '20:30', home: 'Deportes Iquique', away: 'Deportes Antofagasta', score: '1–1', status: 'final', detail: 'Garrido y Bández', venue: 'Tierra de Campeones' },
+  { id: 'calera-catolica-ida', tie: 'Unión La Calera / Universidad Católica', leg: 'IDA', date: '2026-09-23', time: '20:30', home: 'Unión La Calera', away: 'Universidad Católica', score: '1–1', status: 'final', detail: 'Gómez y Salomoni', venue: 'Nicolás Chahuán' },
+  { id: 'ohiggins-santa-cruz-ida', tie: "O'Higgins / Santa Cruz", leg: 'IDA', date: '2026-09-24', time: '18:00', home: "O'Higgins", away: 'Deportes Santa Cruz', score: '2–1', status: 'final', detail: 'Castillo y Yáñez; descontó Brito', venue: 'Codelco El Teniente' },
+  { id: 'everton-u-ida', tie: 'Everton / Universidad de Chile', leg: 'IDA', date: '2026-09-24', time: '20:30', home: 'Everton', away: 'Universidad de Chile', score: '0–1', status: 'final', detail: 'Lucero 62′. Suspendido en Sausalito y cerrado el 27/09 en el Nacional', venue: 'Sausalito · cierre en el Nacional' },
+  { id: 'colo-colo-audax-vuelta', tie: 'Audax Italiano / Colo-Colo', leg: 'VUELTA', date: '2026-09-25', time: '20:00', home: 'Colo Colo', away: 'Audax Italiano', score: '1–0', status: 'final', detail: 'Díaz 33′ · Colo-Colo clasifica 1–0', venue: 'Estadio Nacional Julio Martínez Prádanos' },
+  { id: 'nublense-puerto-montt-vuelta', tie: 'Puerto Montt / Ñublense', leg: 'VUELTA', date: '2026-09-26', time: '17:30', home: 'Ñublense', away: 'Deportes Puerto Montt', score: '2–1', status: 'final', detail: 'Calderón (2) · global 3–2, clasifica Puerto Montt', venue: 'Bicentenario Nelson Oyarzún' },
+  { id: 'catolica-calera-vuelta', tie: 'Unión La Calera / Universidad Católica', leg: 'VUELTA', date: '2026-09-26', time: '20:00', home: 'Universidad Católica', away: 'Unión La Calera', score: '2–4 P', status: 'final', detail: '0–0 en el tiempo · La Calera clasifica en penales', venue: 'Claro Arena' },
+  { id: 'antofagasta-iquique-vuelta', tie: 'Iquique / Antofagasta', leg: 'VUELTA', date: '2026-09-27', time: '12:30', home: 'Deportes Antofagasta', away: 'Deportes Iquique', score: '4–1', status: 'final', detail: 'Global 5–2 · clasifica Antofagasta', venue: 'Regional Calvo y Bascuñán' },
+  { id: 'concepcion-curico-vuelta', tie: 'Curicó Unido / Deportes Concepción', leg: 'VUELTA', date: '2026-09-27', time: '15:00', home: 'Deportes Concepción', away: 'Curicó Unido', score: '2–0', status: 'final', detail: 'Espinoza y Cáceres · global 6–0, clasifica Concepción', venue: 'Ester Roa Rebolledo' },
+  { id: 'u-everton-vuelta', tie: 'Everton / Universidad de Chile', leg: 'VUELTA', date: '2026-09-27', time: '17:30', home: 'Universidad de Chile', away: 'Everton', score: '1–1', status: 'final', detail: 'Vargas 45+3′ y Montiel 56′ · global 2–1, clasifica la U', venue: 'Estadio Nacional Julio Martínez Prádanos' },
+  { id: 'santa-cruz-ohiggins-vuelta', tie: "O'Higgins / Santa Cruz", leg: 'VUELTA', date: '2026-09-27', time: '20:00', home: 'Deportes Santa Cruz', away: "O'Higgins", status: 'scheduled', detail: 'Aún no comenzaba al corte · O’Higgins llega 2–1', venue: 'Joaquín Muñoz' },
+  { id: 'coquimbo-cobreloa-vuelta', tie: 'Cobreloa / Coquimbo Unido', leg: 'VUELTA', date: '2026-10-07', time: '19:00', home: 'Coquimbo Unido', away: 'Cobreloa', status: 'scheduled', detail: 'Coquimbo llega 2–1 de la ida', venue: 'Municipal Francisco Sánchez Rumoroso' },
 ];
+
+function normalizeClubName(value) {
+  return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function fixturesForTeam(team) {
+  const key = normalizeClubName(team?.name);
+  return copaChileFixtures.filter((fixture) => [fixture.home, fixture.away].some((club) => normalizeClubName(club) === key));
+}
+
+function crestForFixtureClub(name) {
+  const key = normalizeClubName(name);
+  return teamChoices.find((team) => normalizeClubName(team.name) === key);
+}
+
+function fixtureShortName(name) {
+  return crestForFixtureClub(name)?.mark || name.replace(/^Deportes /, '').toUpperCase();
+}
+
+function formatFixtureWhen(fixture) {
+  const label = new Intl.DateTimeFormat('es-CL', { weekday: 'short', day: '2-digit', month: 'short' }).format(new Date(`${fixture.date}T12:00:00`)).replace('.', '').toUpperCase();
+  return `${label} · ${fixture.time}`;
+}
+
+function focusFixture(team) {
+  const fixtures = fixturesForTeam(team);
+  return fixtures.find((fixture) => fixture.status === 'live')
+    || fixtures.find((fixture) => fixture.status === 'cutoff')
+    || fixtures.find((fixture) => fixture.status === 'scheduled')
+    || [...fixtures].reverse().find((fixture) => fixture.status === 'final')
+    || null;
+}
 
 function standingsClubName(id) {
   return teamChoices.find((team) => team.id === id)?.name || id;
@@ -475,22 +510,22 @@ function socialSearch(team, network) {
 }
 
 const dtPlayers = [
-  { id: 'castellon', name: 'Gabriel Castellón', short: 'Castellón', role: 'POR', rating: 82, points: 86, note: 'Arco en cero' },
-  { id: 'ramirez', name: 'Nicolás Ramírez', short: 'N. Ramírez', role: 'DFC', rating: 78, points: 74, note: 'Cierre y anticipo' },
-  { id: 'zaldivia', name: 'Matías Zaldivia', short: 'Zaldivia', role: 'DFC', rating: 80, points: 79, note: 'Liderazgo' },
-  { id: 'tamayo', name: 'Bianneider Tamayo', short: 'Tamayo', role: 'DFC', rating: 76, points: 72, note: 'Duelos ganados' },
-  { id: 'hormazabal', name: 'Fabián Hormazábal', short: 'Hormazábal', role: 'MED', rating: 84, points: 92, note: 'Gol de taco' },
-  { id: 'poblete', name: 'Israel Poblete', short: 'Poblete', role: 'MED', rating: 79, points: 77, note: 'Equilibrio' },
-  { id: 'reinhart', name: 'Tobías Reinhart', short: 'Reinhart', role: 'MED', rating: 77, points: 74, note: 'Recorrido' },
+  { id: 'castellon', name: 'Gabriel Castellón', short: 'Castellón', role: 'POR', rating: 82, points: 86, note: 'Arco en cero', portrait: '/assets/players/castellon-oficial.png' },
+  { id: 'ramirez', name: 'Nicolás Ramírez', short: 'N. Ramírez', role: 'DFC', rating: 78, points: 74, note: 'Cierre y anticipo', portrait: '/assets/players/ramirez-oficial.png' },
+  { id: 'zaldivia', name: 'Matías Zaldivia', short: 'Zaldivia', role: 'DFC', rating: 80, points: 79, note: 'Liderazgo', portrait: '/assets/players/zaldivia-oficial.png' },
+  { id: 'tamayo', name: 'Bianneider Tamayo', short: 'Tamayo', role: 'DFC', rating: 76, points: 72, note: 'Duelos ganados', portrait: '/assets/players/tamayo-oficial.png' },
+  { id: 'hormazabal', name: 'Fabián Hormazábal', short: 'Hormazábal', role: 'MED', rating: 84, points: 92, note: 'Gol de taco', portrait: '/assets/players/hormazabal-oficial.png' },
+  { id: 'poblete', name: 'Israel Poblete', short: 'Poblete', role: 'MED', rating: 79, points: 77, note: 'Equilibrio', portrait: '/assets/players/poblete-oficial.png' },
+  { id: 'reinhart', name: 'Tobías Reinhart', short: 'Reinhart', role: 'MED', rating: 77, points: 74, note: 'Recorrido', portrait: '/assets/players/reinhart-oficial.png' },
   { id: 'guerrero', name: 'Maximiliano Guerrero', short: 'Guerrero', role: 'MED', rating: 83, points: 88, note: 'Asistencia' },
-  { id: 'reyna', name: 'Gonzalo Reyna', short: 'Reyna', role: 'DEL', rating: 75, points: 71, note: 'Presión alta' },
-  { id: 'vargas', name: 'Eduardo Vargas', short: 'E. Vargas', role: 'DEL', rating: 85, points: 84, note: 'Experiencia' },
-  { id: 'arce', name: 'Agustín Arce', short: 'Arce', role: 'DEL', rating: 86, points: 96, note: 'Gol y desborde' },
-  { id: 'aranguiz', name: 'Charles Aránguiz', short: 'Aránguiz', role: 'MED', rating: 84, points: 83, note: 'Pase vertical' },
-  { id: 'altamirano', name: 'Javier Altamirano', short: 'Altamirano', role: 'MED', rating: 80, points: 78, note: 'Cambio de ritmo' },
-  { id: 'fernandez', name: 'Nicolás Fernández', short: 'N. Fernández', role: 'DFC', rating: 78, points: 76, note: 'Velocidad' },
-  { id: 'morales', name: 'Marcelo Morales', short: 'Morales', role: 'MED', rating: 77, points: 73, note: 'Proyección' },
-  { id: 'lucero', name: 'Juan Martín Lucero', short: 'Lucero', role: 'DEL', rating: 81, points: 80, note: 'Juego aéreo' },
+  { id: 'reyna', name: 'Gonzalo Reyna', short: 'Reyna', role: 'DEL', rating: 75, points: 71, note: 'Presión alta', portrait: '/assets/players/reyna-oficial.png' },
+  { id: 'vargas', name: 'Eduardo Vargas', short: 'E. Vargas', role: 'DEL', rating: 85, points: 84, note: 'Experiencia', portrait: '/assets/players/vargas-oficial.png' },
+  { id: 'arce', name: 'Agustín Arce', short: 'Arce', role: 'DEL', rating: 86, points: 96, note: 'Gol y desborde', portrait: '/assets/players/arce-oficial.png' },
+  { id: 'aranguiz', name: 'Charles Aránguiz', short: 'Aránguiz', role: 'MED', rating: 84, points: 83, note: 'Pase vertical', portrait: '/assets/players/aranguiz-oficial.png' },
+  { id: 'altamirano', name: 'Javier Altamirano', short: 'Altamirano', role: 'MED', rating: 80, points: 78, note: 'Cambio de ritmo', portrait: '/assets/players/altamirano-oficial.png' },
+  { id: 'fernandez', name: 'Nicolás Fernández', short: 'N. Fernández', role: 'DFC', rating: 78, points: 76, note: 'Velocidad', portrait: '/assets/players/fernandez-oficial.png' },
+  { id: 'morales', name: 'Marcelo Morales', short: 'Morales', role: 'MED', rating: 77, points: 73, note: 'Proyección', portrait: '/assets/players/morales-oficial.png' },
+  { id: 'lucero', name: 'Juan Martín Lucero', short: 'Lucero', role: 'DEL', rating: 81, points: 80, note: 'Juego aéreo', portrait: '/assets/players/lucero-oficial.png' },
 ];
 
 const dtFormations = {
@@ -620,21 +655,105 @@ function TeamPicker({ selectedTeam, onSelect }) {
 
 function MatchdayStrip({ team }) {
   const activeTeam = team || teamChoices.find((item) => item.id === 'u-de-chile');
-  if (activeTeam.id === 'u-de-chile') return <aside className="matchday-strip" aria-label="Próximo partido de Universidad de Chile"><div className="shell matchday-inner"><div className="matchday-live"><span className="live-pulse" />PRÓXIMO PARTIDO</div><div className="matchday-competition">COPA CHILE · OCTAVOS</div><div className="matchday-teams"><TeamCrest team={teamChoices.find((item) => item.id === 'everton')} className="matchday-crest" /><b>EVERTON</b><span>VS</span><TeamCrest team={activeTeam} className="matchday-crest" /><b>LA U</b></div><div className="matchday-meta">JUE 24 SEP · 20:30 <i /> SAUSALITO</div><RouteLink to="/soy-dt" className="matchday-action">ARMA TU ONCE <span>↗</span></RouteLink></div></aside>;
-  return <aside className="matchday-strip" aria-label={`Portada personalizada de ${activeTeam.name}`}><div className="shell matchday-inner"><div className="matchday-live"><span className="live-pulse" />MI EQUIPO</div><div className="matchday-competition">PORTADA PERSONALIZADA</div><div className="matchday-teams"><TeamCrest team={activeTeam} className="matchday-crest" /><b>{activeTeam.name}</b></div><div className="matchday-meta">NOTICIAS <i /> TABLA <i /> AGENDA</div><RouteLink to="/actualidad" className="matchday-action">VER NOTICIAS <span>↗</span></RouteLink></div></aside>;
+  const focus = focusFixture(activeTeam);
+  const snapshot = clubSnapshots[activeTeam.id];
+  if (!focus) {
+    return <aside className="matchday-strip" aria-label={`Temporada de ${activeTeam.name}`}><div className="shell matchday-inner"><div className="matchday-live"><span className="live-pulse" />LIGA DE PRIMERA</div><div className="matchday-competition">CORTE 23 SEP · SIN FECHA ESTA SEMANA</div><div className="matchday-teams"><TeamCrest team={activeTeam} className="matchday-crest" /><b>{activeTeam.mark}</b><span>{snapshot ? `${snapshot.position}°` : '—'}</span><b>{snapshot ? `${snapshot.points} PTS` : ''}</b></div><div className="matchday-meta">LA LIGA VUELVE EN OCTUBRE</div><RouteLink to="/datos" className="matchday-action">VER TABLA <span>↗</span></RouteLink></div></aside>;
+  }
+  const homeCrest = crestForFixtureClub(focus.home);
+  const awayCrest = crestForFixtureClub(focus.away);
+  const kicker = focus.status === 'live' ? `EN CANCHA · ${focus.minute}′` : focus.status === 'cutoff' ? 'AL CORTE' : focus.status === 'scheduled' ? 'PRÓXIMO PARTIDO' : 'ÚLTIMO RESULTADO';
+  const center = focus.status === 'scheduled' ? 'VS' : focus.score;
+  const meta = focus.status === 'scheduled' ? `${formatFixtureWhen(focus)} · ${focus.venue}` : focus.detail;
+  const stripClass = focus.status === 'live' ? 'is-live' : focus.status === 'cutoff' ? 'is-cutoff' : '';
+  return <aside className={`matchday-strip ${stripClass}`} aria-label={`${kicker} de ${activeTeam.name}`}><div className="shell matchday-inner"><div className="matchday-live"><span className="live-pulse" />{kicker}</div><div className="matchday-competition">COPA CHILE · {focus.leg}</div><div className="matchday-teams">{homeCrest && <TeamCrest team={homeCrest} className="matchday-crest" />}<b>{fixtureShortName(focus.home)}</b>{focus.status === 'scheduled' ? <span>VS</span> : <strong className="matchday-score">{center}</strong>}{awayCrest && <TeamCrest team={awayCrest} className="matchday-crest" />}<b>{fixtureShortName(focus.away)}</b></div><div className="matchday-meta">{meta}</div>{focus.id === 'u-everton-vuelta' && focus.status === 'live' ? <a className="matchday-action" href="https://www.espn.co.uk/football/match/_/gameId/401916341/everton-cd-universidad-de-chile" target="_blank" rel="noreferrer">VER EN ESPN <span>↗</span></a> : <RouteLink to="/datos" className="matchday-action">VER LA LLAVE <span>↗</span></RouteLink>}</div></aside>;
 }
 
 function Header({ route, favoriteTeam, onChooseTeam }) {
   const [open, setOpen] = useState(false);
   const edition = new Intl.DateTimeFormat('es-CL', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date()).replace('.', '').toUpperCase();
-  return <><div className="topline"><div className="shell"><span>EL CLUB DE TODOS · MÁS QUE UNA PASIÓN</span><span>SANTIAGO, CHILE <b>•</b> EDICIÓN {edition}</span></div></div><header className="site-header"><div className="shell header-row"><Brand /><button className="menu-toggle" aria-label="Abrir navegación" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? '×' : '☰'}</button><nav className={open ? 'open' : ''} aria-label="Principal">{navItems.map(([path, label]) => <RouteLink key={`${path}-${label}`} to={path} className={`${route === path ? 'active ' : ''}${path === '/soy-dt' ? 'nav-dt' : ''}`} onClick={() => setOpen(false)}>{label}</RouteLink>)}<button className="mobile-team-switch" onClick={() => { setOpen(false); onChooseTeam(); }}>Mi equipo: {favoriteTeam?.name || 'Elegir'}</button></nav><div className="header-actions"><button className="team-switch" onClick={onChooseTeam} aria-label={`Cambiar mi equipo favorito: ${favoriteTeam?.name || 'elegir equipo'}`}><TeamCrest team={favoriteTeam || { id: 'u-de-chile' }} className="header-crest" /><small>{favoriteTeam?.name || 'Mi equipo'}</small></button><RouteLink to="/actualidad" className="header-search" aria-label="Buscar noticias"><span>⌕</span><small>BUSCAR</small></RouteLink></div></div></header><MatchdayStrip team={favoriteTeam} /></>;
+  return <><div className="topline"><div className="shell"><span>EL CLUB DE TODOS · MÁS QUE UNA PASIÓN</span><span>SANTIAGO, CHILE <b>•</b> EDICIÓN {edition}</span></div></div><header className="site-header"><div className="shell header-row"><Brand /><button className="menu-toggle" aria-label="Abrir navegación" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? '×' : '☰'}</button><nav className={open ? 'open' : ''} aria-label="Principal">{navItems.map(([path, label]) => <RouteLink key={`${path}-${label}`} to={path} className={`${route === path ? 'active ' : ''}${path === '/soy-dt' ? 'nav-dt' : ''}`} onClick={() => setOpen(false)}>{label}</RouteLink>)}<button className="mobile-team-switch" onClick={() => { setOpen(false); onChooseTeam(); }}>Mi equipo: {favoriteTeam?.name || 'Elegir'}</button></nav><div className="header-actions"><button className="team-switch" onClick={onChooseTeam} aria-label={`Cambiar mi equipo favorito: ${favoriteTeam?.name || 'elegir equipo'}`}><TeamCrest team={favoriteTeam || { id: 'u-de-chile' }} className="header-crest" /><small>{favoriteTeam?.name || 'Mi equipo'}</small></button><RouteLink to="/actualidad" className="header-search" aria-label="Buscar noticias"><span>⌕</span><small>BUSCAR</small></RouteLink></div></div></header><MatchdayStrip team={favoriteTeam} /><MobileBottomNav route={route} favoriteTeam={favoriteTeam} onChooseTeam={onChooseTeam} /></>;
+}
+
+function BottomNavIcon({ name }) {
+  const paths = {
+    home: <><path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9Z" /><path d="M9 21v-6h6v6" /></>,
+    news: <><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M7 8h7M7 12h10M7 16h6M17 8h.01" /></>,
+    table: <><rect x="4" y="3" width="16" height="18" rx="2" /><path d="M8 7h8M8 11h8M8 15h8M8 19h5" /></>,
+    tactics: <><rect x="3" y="4" width="18" height="16" rx="2" /><circle cx="8" cy="10" r="1.5" /><circle cx="16" cy="15" r="1.5" /><path d="m9.5 11 5 3M16 8v4M14 8h4" /></>,
+  };
+  return <svg className="bottom-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>;
+}
+
+function MobileBottomNav({ route, favoriteTeam, onChooseTeam }) {
+  const shortcuts = [
+    ['/', 'Inicio', 'home'],
+    ['/actualidad', 'Noticias', 'news'],
+    ['/datos', 'Tabla', 'table'],
+    ['/soy-dt', 'Soy DT', 'tactics'],
+  ];
+  const team = favoriteTeam || { id: 'u-de-chile', name: 'Mi equipo' };
+  return <nav className="mobile-bottom-nav" aria-label="Navegación rápida">
+    {shortcuts.map(([path, label, icon]) => <RouteLink key={path} to={path} className={`bottom-nav-item ${route === path ? 'active' : ''}`}><BottomNavIcon name={icon} /><span>{label}</span></RouteLink>)}
+    <button className="bottom-nav-item bottom-team-item" onClick={onChooseTeam} aria-label={`Cambiar mi equipo favorito: ${team.name}`}><TeamCrest team={team} className="bottom-team-crest" /><span>Mi club</span></button>
+  </nav>;
 }
 
 function Footer({ favoriteTeam }) {
   const team = favoriteTeam || teamChoices[0];
   const directory = clubDirectory[team.id] || {};
   const shortNames = { Instagram: 'IG', X: 'X', YouTube: 'YT' };
-  return <footer><div className="shell footer-main"><Brand /><p>Fútbol, análisis, noticias y debate<br />para quienes viven el juego.</p><div className="footer-team-links"><a className="footer-team-site" href={directory.site} target="_blank" rel="noreferrer">{team.mark} · sitio oficial ↗</a>{directory.socials?.length > 0 && <div className="footer-social" aria-label={`Redes oficiales de ${team.name}`}>{directory.socials.map((social) => <a key={social.label} href={social.url} target="_blank" rel="noreferrer" aria-label={`${social.label} oficial de ${team.name}`}>{shortNames[social.label] || social.label}</a>)}</div>}</div></div><div className="shell footer-bottom"><span>© 2026 El Sendero del Soccer · Pasión por el juego.</span><span>Sitio editorial independiente. Las marcas pertenecen a sus respectivos titulares.</span><span>Escudos: <a href="https://www.footylogos.com/es/competition/liga-de-primera-chile" target="_blank" rel="noreferrer">FootyLogos.com ↗</a></span></div></footer>;
+
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  return (
+    <footer className="fc-footer">
+      <div className="shell footer-main fc-footer-main">
+        <div className="fc-footer-brand">
+          <Brand />
+          <p>Fútbol, análisis táctico, noticias y debate para quienes viven la pasión del juego.</p>
+          <span className="fc-footer-badge">EDICIÓN INDEPENDIENTE · TEMPORADA 2026</span>
+        </div>
+        <div className="footer-column fc-footer-col">
+          <h4 className="footer-heading">Secciones</h4>
+          <div className="footer-nav-links" aria-label="Secciones">
+            <RouteLink to="/soy-dt"><span>→</span> Soy DT</RouteLink>
+            <RouteLink to="/comunidad"><span>→</span> Tribuna</RouteLink>
+            <RouteLink to="/datos"><span>→</span> Tabla de Posiciones</RouteLink>
+            <RouteLink to="/actualidad"><span>→</span> Radar de Noticias</RouteLink>
+          </div>
+        </div>
+        <div className="footer-column fc-footer-col">
+          <h4 className="footer-heading">Club Oficial</h4>
+          <div className="footer-team-links fc-team-links">
+            <a className="footer-team-site fc-team-btn" href={directory.site} target="_blank" rel="noreferrer">
+              <TeamCrest team={team} className="fc-footer-crest" />
+              <span>{team.name} · Sitio Oficial ↗</span>
+            </a>
+            {directory.socials?.length > 0 && (
+              <div className="footer-social fc-social-row" aria-label={`Redes oficiales de ${team.name}`}>
+                {directory.socials.map((social) => (
+                  <a key={social.label} href={social.url} target="_blank" rel="noreferrer" aria-label={`${social.label} oficial de ${team.name}`}>
+                    {shortNames[social.label] || social.label}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="shell footer-bottom fc-footer-bottom">
+        <div className="fc-footer-copy">
+          <span>© 2026 El Sendero del Soccer · Pasión por el juego.</span>
+          <span>Sitio editorial independiente. Las marcas pertenecen a sus respectivos titulares.</span>
+          <span>Escudos cortesía de <a href="https://www.footylogos.com/es/competition/liga-de-primera-chile" target="_blank" rel="noreferrer">FootyLogos.com ↗</a></span>
+        </div>
+        <button className="back-to-top fc-back-to-top" onClick={scrollToTop} aria-label="Volver arriba">
+          <span>↑</span> Volver arriba
+        </button>
+      </div>
+    </footer>
+  );
 }
 
 function SectionTitle({ eyebrow, title, children }) {
@@ -656,7 +775,7 @@ function useNewsFeed(limit = 6, clubId = '') {
       })
       .then((payload) => setFeed({ items: payload.items || [], updatedAt: payload.updatedAt, state: payload.state || 'curated' }))
       .catch((error) => {
-        if (error.name !== 'AbortError') setFeed({ items: newsFeed.filter((item) => !clubId || item.clubIds?.includes(clubId)).slice(0, limit), updatedAt: feedUpdatedAt, state: 'cached' });
+        if (error.name !== 'AbortError') setFeed({ items: newsFeed.filter((item) => !clubId || item.clubIds?.includes(clubId)).sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)).slice(0, limit), updatedAt: feedUpdatedAt, state: 'cached' });
       });
     return () => controller.abort();
   }, [limit, clubId]);
@@ -684,18 +803,64 @@ function NewsRadar({ team }) {
     ? new Intl.DateTimeFormat('es-CL', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(updatedAt)).replace('.', '')
     : null;
 
-  return <section className="shell news-radar" aria-labelledby="radar-title">
-    <SectionTitle eyebrow="RADAR PERSONALIZADO" title={`Noticias de ${activeTeam.name}.`}>
-      <div className="radar-status" role="status"><span className={state === 'loading' ? 'status-dot loading' : 'status-dot'} />{state === 'loading' ? 'Cargando la edición…' : `Edición ${updateLabel} · CLT`}</div>
-    </SectionTitle>
-    {lead ? <div className={`radar-grid ${remaining.length ? '' : 'radar-grid-solo'}`}>
-      <a className="radar-lead" href={lead.sourceUrl} target="_blank" rel="noreferrer">
-        <div className="radar-lead-copy"><span className="radar-topic">{lead.topic}</span><h3>{lead.headline}</h3><p>{lead.summary}</p><small><SourceMark source={lead.source} /> {lead.source} · {lead.publishedLabel} <b>↗</b></small></div>
-        <div className="radar-lead-art" aria-hidden="true"><span className="radar-art-kicker">EL SENDERO · FUENTES</span><div>{lead.clubIds.slice(0, 3).map((clubId) => { const crestTeam = teamChoices.find((item) => item.id === clubId); return crestTeam ? <TeamCrest key={clubId} team={crestTeam} className="radar-art-crest" /> : null; })}</div><b>90<span>′</span></b></div>
+  return <section className="shell news-radar fc-radar-section" aria-labelledby="radar-title">
+    <div className="fc-radar-header">
+      <div>
+        <span className="fc-badge-pill">RADAR TÁCTICO · FC26</span>
+        <h2 id="radar-title">Noticias & Actualidad de {activeTeam.name}.</h2>
+      </div>
+      <div className="radar-status fc-radar-status" role="status">
+        <span className={state === 'loading' ? 'status-dot loading' : 'status-dot'} />
+        {state === 'loading' ? 'Actualizando radar…' : `Edición ${updateLabel} · CLT`}
+      </div>
+    </div>
+    {lead ? <div className={`radar-grid fc-radar-grid ${remaining.length ? '' : 'radar-grid-solo'}`}>
+      <a className="radar-lead fc-radar-lead" href={lead.sourceUrl} target="_blank" rel="noreferrer">
+        <div className="fc-lead-gradient-border" />
+        <div className="radar-lead-copy fc-lead-copy">
+          <div className="fc-lead-tags">
+            <span className="radar-topic fc-topic-badge">{lead.topic}</span>
+            <span className="fc-lead-exclusive">DESTACADO FC</span>
+          </div>
+          <h3>{lead.headline}</h3>
+          <p>{lead.summary}</p>
+          <small><SourceMark source={lead.source} /> {lead.source} · {lead.publishedLabel} <b>↗</b></small>
+        </div>
+        <div className="radar-lead-art fc-lead-art" aria-hidden="true">
+          <span className="radar-art-kicker">FC26 HUB · CENTRAL</span>
+          <div>{lead.clubIds.slice(0, 3).map((clubId) => { const crestTeam = teamChoices.find((item) => item.id === clubId); return crestTeam ? <TeamCrest key={clubId} team={crestTeam} className="radar-art-crest" /> : null; })}</div>
+          <b>90<span>′</span></b>
+        </div>
       </a>
-      {remaining.length > 0 && <aside className="radar-stream" aria-label="Más titulares del radar"><div className="radar-stream-heading"><div><span>AL DÍA</span><b>Más del radar</b></div><strong>{remaining.length}<small> TITULARES</small></strong></div><div className="radar-stream-list">{sideStories.map((item, index) => <a key={item.id} href={item.sourceUrl} target="_blank" rel="noreferrer" className="radar-item"><i className="radar-item-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</i><span><small>{item.topic} · {item.publishedLabel}</small><b>{item.headline}</b><em>{item.source} ↗</em></span></a>)}</div><div className="radar-stream-footer"><span>{hiddenStories ? `+ ${hiddenStories} titulares más` : `Más sobre ${activeTeam.name}`}</span><a href={getClubSearchUrl(activeTeam)} target="_blank" rel="noreferrer">Buscar actualidad ↗</a></div></aside>}
+      {remaining.length > 0 && <aside className="radar-stream fc-radar-stream" aria-label="Más titulares del radar">
+        <div className="radar-stream-heading fc-stream-heading">
+          <div>
+            <span>FEED EN TIEMPO REAL</span>
+            <b>Radar Táctico</b>
+          </div>
+          <strong>{remaining.length}<small> TITULARES</small></strong>
+        </div>
+        <div className="radar-stream-list fc-stream-list">
+          {sideStories.map((item, index) => <a key={item.id} href={item.sourceUrl} target="_blank" rel="noreferrer" className="radar-item fc-radar-item">
+            <i className="radar-item-number fc-item-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</i>
+            <span>
+              <small>{item.topic} · {item.publishedLabel}</small>
+              <b>{item.headline}</b>
+              <em>{item.source} ↗</em>
+            </span>
+          </a>)}
+        </div>
+        <div className="radar-stream-footer fc-stream-footer">
+          <span>{hiddenStories ? `+ ${hiddenStories} notas adicionales` : `Todo sobre ${activeTeam.name}`}</span>
+          <a href={getClubSearchUrl(activeTeam)} target="_blank" rel="noreferrer">Buscar actualidad ↗</a>
+        </div>
+      </aside>}
     </div> : state === 'loading' ? <div className="radar-skeleton" aria-hidden="true"><span /><span /><span /></div> : <div className="team-news-empty"><TeamCrest team={activeTeam} className="empty-crest" /><div><b>Aún no hay notas verificadas de {activeTeam.name} en nuestro catálogo.</b><p>Para no mostrarte noticias de otro club, dejamos este radar listo para las fuentes de tu equipo.</p></div><a href={getClubSearchUrl(activeTeam)} target="_blank" rel="noreferrer">Buscar actualidad ↗</a></div>}
-    <div className="radar-note"><span>◉</span><p><b>Tu radar, sin ruido.</b> Resúmenes editoriales con enlace a su fuente; esta edición no es una transmisión en vivo.</p><a href={getClubSearchUrl(activeTeam)} target="_blank" rel="noreferrer">Abrir búsqueda ↗</a></div>
+    <div className="radar-note fc-radar-note">
+      <span>◉</span>
+      <p><b>Radar de Noticias FC26:</b> Cobertura curada y verificada de fuentes deportivas oficiales con enlace directo.</p>
+      <a href={getClubSearchUrl(activeTeam)} target="_blank" rel="noreferrer">Abrir búsqueda ↗</a>
+    </div>
   </section>;
 }
 
@@ -767,11 +932,54 @@ function ClubDesk({ team, storyCount }) {
 }
 
 function BookBanner() {
-  return <aside className="book-banner" aria-label="Publicidad del libro Mariano Puyol"><img src="/assets/mariano-puyol-libro.png" alt="Portada de Mariano Puyol, Simplemente un Capitán, por Omar Soto Díaz" /><div><span className="eyebrow">PUBLICIDAD · LIBROS AZULES</span><h2>Hay capitanes que se llevan para siempre.</h2><p>Mariano Puyol. Simplemente un Capitán.<br />Una historia azul, escrita por Omar Soto Díaz.</p></div><a className="button gold" href="https://marianopuyolcapitan.cl/" target="_blank" rel="noreferrer">Conocer el libro ↗</a></aside>;
+  return (
+    <aside className="book-banner fc-book-banner" aria-label="Publicidad del libro Mariano Puyol">
+      <div className="fc-book-glow" />
+      <div className="fc-book-media">
+        <img src="/assets/mariano-puyol-libro.png" alt="Portada de Mariano Puyol, Simplemente un Capitán, por Omar Soto Díaz" />
+      </div>
+      <div className="fc-book-content">
+        <div className="fc-book-badge">✦ EDICIÓN ESPECIAL · MEMORIA DEL CLUB</div>
+        <h2>Hay capitanes que se llevan para siempre.</h2>
+        <p><strong>Mariano Puyol. Simplemente un Capitán.</strong><br />Una historia azul imprescindible, escrita por Omar Soto Díaz.</p>
+        <div className="fc-book-meta"><span>RESEÑA & VENTA OFICIAL</span><span>AUTOR: OMAR SOTO DÍAZ</span></div>
+      </div>
+      <div className="fc-book-action">
+        <a className="button fc-book-btn" href="https://marianopuyolcapitan.cl/" target="_blank" rel="noreferrer">
+          Conocer el libro <span>↗</span>
+        </a>
+      </div>
+    </aside>
+  );
 }
 
 function NewsCard({ article, saved, onSave, featured = false }) {
-  return <article className={featured ? 'news-card featured' : 'news-card'}><ArticleLink article={article} className="card-image"><img src={article.image} alt={article.credit} loading="lazy" /></ArticleLink><div className="card-body"><div className="card-meta"><span>{article.category}</span><small>{article.type}</small></div><h3><ArticleLink article={article}>{article.title}</ArticleLink></h3><p>{article.excerpt}</p><div className="card-footer"><small>{article.date}</small><button onClick={() => onSave(article.id)} aria-pressed={saved} aria-label={`${saved ? 'Quitar de guardados' : 'Guardar'}: ${article.title}`}>{saved ? '♥' : '♡'}</button></div></div></article>;
+  return (
+    <article className={featured ? 'news-card featured fc-news-card' : 'news-card fc-news-card'}>
+      <div className="fc-card-glow" />
+      <ArticleLink article={article} className="card-image fc-card-image">
+        <span className="fc-card-badge">{article.category}</span>
+        <img src={article.image} alt={article.credit} loading="lazy" />
+        <div className="fc-image-overlay" />
+      </ArticleLink>
+      <div className="card-body fc-card-body">
+        <div className="card-meta fc-card-meta">
+          <span className="fc-type-badge">{article.type}</span>
+          <small className="fc-date-badge">{article.date}</small>
+        </div>
+        <h3><ArticleLink article={article}>{article.title}</ArticleLink></h3>
+        <p>{article.excerpt}</p>
+        <div className="card-footer fc-card-footer">
+          <ArticleLink article={article} className="fc-read-link">
+            LEER CRÓNICA <span>→</span>
+          </ArticleLink>
+          <button onClick={() => onSave(article.id)} aria-pressed={saved} className="fc-save-btn" aria-label={`${saved ? 'Quitar de guardados' : 'Guardar'}: ${article.title}`}>
+            {saved ? '♥' : '♡'}
+          </button>
+        </div>
+      </div>
+    </article>
+  );
 }
 
 function SourceNewsCard({ item }) {
@@ -779,30 +987,138 @@ function SourceNewsCard({ item }) {
   return <article className="source-news-card"><div className="source-news-top"><span>{item.topic}</span><time>{item.publishedLabel}</time></div><div className="source-news-main">{taggedTeam && <TeamCrest team={taggedTeam} className="source-news-crest" />}<div><h3>{item.headline}</h3><p>{item.summary}</p></div></div><div className="source-news-footer"><span><SourceMark source={item.source} /> Resumen editorial · {item.source}</span><a href={item.sourceUrl} target="_blank" rel="noreferrer">Leer la fuente ↗</a></div></article>;
 }
 
+function FixtureCard({ fixture, featured = false }) {
+  const when = new Intl.DateTimeFormat('es-CL', { weekday: 'short', day: '2-digit', month: 'short' }).format(new Date(`${fixture.date}T12:00:00`)).replace('.', '').toUpperCase();
+  const badge = fixture.status === 'live' ? `EN CANCHA · ${fixture.minute}′` : fixture.status === 'cutoff' ? 'AL CORTE 18:00' : fixture.status === 'scheduled' ? 'PROGRAMADO' : 'FINAL';
+  return <article className={`schedule-day ${featured ? 'is-focus' : ''} ${fixture.status === 'live' || fixture.status === 'cutoff' ? 'is-cutoff' : ''}`}><h3>{when}<span>{badge} · {fixture.leg}</span></h3><div className="schedule-match"><span>{fixture.home}</span><b>{fixture.score || fixture.time}</b><span>{fixture.away}</span></div><small className="schedule-venue">{fixture.venue}{fixture.detail ? ` · ${fixture.detail}` : ''}</small></article>;
+}
+
+function ClubCupBoard({ team }) {
+  const fixtures = fixturesForTeam(team);
+  if (!fixtures.length) return null;
+  return <section className="shell cup-home" aria-label={`Copa Chile de ${team.name}`}><SectionTitle eyebrow="COPA CHILE · OCTAVOS 2026" title={`La serie de ${team.name}.`}><RouteLink to="/datos" className="section-link">Ver todos los octavos →</RouteLink></SectionTitle><div className="schedule-days">{fixtures.map((fixture) => <FixtureCard key={fixture.id} fixture={fixture} featured={fixture.status === 'cutoff' || fixture.status === 'scheduled'} />)}</div></section>;
+}
+
 function HomePage({ saved, onSave, favoriteTeam }) {
   const activeTeam = favoriteTeam || teamChoices.find((item) => item.id === 'u-de-chile');
   const clubArticles = useMemo(() => articles.filter((article) => article.clubIds?.includes(activeTeam.id)), [activeTeam.id]);
   const sourceCount = newsFeed.filter((item) => item.clubIds?.includes(activeTeam.id)).length;
   const storyCount = sourceCount + clubArticles.length;
+  const activeStanding = leagueStandings2026.find((club) => club.id === activeTeam.id);
+
   return <>
+    <div className="home-scroll-indicator"><span>↓</span></div>
+
+    <div className="home-welcome-banner" style={{'--club-color': activeTeam.primary}}>
+      <h2>Tu club. Tu sendero.</h2>
+    </div>
+
     <ClubHero team={activeTeam} storyCount={storyCount} />
+
+    {activeStanding && (
+      <section className="shell fc-stats-section" aria-label="Estadísticas clave del equipo">
+        <div className="fc-stats-grid">
+          <div className="fc-stat-card">
+            <div className="fc-stat-glow" />
+            <div className="fc-stat-top">
+              <span className="fc-stat-label">POSICIÓN</span>
+              <span className="fc-stat-pill">LIGA</span>
+            </div>
+            <strong className="fc-stat-value">{activeStanding.position}°</strong>
+            <span className="fc-stat-caption">Puesto en tabla</span>
+          </div>
+          <div className="fc-stat-card">
+            <div className="fc-stat-glow" />
+            <div className="fc-stat-top">
+              <span className="fc-stat-label">PUNTOS</span>
+              <span className="fc-stat-pill">PTS</span>
+            </div>
+            <strong className="fc-stat-value">{activeStanding.points}</strong>
+            <span className="fc-stat-caption">Puntos acumulados</span>
+          </div>
+          <div className="fc-stat-card">
+            <div className="fc-stat-glow" />
+            <div className="fc-stat-top">
+              <span className="fc-stat-label">PARTIDOS</span>
+              <span className="fc-stat-pill">PJ</span>
+            </div>
+            <strong className="fc-stat-value">{activeStanding.played}</strong>
+            <span className="fc-stat-caption">Fechas jugadas</span>
+          </div>
+          <div className="fc-stat-card">
+            <div className="fc-stat-glow" />
+            <div className="fc-stat-top">
+              <span className="fc-stat-label">DIF. GOLES</span>
+              <span className="fc-stat-pill">DG</span>
+            </div>
+            <strong className="fc-stat-value">{activeStanding.goalDifference > 0 ? `+${activeStanding.goalDifference}` : activeStanding.goalDifference}</strong>
+            <span className="fc-stat-caption">Balance anotaciones</span>
+          </div>
+        </div>
+      </section>
+    )}
+
+    <div className="section-divider" style={{'--club-accent': activeTeam.accent}}></div>
+
     <ClubDesk team={activeTeam} storyCount={storyCount} />
+
+    <div className="section-divider" style={{'--club-accent': activeTeam.accent}}></div>
+
+    <ClubCupBoard team={activeTeam} />
+
+    <div className="section-divider" style={{'--club-accent': activeTeam.accent}}></div>
+
     <NewsRadar team={activeTeam} />
-    <section className="shell home-latest">
-      <SectionTitle eyebrow="ARCHIVO DEL CLUB" title={`Historias de ${activeTeam.name}.`}><RouteLink to="/actualidad" className="section-link">Ver toda la actualidad →</RouteLink></SectionTitle>
-      {clubArticles.length ? <div className="home-news-grid">{clubArticles.slice(0, 3).map((article) => <NewsCard key={article.id} article={article} saved={saved.includes(article.id)} onSave={onSave} />)}</div> : <div className="club-history-teaser"><img src={clubMedia[activeTeam.id]?.image} alt={clubMedia[activeTeam.id]?.alt || `Imagen de ${activeTeam.name}`} loading="lazy" /><div><span className="eyebrow">IDENTIDAD E HISTORIA · {activeTeam.mark}</span><h3>{clubProfiles[activeTeam.id]?.historyTitle}</h3><p>{clubProfiles[activeTeam.id]?.historyLead}</p><RouteLink to="/memoria">Conocer la historia del club →</RouteLink></div><TeamCrest team={activeTeam} className="empty-crest" /></div>}
-    </section>
+
+    <div className="section-divider" style={{'--club-accent': activeTeam.accent}}></div>
+
+    <div className="home-latest-wrapper fc-news-wrapper">
+      <section className="shell home-latest">
+        <div className="fc-news-header">
+          <div>
+            <span className="fc-badge-pill">EDICIÓN ESPECIAL FC26</span>
+            <h2>Crónicas & Historias de {activeTeam.name}</h2>
+            <p className="fc-news-sub">El archivo táctico, la memoria del club y las crónicas de partido en profundidad.</p>
+          </div>
+          <RouteLink to="/actualidad" className="fc-cta-link">Ver todo el archivo <span>→</span></RouteLink>
+        </div>
+        {clubArticles.length ? (
+          <div className="home-news-grid fc-news-grid">
+            {clubArticles.slice(0, 3).map((article) => (
+              <NewsCard key={article.id} article={article} saved={saved.includes(article.id)} onSave={onSave} />
+            ))}
+          </div>
+        ) : (
+          <div className="club-history-teaser fc-history-teaser">
+            <img src={clubMedia[activeTeam.id]?.image} alt={clubMedia[activeTeam.id]?.alt || `Imagen de ${activeTeam.name}`} loading="lazy" />
+            <div>
+              <span className="eyebrow">IDENTIDAD E HISTORIA · {activeTeam.mark}</span>
+              <h3>{clubProfiles[activeTeam.id]?.historyTitle}</h3>
+              <p>{clubProfiles[activeTeam.id]?.historyLead}</p>
+              <RouteLink to="/memoria">Conocer la historia del club →</RouteLink>
+            </div>
+            <TeamCrest team={activeTeam} className="empty-crest" />
+          </div>
+        )}
+      </section>
+    </div>
+
     <section className="shell home-split">
       <div className="home-data"><span className="eyebrow">LECTURA CON CONTEXTO</span><h2>El dato sirve cuando habla de <em>{activeTeam.name}.</em></h2><p>La portada conserva sólo lo que se relaciona con tu club: noticias, archivo y un punto de referencia para seguir su temporada.</p><RouteLink to="/actualidad" className="button">Explorar su actualidad →</RouteLink></div>
-      <div className="home-tribuna"><span className="eyebrow">TU SENDERO</span><h2>Una experiencia que se pone la camiseta contigo.</h2><p>Cambia de equipo cuando quieras: la identidad y el filtro editorial se actualizan al instante.</p><RouteLink to="/actualidad" className="button light">Abrir el radar →</RouteLink></div>
+      <div className="home-tribuna">
+        <span className="eyebrow">TU SENDERO</span><h2>Una experiencia que se pone la camiseta contigo.</h2><p>Cambia de equipo cuando quieras: la identidad y el filtro editorial se actualizan al instante.</p><RouteLink to="/actualidad" className="button light">Abrir el radar →</RouteLink>
+        <div className="split-decorator split-circle"></div>
+        <div className="split-decorator split-lines"></div>
+      </div>
     </section>
+
     {activeTeam.id === 'u-de-chile' && <div className="shell"><BookBanner /></div>}
   </>;
 }
 
 function NewsPage({ saved, onSave, saveError, favoriteTeam, latestMode = false }) {
   const activeTeam = favoriteTeam || teamChoices.find((item) => item.id === 'u-de-chile');
-  const { items: sourceItems, updatedAt, state } = useNewsFeed(latestMode ? 12 : 20, activeTeam.id);
+  const { items: sourceItems, updatedAt, state } = useNewsFeed(latestMode ? 12 : 30, activeTeam.id);
   const clubArticles = useMemo(() => articles.filter((article) => article.clubIds?.includes(activeTeam.id)), [activeTeam.id]);
   const categories = useMemo(() => ['Todo', ...new Set([...sourceItems.map((item) => item.topic), ...clubArticles.map((article) => article.category)])], [sourceItems, clubArticles]);
   const [category, setCategory] = useState('Todo');
@@ -813,16 +1129,32 @@ function NewsPage({ saved, onSave, saveError, favoriteTeam, latestMode = false }
   const filtered = useMemo(() => clubArticles.filter((article) => (category === 'Todo' || article.category === category) && normalize(`${article.title} ${article.excerpt}`).includes(normalize(query)) && (!onlySaved || saved.includes(article.id))), [clubArticles, category, query, onlySaved, saved]);
   const filteredSource = useMemo(() => sourceItems.filter((item) => (category === 'Todo' || item.topic === category) && normalize(`${item.headline} ${item.summary} ${item.source}`).includes(normalize(query))).sort((a, b) => new Date(b.publishedAt || '1970-01-01').getTime() - new Date(a.publishedAt || '1970-01-01').getTime()), [sourceItems, category, query]);
   const savedForTeam = saved.filter((id) => clubArticles.some((article) => article.id === id));
-  return <div className="page shell"><div className="page-heading editorial-heading"><span className="eyebrow">{latestMode ? `RADAR DE ÚLTIMO MINUTO · ${activeTeam.mark}` : `ACTUALIDAD DE ${activeTeam.mark}`}</span><h1>{latestMode ? <>Lo último<br />de {activeTeam.mark}.</> : <>Todo sobre<br />{activeTeam.name}.</>}</h1><p>{latestMode ? `El pulso reciente de ${activeTeam.name}: titulares filtrados por club, fecha visible y enlace a cada fuente. Este radar se actualiza editorialmente; no es una transmisión en vivo.` : `Actualidad deportiva y archivo editorial de tu club. Los datos externos se enlazan a su fuente; los textos de esta página son resúmenes originales.`}</p>{latestMode && <RouteLink to="/soy-dt" className="inline-link">Armar mi once para {activeTeam.mark} →</RouteLink>}</div><div className="news-toolbar"><label className="search-box"><span aria-hidden="true">⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} aria-label={`Buscar artículos de ${activeTeam.name}`} placeholder={`Buscar en ${activeTeam.name}…`} /></label><div className="category-filter" role="group" aria-label="Filtrar por categoría">{categories.map((item) => <button key={item} aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</button>)}</div>{!latestMode && <button className="saved-button" aria-pressed={onlySaved} onClick={() => setOnlySaved(!onlySaved)}>{onlySaved ? '♥' : '♡'} Mis guardados ({savedForTeam.length})</button>}</div>{!onlySaved && <section className="source-news-section"><div className="source-news-heading"><div><span className="eyebrow">{latestMode ? 'SELECCIÓN RECIENTE · CON FUENTE' : 'FUENTES VERIFICABLES'}</span><h2>{latestMode ? `Ahora en el radar de ${activeTeam.name}.` : `Lo más reciente para ${activeTeam.name}.`}</h2></div><small>{state === 'loading' ? 'Actualizando…' : `Corte editorial · ${updatedAt ? new Intl.DateTimeFormat('es-CL', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(updatedAt)).toUpperCase() : 'sin fecha'}`}</small></div>{state === 'loading' && sourceItems.length === 0 ? <NewsLoadingCards /> : filteredSource.length ? <div className="source-news-grid">{filteredSource.map((item) => <SourceNewsCard key={item.id} item={item} />)}</div> : <div className="empty-state"><h2>{sourceItems.length ? 'No hay titulares con esos filtros.' : `Todavía no hay resúmenes verificados para ${activeTeam.name}.`}</h2><p>No completamos esta sección con noticias de otros equipos.</p>{!sourceItems.length && <a href={getClubSearchUrl(activeTeam)} target="_blank" rel="noreferrer">Buscar actualidad ↗</a>}</div>}</section>}{!latestMode && (filtered.length > 0 || onlySaved) && <section className="club-archive"><div className="source-news-heading"><div><span className="eyebrow">ARCHIVO PROPIO</span><h2>Historias del Sendero.</h2></div><small>Reportajes y análisis originales</small></div>{filtered.length ? <div className="news-grid">{filtered.map((article, index) => <NewsCard key={article.id} article={article} featured={index === 0 && category === 'Todo' && !query && !onlySaved} saved={saved.includes(article.id)} onSave={onSave} />)}</div> : <div className="empty-state"><h2>No tienes historias guardadas de este equipo.</h2><p>Prueba con otra categoría o quita la búsqueda.</p><button onClick={() => setOnlySaved(false)}>Volver a actualidad</button></div>}</section>}{latestMode && <ClubConnections team={activeTeam} />}<p className="data-note">Los guardados viven solo en este navegador.{saveError ? ' No pudimos guardar el último cambio.' : ''}</p>{!latestMode && activeTeam.id === 'u-de-chile' && <BookBanner />}</div>;
+  return <div className="page shell"><div className="page-heading editorial-heading"><span className="eyebrow">{latestMode ? `RADAR DE ÚLTIMO MINUTO · ${activeTeam.mark}` : `ACTUALIDAD DE ${activeTeam.mark}`}</span><h1>{latestMode ? <>Lo último<br />de {activeTeam.mark}.</> : <>Todo sobre<br />{activeTeam.name}.</>}</h1><p>{latestMode ? `El pulso reciente de ${activeTeam.name}: titulares filtrados por club, fecha visible y enlace a cada fuente. Este radar se actualiza editorialmente; no es una transmisión en vivo.` : `Actualidad deportiva y archivo editorial de tu club. Los datos externos se enlazan a su fuente; los textos de esta página son resúmenes originales.`}</p>{latestMode && <RouteLink to="/soy-dt" className="inline-link">Armar mi once para {activeTeam.mark} →</RouteLink>}</div><ClubNow team={activeTeam} /><div className="news-toolbar"><label className="search-box"><span aria-hidden="true">⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} aria-label={`Buscar artículos de ${activeTeam.name}`} placeholder={`Buscar en ${activeTeam.name}…`} /></label><div className="category-filter" role="group" aria-label="Filtrar por categoría">{categories.map((item) => <button key={item} aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</button>)}</div>{!latestMode && <button className="saved-button" aria-pressed={onlySaved} onClick={() => setOnlySaved(!onlySaved)}>{onlySaved ? '♥' : '♡'} Mis guardados ({savedForTeam.length})</button>}</div>{!onlySaved && <section className="source-news-section"><div className="source-news-heading"><div><span className="eyebrow">{latestMode ? 'SELECCIÓN RECIENTE · CON FUENTE' : 'FUENTES VERIFICABLES'}</span><h2>{latestMode ? `Ahora en el radar de ${activeTeam.name}.` : `Lo más reciente para ${activeTeam.name}.`}</h2></div><small>{state === 'loading' ? 'Actualizando…' : `Corte editorial · ${updatedAt ? new Intl.DateTimeFormat('es-CL', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(updatedAt)).toUpperCase() : 'sin fecha'}`}</small></div>{state === 'loading' && sourceItems.length === 0 ? <NewsLoadingCards /> : filteredSource.length ? <div className="source-news-grid">{filteredSource.map((item) => <SourceNewsCard key={item.id} item={item} />)}</div> : <div className="empty-state"><h2>{sourceItems.length ? 'No hay titulares con esos filtros.' : `Todavía no hay resúmenes verificados para ${activeTeam.name}.`}</h2><p>No completamos esta sección con noticias de otros equipos.</p>{!sourceItems.length && <a href={getClubSearchUrl(activeTeam)} target="_blank" rel="noreferrer">Buscar actualidad ↗</a>}</div>}</section>}{!latestMode && (filtered.length > 0 || onlySaved) && <section className="club-archive"><div className="source-news-heading"><div><span className="eyebrow">ARCHIVO PROPIO</span><h2>Historias del Sendero.</h2></div><small>Reportajes y análisis originales</small></div>{filtered.length ? <div className="news-grid">{filtered.map((article, index) => <NewsCard key={article.id} article={article} featured={index === 0 && category === 'Todo' && !query && !onlySaved} saved={saved.includes(article.id)} onSave={onSave} />)}</div> : <div className="empty-state"><h2>No tienes historias guardadas de este equipo.</h2><p>Prueba con otra categoría o quita la búsqueda.</p><button onClick={() => setOnlySaved(false)}>Volver a actualidad</button></div>}</section>}{latestMode && <ClubConnections team={activeTeam} />}<p className="data-note">Los guardados viven solo en este navegador.{saveError ? ' No pudimos guardar el último cambio.' : ''}</p>{!latestMode && activeTeam.id === 'u-de-chile' && <BookBanner />}</div>;
+}
+
+function CategoryTable({ rows, favoriteId }) {
+  return <div className="standings-scroll"><table className="standings-table"><thead><tr><th scope="col">#</th><th scope="col">Club</th><th scope="col">PJ</th><th scope="col">G</th><th scope="col">E</th><th scope="col">P</th><th scope="col">DG</th><th scope="col">Pts</th></tr></thead><tbody>{rows.map((club) => {
+    const clubTeam = club.id ? teamChoices.find((team) => team.id === club.id) : null;
+    const spotlight = club.spotlight || club.id === favoriteId;
+    return <tr key={club.id || club.name} className={`${spotlight ? 'favorite-row' : ''} ${club.zone ? `zone-${club.zone}` : ''}`} aria-current={club.id === favoriteId ? 'true' : undefined}><td>{club.position}</td><td><span className="standing-club">{clubTeam && <TeamCrest team={clubTeam} className="standing-crest" />}<b>{club.name || standingsClubName(club.id)}</b><small>{club.id === favoriteId ? 'MI EQUIPO' : club.city}</small></span></td><td>{club.played}</td><td>{club.wins}</td><td>{club.draws}</td><td>{club.losses}</td><td className={club.goalDifference > 0 ? 'positive-difference' : club.goalDifference < 0 ? 'negative-difference' : ''}>{club.goalDifference > 0 ? '+' : ''}{club.goalDifference}</td><td><b>{club.points}</b></td></tr>;
+  })}</tbody></table></div>;
 }
 
 function DataPage({ favoriteTeam }) {
   const activeTeam = favoriteTeam || teamChoices.find((item) => item.id === 'u-de-chile');
+  const [league, setLeague] = useState('primera');
   const activeStanding = leagueStandings2026.find((club) => club.id === activeTeam.id);
-  const normalizeClub = (value) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
-  const teamKey = normalizeClub(activeTeam.name);
-  const teamCupSchedule = copaChileFixtures.filter((fixture) => [fixture.home, fixture.away].some((club) => normalizeClub(club) === teamKey));
-  return <div className="page shell data-page"><div className="page-heading data-heading"><span className="eyebrow">LIGA DE PRIMERA · CHILE</span><h1>La tabla<br />al día.</h1><p>Posiciones, diferencia de gol y Copa Chile. Seleccionamos a {activeTeam.name} para ubicar sus datos y cruces de copa.</p></div><section className="standings-panel"><div className="standings-heading"><div><span className="eyebrow">CAMPEONATO NACIONAL 2026</span><h2>Tabla de posiciones</h2></div><span className="standings-cut">CORTE OFICIAL · 23 SEP 2026</span></div><div className="standings-scroll"><table className="standings-table"><thead><tr><th scope="col">#</th><th scope="col">Club</th><th scope="col">PJ</th><th scope="col">G</th><th scope="col">E</th><th scope="col">P</th><th scope="col">DG</th><th scope="col">Pts</th></tr></thead><tbody>{leagueStandings2026.map((club) => { const clubTeam = teamChoices.find((team) => team.id === club.id); return <tr key={club.id} className={club.id === activeTeam.id ? 'favorite-row' : ''} aria-current={club.id === activeTeam.id ? 'true' : undefined}><td>{club.position}</td><td><span className="standing-club">{clubTeam && <TeamCrest team={clubTeam} className="standing-crest" />}<b>{standingsClubName(club.id)}</b>{club.id === activeTeam.id && <small>MI EQUIPO</small>}</span></td><td>{club.played}</td><td>{club.wins}</td><td>{club.draws}</td><td>{club.losses}</td><td className={club.goalDifference > 0 ? 'positive-difference' : club.goalDifference < 0 ? 'negative-difference' : ''}>{club.goalDifference > 0 ? '+' : ''}{club.goalDifference}</td><td><b>{club.points}</b></td></tr>; })}</tbody></table></div><div className="standings-footer"><span>{activeTeam.name}: <b>{activeStanding?.position}°</b> · {activeStanding?.points} puntos · {activeStanding?.played} PJ</span><a href="https://www.campeonatochileno.cl/ligas/liga-de-primera-mercado-libre/" target="_blank" rel="noreferrer">Ver tabla en Campeonato Chileno ↗</a></div></section><section className="cup-schedule"><div className="source-news-heading"><div><span className="eyebrow">COPA CHILE COCA-COLA ZERO AZÚCAR · 2026</span><h2>Octavos: la llave de {activeTeam.name}.</h2></div><a href="https://www.campeonatochileno.cl/noticias/la-copa-chile-coca-cola-zero-azucar-vuelve-con-los-octavos-de-final/" target="_blank" rel="noreferrer">Programación oficial ↗</a></div>{teamCupSchedule.length ? <div className="schedule-days">{teamCupSchedule.map((fixture) => <article key={fixture.id} className="schedule-day"><h3>{new Intl.DateTimeFormat('es-CL', { weekday: 'short', day: '2-digit', month: 'short' }).format(new Date(`${fixture.date}T12:00:00`)).toUpperCase()}<span>{fixture.leg} · OCTAVOS</span></h3><div className="schedule-match"><span>{fixture.home}</span><b>{fixture.score || fixture.time}</b><span>{fixture.away}</span></div><small className="schedule-venue">{fixture.venue}</small></article>)}</div> : <div className="empty-state"><h2>{activeTeam.name} no disputa estos octavos.</h2><p>Esta sección muestra los cruces oficiales de octavos de final cuando participa tu club.</p></div>}<p className="data-note">Fixture, sedes y horarios: programación publicada por Campeonato Chileno/ANFP. Resultados de ida publicados hasta el 23/09/2026; agenda consultada al 24/09/2026. La tabla de Liga de Primera corresponde al corte oficial del 23/09/2026. Verifica cambios en las <a href="https://www.campeonatochileno.cl/ligas/copa-chile-coca-cola-zero-azucar/" target="_blank" rel="noreferrer">fuentes oficiales del torneo ↗</a>.</p></section></div>;
+  const teamCupSchedule = fixturesForTeam(activeTeam);
+  const ties = copaChileFixtures.reduce((groups, fixture) => {
+    const group = groups.find((item) => item.tie === fixture.tie);
+    if (group) group.matches.push(fixture);
+    else groups.push({ tie: fixture.tie, matches: [fixture] });
+    return groups;
+  }, []);
+  return <div className="page shell data-page"><div className="page-heading data-heading"><span className="eyebrow">TRES CATEGORÍAS · CHILE</span><h1>De la Primera<br />a la Tercera A.</h1><p>La Primera ya estaba. Ahora también están el Ascenso y la Tercera A, el torneo donde juegan Lautaro de Buin y Rodelindo Román. {activeTeam.name} sigue marcado en la Primera.</p></div><section className="standings-panel"><div className="league-switch" role="tablist" aria-label="Elegir categoría"><button type="button" role="tab" aria-selected={league === 'primera'} onClick={() => setLeague('primera')}>Primera</button><button type="button" role="tab" aria-selected={league === 'ascenso'} onClick={() => setLeague('ascenso')}>Ascenso</button><button type="button" role="tab" aria-selected={league === 'tercera'} onClick={() => setLeague('tercera')}>Tercera A</button></div><div className="standings-heading"><div><span className="eyebrow">{league === 'primera' ? 'LIGA DE PRIMERA 2026' : league === 'ascenso' ? 'LIGA DE ASCENSO 2026' : 'TERCERA A · ANFA 2026'}</span><h2>{league === 'primera' ? 'La categoría grande.' : league === 'ascenso' ? 'La B profesional.' : 'Lautaro, Rodelindo y el resto.'}</h2></div><span className="standings-cut">{league === 'primera' ? 'CORTE · 23 SEP' : league === 'ascenso' ? 'CORTE · 26 SEP' : 'CORTE · 27 SEP'}</span></div><p className="league-blurb">{league === 'primera' ? 'Es la Liga de Primera, la que en la conversación todavía se llama Primera. Colo-Colo lidera con 54 puntos. La U y la UC tienen 42.' : league === 'ascenso' ? 'Esta es la categoría profesional de abajo, la Liga de Ascenso. Cobreloa quedó líder con 45 puntos después de ganarle a Santiago Wanderers. El último desciende a la Segunda División profesional.' : 'Lautaro de Buin va segundo, con 43 puntos y un partido menos que Malleco Unido. Rodelindo Román va décimo, con 24. El campeón de esta Tercera A sube a la Segunda División profesional. No es esa Segunda: es la categoría de más abajo, la que casi no aparece en la portada de los medios grandes.'}</p>{league === 'primera' ? <CategoryTable rows={leagueStandings2026} favoriteId={activeTeam.id} /> : league === 'ascenso' ? <CategoryTable rows={ascensoStandings2026} /> : <CategoryTable rows={terceraAStandings2026} />}<div className="standings-footer">{league === 'primera' ? <span>{activeTeam.name}: <b>{activeStanding?.position}°</b> · {activeStanding?.points} puntos · {activeStanding?.played} PJ</span> : <span>{league === 'ascenso' ? 'Cobreloa asciende directo. De Wanderers a Unión Española entran a la liguilla. Rangers desciende. Curicó figura con 24 puntos en la tabla oficial.' : 'Malleco Unido asciende directo. Lautaro de Buin pelea los playoffs desde el segundo lugar.'}</span>}{league === 'primera' ? <a href="https://www.campeonatochileno.cl/ligas/liga-de-primera-mercado-libre/" target="_blank" rel="noreferrer">Ver tabla en Campeonato Chileno ↗</a> : league === 'ascenso' ? <a href="https://www.campeonatochileno.cl/ligas/liga-de-ascenso-caixun" target="_blank" rel="noreferrer">Ver el Ascenso oficial ↗</a> : <a href="https://cf3.cl/torneo/tabla/tercera-a" target="_blank" rel="noreferrer">Ver la Tercera A en CF3 ↗</a>}</div></section><section className="cup-schedule"><div className="source-news-heading"><div><span className="eyebrow">COPA CHILE COCA-COLA ZERO AZÚCAR · 2026</span><h2>{teamCupSchedule.length ? `La llave de ${activeTeam.name}, dentro de los octavos.` : `${activeTeam.name} no está en estos octavos.`}</h2></div><a href="https://www.campeonatochileno.cl/ligas/copa-chile-coca-cola-zero-azucar/" target="_blank" rel="noreferrer">Programación oficial ↗</a></div><div className="schedule-days">{ties.map((group) => {
+    const featured = group.matches.some((fixture) => teamCupSchedule.some((item) => item.id === fixture.id));
+    return <article key={group.tie} className={`schedule-day schedule-tie ${featured ? 'is-focus' : ''}`}><h3>{group.tie}<span>{featured ? 'TU LLAVE' : 'OCTAVOS'}</span></h3>{group.matches.map((fixture) => <div key={fixture.id} className="schedule-leg"><div className="schedule-match"><span>{fixture.leg}</span><b>{fixture.score || fixture.time}</b><span>{fixture.status === 'live' ? `${fixture.minute}′` : fixture.status === 'cutoff' ? 'AL CORTE' : fixture.status === 'scheduled' ? 'PROGRAMADO' : 'FINAL'}</span></div><small className="schedule-venue">{fixture.home} – {fixture.away} · {fixture.venue}{fixture.detail ? ` · ${fixture.detail}` : ''}</small></div>)}</article>;
+  })}</div><p className="data-note">La Liga de Primera no tuvo fecha entre el 23 y el 27 de septiembre: el corte del 23 sigue vigente. Huachipato y Universidad de Concepción tienen un partido pendiente. Universidad de Chile empató 1–1 la vuelta con Everton y avanzó por 2–1 en el global. En cuartos espera Deportes Antofagasta. Santa Cruz–O’Higgins, a las 20:00, no tenía marcador cerrado en este corte. La revancha Coquimbo Unido–Cobreloa es el 7 de octubre. Fuentes: Cooperativa, Emol y ESPN, más la programación de <a href="https://www.campeonatochileno.cl/ligas/copa-chile-coca-cola-zero-azucar/" target="_blank" rel="noreferrer">Campeonato Chileno ↗</a>.</p></section></div>;
 }
 
 function ManagerPage({ favoriteTeam }) {
@@ -831,10 +1163,8 @@ function ManagerPage({ favoriteTeam }) {
 }
 
 function CupManagerContext({ team }) {
-  const normalizeClub = (value) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
-  const teamKey = normalizeClub(team.name);
-  const fixtures = copaChileFixtures.filter((fixture) => [fixture.home, fixture.away].some((club) => normalizeClub(club) === teamKey));
-  return <section className="shell manager-cup-context"><div className="manager-cup-heading"><span className="eyebrow">COPA CHILE · OCTAVOS 2026</span><h2>La llave de {team.mark} también se juega en Soy DT.</h2><p>Prepara tu once con el contexto del cruce oficial de ida y vuelta.</p></div>{fixtures.length ? <div className="manager-cup-fixtures">{fixtures.map((fixture) => <article key={fixture.id}><span>{fixture.leg} · {new Intl.DateTimeFormat('es-CL', { day: '2-digit', month: 'short' }).format(new Date(`${fixture.date}T12:00:00`))}</span><b>{fixture.home} <i>{fixture.score || fixture.time}</i> {fixture.away}</b><small>{fixture.venue}</small></article>)}</div> : <p className="manager-cup-empty">No hay un cruce de estos octavos asociado a {team.name}.</p>}<RouteLink to="/datos" className="manager-cup-link">Ver Copa Chile y datos del campeonato <span>↗</span></RouteLink></section>;
+  const fixtures = fixturesForTeam(team);
+  return <section className="shell manager-cup-context"><div className="manager-cup-heading"><span className="eyebrow">COPA CHILE · OCTAVOS 2026</span><h2>La llave de {team.mark} también se juega en Soy DT.</h2><p>Prepara tu once con el contexto del cruce oficial de ida y vuelta, actualizado al corte del 27 de septiembre.</p></div>{fixtures.length ? <div className="manager-cup-fixtures">{fixtures.map((fixture) => <article key={fixture.id}><span>{fixture.leg} · {new Intl.DateTimeFormat('es-CL', { day: '2-digit', month: 'short' }).format(new Date(`${fixture.date}T12:00:00`))}</span><b>{fixture.home} <i>{fixture.score || fixture.time}</i> {fixture.away}</b><small>{fixture.detail || fixture.venue}</small></article>)}</div> : <p className="manager-cup-empty">No hay un cruce de estos octavos asociado a {team.name}. La pizarra sigue disponible para armar el once de la liga.</p>}<RouteLink to="/datos" className="manager-cup-link">Ver Copa Chile y datos del campeonato <span>↗</span></RouteLink></section>;
 }
 
 function ClubManagerPage({ team }) {
@@ -987,7 +1317,11 @@ function UniversityManagerPage() {
     setDuel(null);
   }
 
-  const playerCard = (player, origin, index) => <div className={`dt-player ${selected === `${origin}:${index}` ? 'selected' : ''}`} draggable onDragStart={() => setDragging(`${origin}:${index}`)} onDragEnd={() => setDragging(null)} onClick={(event) => { event.stopPropagation(); setSelected(`${origin}:${index}`); }} role="button" tabIndex="0" onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelected(`${origin}:${index}`); } }}><div className="dt-card-top"><span className="dt-rating">{player.rating}</span><span className="dt-role">{player.role}</span></div><span className="dt-card-mark" aria-hidden="true">S</span><span className="dt-player-name">{player.short}</span><div className="dt-card-stats"><span><b>{player.rating}</b>VAL</span><span><b>{player.points}</b>FOR</span><span><b>{player.role}</b>POS</span></div></div>;
+  const playerPortrait = (player, className = '') => player.portrait ? <span className={`dt-player-photo ${className}`} style={{ backgroundImage: `url('${player.portrait}')` }} aria-hidden="true" /> : <span className={`dt-initials ${className}`} aria-hidden="true">{player.short.replace(/[^A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/g, '').slice(0, 2).toUpperCase()}</span>;
+  const playerCard = (player, origin, index, slotRole) => {
+    const outOfRole = Boolean(slotRole && player.role !== slotRole);
+    return <div className={`dt-player ${selected === `${origin}:${index}` ? 'selected' : ''} ${outOfRole ? 'out-of-role' : ''}`} draggable onDragStart={() => setDragging(`${origin}:${index}`)} onDragEnd={() => setDragging(null)} onClick={(event) => { event.stopPropagation(); setSelected(`${origin}:${index}`); }} role="button" tabIndex="0" onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelected(`${origin}:${index}`); } }}><div className="dt-card-top"><span className="dt-rating">{player.rating}</span><span className="dt-role">{player.role}</span></div>{outOfRole && <span className="dt-out">Fuera</span>}{playerPortrait(player)}<span className="dt-player-name">{player.short}</span><div className="dt-card-stats"><span><b>{player.rating}</b>VAL</span><span><b>{player.points}</b>FOR</span><span><b>{player.role}</b>POS</span></div></div>;
+  };
 
   const activeUser = user;
   const openRegister = () => { setAuthMode('register'); setAuthOpen(true); setAuthMessage(''); };
@@ -1000,8 +1334,8 @@ function UniversityManagerPage() {
     <section className="shell manager-heading">
       <div>
         <span className="eyebrow manager-version">SOY DT · COPA CHILE <b>VERSIÓN 2.0.0</b></span>
-        <h1>Arma tu once.<br /><em>Defiende la U.</em></h1>
-        <p>Prueba distintos sistemas, mueve tus cartas y encuentra el once que llevarías a la cancha. Tu pizarra queda guardada en este dispositivo.</p>
+        <h1>Arma el once<br /><em>para los cuartos.</em></h1>
+        <p>La U empató 1–1 con Everton y avanzó por 2–1. El siguiente rival es Deportes Antofagasta. Mueve las cartas y deja tu lectura en este dispositivo.</p>
         <div className="manager-auth">
           {activeUser ? <><span className="auth-avatar">{(activeUser.displayName || activeUser.email || 'U').slice(0, 1).toUpperCase()}</span><span><b>{activeUser.displayName || 'Hincha azul'}</b><small>{activeUser.email || 'Sesión iniciada con Google'}</small></span><button className="auth-link" onClick={handleLogout}>Salir</button></> : <><span className="google-mark">U</span><span><b>Tu pizarra, a tu manera</b><small>Acceso gratuito con Google o email</small></span><button className="auth-button" onClick={openRegister}>Crear cuenta</button><button className="auth-link" onClick={openLogin}>Entrar</button>{!isFirebaseConfigured && !authMessage && <small className="auth-note" role="status">Falta conectar Firebase para activar las cuentas.</small>}{authMessage && !authOpen && <small className="auth-message" role="status">{authMessage}</small>}</>}
         </div>
@@ -1021,12 +1355,12 @@ function UniversityManagerPage() {
     </section>
     <section className="shell manager-layout"><div className="manager-main">
       <div className="manager-toolbar"><div><span className="eyebrow">TU PIZARRA · SOY DT 2.0</span><h2>Once titular · {activeFormation.label}</h2></div><div className="manager-toolbar-controls"><label className="formation-control"><span>ESQUEMA</span><select aria-label="Elegir formación" value={activeFormationId} onChange={(event) => { const nextId = event.target.value; setLineup(fitLineupToFormation(activeLineup, dtFormations[nextId].slots)); setFormationId(nextId); setSelected(null); setDuel(null); }}><option value="3-4-3">3–4–3 · Ofensivo</option><option value="4-3-3">4–3–3 · Equilibrado</option><option value="4-4-2">4–4–2 · Clásico</option></select></label><div className="manager-score"><small>VALORACIÓN</small><strong>{totalPoints}</strong><span>{roleFit}/11 en posición</span></div></div></div>
-      <p className="manager-help">Elige una formación. Arrastra una carta o selecciónala y toca otra posición para cambiarla. Las valoraciones son parte del juego de demostración, no estadísticas oficiales.</p>
-      <div className={`football-pitch formation-${activeFormationId}`} aria-label={`Campo para armar la formación ${activeFormation.label}`}>{dtSlots.map((slot, index) => <div key={slot.key} className={`pitch-slot ${selected === `lineup:${index}` ? 'targeted' : ''}`} style={{ gridColumn: slot.gridColumn, gridRow: slot.gridRow }} onDragOver={(event) => event.preventDefault()} onDrop={() => handleDrop(index)} onClick={() => handleSlotClick(index)}><span className="slot-label">{slot.label}</span>{activeLineup[index] ? playerCard(playerById[activeLineup[index]], 'lineup', index) : <span className="empty-slot">+</span>}</div>)}</div>
+      <p className="manager-help">Elige una formación. Arrastra una carta o selecciónala y toca otra posición para cambiarla. Las valoraciones son parte del juego de demostración, no estadísticas oficiales. La foto aparece solo si el dorsal de la imagen del plantel identifica a ese jugador. El resto queda con iniciales, sin una cara prestada.</p>
+      <div className={`football-pitch formation-${activeFormationId}`} aria-label={`Campo para armar la formación ${activeFormation.label}`}><div className="pitch-markings" aria-hidden="true"><span className="pitch-box pitch-box-top" /><span className="pitch-circle" /><span className="pitch-spot" /><span className="pitch-box pitch-box-bottom" /></div>{dtSlots.map((slot, index) => <div key={slot.key} className={`pitch-slot ${selected === `lineup:${index}` ? 'targeted' : ''}`} style={{ gridColumn: slot.gridColumn, gridRow: slot.gridRow }} onDragOver={(event) => event.preventDefault()} onDrop={() => handleDrop(index)} onClick={() => handleSlotClick(index)}><span className="slot-label">{slot.label}</span>{activeLineup[index] ? playerCard(playerById[activeLineup[index]], 'lineup', index, slot.role) : <span className="empty-slot">+</span>}</div>)}</div>
       <div className="manager-actions"><button className="button" onClick={playDuel}>Jugar el duelo ↗</button><button className="text-button" onClick={resetLineup}>Restablecer once</button>{lineupError && <small>No pudimos guardar tu once en este dispositivo.</small>}</div>
     </div><aside className="manager-sidebar">
-      <div className="bench-panel"><div className="bench-head"><div><span className="eyebrow">BANCA</span><h3>Opciones para cambiar el partido</h3></div><span>{bench.length} jugadores</span></div><div className="bench-list">{bench.map((player, index) => <div key={player.id} draggable onDragStart={() => setDragging(`bench:${player.id}`)} onDragEnd={() => setDragging(null)} onClick={() => setSelected(`bench:${player.id}`)} className={`bench-player ${selected === `bench:${player.id}` ? 'selected' : ''}`} role="button" tabIndex="0"><span className="bench-number">{String(index + 1).padStart(2, '0')}</span><span><b>{player.name}</b><small>{player.role} · {player.note}</small></span><strong>{player.points}</strong></div>)}</div><p className="bench-tip">Consejo: un jugador fuera de su posición pierde parte del bonus táctico.</p></div>
-      <div className="dt-detail"><div className="dt-detail-head"><span className="dt-avatar">{selectedPlayer.short.slice(0, 2).toUpperCase()}</span><div><span className="eyebrow">FICHA DE JUGADOR</span><h3>{selectedPlayer.name}</h3></div><strong>{selectedPlayer.rating}</strong></div><div className="dt-attributes"><span><small>POSICIÓN</small><b>{selectedPlayer.role}</b></span><span><small>FORMA</small><b>{selectedPlayer.points}</b></span><span><small>APORTE</small><b>{selectedPlayer.note}</b></span></div><p>Seleccionado para tu pizarra. Arrástralo para probar otra sociedad.</p></div>
+      <div className="bench-panel"><div className="bench-head"><div><span className="eyebrow">BANCA</span><h3>Opciones para cambiar el partido</h3></div><span>{bench.length} jugadores</span></div><div className="bench-list">{bench.map((player) => <div key={player.id} draggable onDragStart={() => setDragging(`bench:${player.id}`)} onDragEnd={() => setDragging(null)} onClick={() => setSelected(`bench:${player.id}`)} className={`bench-player ${selected === `bench:${player.id}` ? 'selected' : ''}`} role="button" tabIndex="0">{player.portrait ? playerPortrait(player, 'bench-photo') : <span className="bench-number">{player.role}</span>}<span><b>{player.name}</b><small>{player.role} · {player.note}</small></span><strong>{player.points}</strong></div>)}</div><p className="bench-tip">Consejo: un jugador fuera de su posición pierde parte del bonus táctico.</p></div>
+      <div className="dt-detail"><div className="dt-detail-head">{playerPortrait(selectedPlayer, 'dt-avatar-photo') || <span className="dt-avatar">{selectedPlayer.short.slice(0, 2).toUpperCase()}</span>}<div><span className="eyebrow">FICHA DE JUGADOR</span><h3>{selectedPlayer.name}</h3></div><strong>{selectedPlayer.rating}</strong></div><div className="dt-attributes"><span><small>POSICIÓN</small><b>{selectedPlayer.role}</b></span><span><small>FORMA</small><b>{selectedPlayer.points}</b></span><span><small>APORTE</small><b>{selectedPlayer.note}</b></span></div><p>Seleccionado para tu pizarra. Arrástralo para probar otra sociedad.</p></div>
       <div className="duel-panel"><span className="eyebrow">RANKING DE LA FECHA</span><h3>¿Tu lectura supera a la de otro azul?</h3><p>Enfrenta tu valoración contra <b>El Bulla 1902</b>, un rival generado para esta fecha.</p>{duel ? <div className="duel-result"><div><small>TU ONCE</small><strong>{duel.user}</strong></div><span>vs</span><div><small>EL BULLA 1902</small><strong>{duel.rival}</strong></div><b className={duel.user >= duel.rival ? 'win' : 'loss'}>{duel.user >= duel.rival ? '¡Ganaste el duelo! 🔵' : 'El rival se impuso. Ajusta tu pizarra.'}</b></div> : <div className="duel-empty">Juega el duelo cuando sientas que tu once está listo.</div>}</div>
     </aside></section>
     <section className="shell manager-footnote"><span>PROTOTIPO JUGABLE</span><p>Tu once y tu resultado se guardan en este navegador. El ranking entre usuarios queda listo para conectar a una base de datos cuando quieras convertirlo en competencia real.</p></section>
@@ -1061,12 +1395,18 @@ function ClubGallery({ team }) {
   return <section className="shell club-gallery"><div className="club-gallery-heading"><div><span className="eyebrow">GALERÍA · {team.mark}</span><h2>El club, en imágenes.</h2><p>{photos.length > 1 ? 'Una selección del archivo visual del proyecto, más acceso a otras galerías del club.' : 'La foto disponible en el archivo del proyecto y un acceso para encontrar más material del club.'}</p></div><a href={officialSiteSearch(team, 'galería fotos hinchada plantel')} target="_blank" rel="noreferrer">Buscar más fotos ↗</a></div><div className={`club-gallery-grid ${photos.length > 1 ? 'multi' : ''}`}>{photos.map((photo) => <figure key={photo.image}><img src={photo.image} alt={photo.alt} loading="lazy" /><figcaption><span>{photo.label}</span><TeamCrest team={team} className="gallery-mini-crest" /></figcaption></figure>)}<a className="club-gallery-more" href={officialSiteSearch(team, 'galería fotos hinchada plantel')} target="_blank" rel="noreferrer"><TeamCrest team={team} className="gallery-more-crest" /><span>Álbum abierto</span><strong>Encuentra más momentos de {team.name}.</strong><small>Buscar galerías publicadas por el club ↗</small></a></div></section>;
 }
 
+function ClubNow({ team }) {
+  const standing = leagueStandings2026.find((club) => club.id === team.id);
+  const focus = focusFixture(team);
+  return <section className="club-now" aria-label={`Momento actual de ${team.name}`}><article><span className="eyebrow">AHORA · PRIMERA</span><strong>{standing ? `${standing.position}°` : '—'}</strong><p>{standing ? `${standing.points} pts · ${standing.played} PJ · corte del 23 de septiembre` : 'Sin posición publicada en esta tabla.'}</p></article><article><span className="eyebrow">{focus ? `COPA CHILE · ${focus.status === 'final' ? 'CERRADO' : focus.leg}` : 'COPA CHILE'}</span><strong>{focus ? (focus.score || focus.time) : '—'}</strong><p>{focus ? `${focus.home} – ${focus.away}. ${focus.detail || focus.venue}` : `${team.name} no está en estos octavos.`}</p></article><RouteLink to="/soy-dt" className="club-now-link">Armar el once <span>↗</span></RouteLink></section>;
+}
+
 function MemoryPage({ saved, onSave, favoriteTeam }) {
   const team = favoriteTeam || teamChoices[0];
   const profile = clubProfiles[team.id];
   const media = clubMedia[team.id];
   const memoryArticles = articles.filter((article) => ['Historia', 'Cultura azul'].includes(article.category) && article.clubIds?.includes(team.id));
-  return <div className="page"><section className="memory-hero shell"><div className="memory-art-wrap"><div className="memory-image"><img src={media?.image} alt={media?.alt || `Imagen de ${team.name}`} /><span>{profile.identity.split(' · ')[0]}<br />EN LA PIEL</span></div><MediaCredit media={media} /></div><div className="memory-intro"><span className="eyebrow">HISTORIA · {team.name.toUpperCase()}</span><h1>{profile.historyTitle}</h1><p>{profile.historyLead}</p><a className="inline-link" href={profile.sourceUrl} target="_blank" rel="noreferrer">{profile.sourceLabel} ↗</a></div></section><ClubGallery team={team} /><section className="shell timeline-section"><SectionTitle eyebrow={`HISTORIA DE ${team.mark}`} title="Hitos que le dieron forma." /><div className="history-timeline">{profile.facts.map(([year, title, description]) => <article key={`${year}-${title}`}><b>{year}</b><span>{title}</span><p>{description}</p></article>)}</div><p className="data-note">Reseña breve preparada por El Sendero. Consulta la <a href={profile.sourceUrl} target="_blank" rel="noreferrer">fuente institucional o histórica: {profile.sourceLabel} ↗</a>.</p></section><section className="shell memory-reading"><SectionTitle eyebrow={`ARCHIVO DE ${team.mark}`} title={`Leer más de ${team.name}.`} />{memoryArticles.length ? <div className="news-grid memory-grid">{memoryArticles.map((article) => <NewsCard key={article.id} article={article} saved={saved.includes(article.id)} onSave={onSave} />)}</div> : <div className="club-history-teaser"><TeamCrest team={team} className="empty-crest" /><div><span className="eyebrow">DEL ARCHIVO DEL CLUB</span><h3>{profile.historyTitle}</h3><p>{profile.historyLead}</p><a href={profile.sourceUrl} target="_blank" rel="noreferrer">Seguir leyendo en {profile.sourceLabel} ↗</a></div></div>}</section><ClubConnections team={team} />{team.id === 'u-de-chile' && <div className="shell"><BookBanner /></div>}</div>;
+  return <div className="page"><section className="memory-hero shell"><div className="memory-art-wrap"><div className="memory-image"><img src={media?.image} alt={media?.alt || `Imagen de ${team.name}`} /><span>{profile.identity.split(' · ')[0]}<br />EN LA PIEL</span></div><MediaCredit media={media} /></div><div className="memory-intro"><span className="eyebrow">HISTORIA · {team.name.toUpperCase()}</span><h1>{profile.historyTitle}</h1><p>{profile.historyLead}</p><a className="inline-link" href={profile.sourceUrl} target="_blank" rel="noreferrer">{profile.sourceLabel} ↗</a></div></section><div className="shell"><ClubNow team={team} /></div><ClubGallery team={team} /><section className="shell timeline-section"><SectionTitle eyebrow={`HISTORIA DE ${team.mark}`} title="Hitos que le dieron forma." /><div className="history-timeline">{profile.facts.map(([year, title, description]) => <article key={`${year}-${title}`}><b>{year}</b><span>{title}</span><p>{description}</p></article>)}</div><p className="data-note">Reseña breve preparada por El Sendero. Consulta la <a href={profile.sourceUrl} target="_blank" rel="noreferrer">fuente institucional o histórica: {profile.sourceLabel} ↗</a>.</p></section><section className="shell memory-reading"><SectionTitle eyebrow={`ARCHIVO DE ${team.mark}`} title={`Leer más de ${team.name}.`} />{memoryArticles.length ? <div className="news-grid memory-grid">{memoryArticles.map((article) => <NewsCard key={article.id} article={article} saved={saved.includes(article.id)} onSave={onSave} />)}</div> : <div className="club-history-teaser"><TeamCrest team={team} className="empty-crest" /><div><span className="eyebrow">DEL ARCHIVO DEL CLUB</span><h3>{profile.historyTitle}</h3><p>{profile.historyLead}</p><a href={profile.sourceUrl} target="_blank" rel="noreferrer">Seguir leyendo en {profile.sourceLabel} ↗</a></div></div>}</section><ClubConnections team={team} />{team.id === 'u-de-chile' && <div className="shell"><BookBanner /></div>}</div>;
 }
 
 function CommunityPage({ favoriteTeam }) {
@@ -1115,7 +1455,7 @@ function ClubSectionPage({ route, favoriteTeam }) {
   const hasOfficialShop = Boolean(clubDirectory[team.id]?.shop);
   const destination = route === '/tienda' ? (clubDirectory[team.id]?.shop || officialSiteSearch(team, topic.search)) : officialSiteSearch(team, topic.search);
   const actionLabel = route === '/tienda' && !hasOfficialShop ? 'Buscar tienda oficial' : topic.action;
-  return <div className="page shell club-guide-page"><section className="club-guide-hero"><div className="club-guide-art"><img src={media.image} alt={media.alt} /><span>{topic.label} · {team.mark}</span><MediaCredit media={media} /></div><div className="club-guide-copy"><span className="eyebrow">{topic.label} · {profile.identity}</span><h1>{topic.title}</h1><p>{topic.copy}</p><a className="button" href={destination} target="_blank" rel="noreferrer">{actionLabel} ↗</a><a className="club-official-secondary" href={clubDirectory[team.id]?.site} target="_blank" rel="noreferrer">Sitio oficial de {team.name} ↗</a>{route === '/escuelas' && <RouteLink className="club-guide-community-link" to="/comunidad">Compartir un recuerdo de la tribuna →</RouteLink>}</div></section><section className="club-guide-info"><div><span className="eyebrow">UNA GUÍA DE EL SENDERO</span><h2>{profile.historyTitle}</h2><p>{profile.historyLead}</p><a href={profile.sourceUrl} target="_blank" rel="noreferrer">{profile.sourceLabel} ↗</a></div><div className="club-guide-facts">{profile.facts.slice(0, 4).map(([year, title, description]) => <article key={`${year}-${title}`}><b>{year}</b><span><strong>{title}</strong><small>{description}</small></span></article>)}</div></section><div className="club-guide-shortcuts"><RouteLink to="/memoria">Galería e historia del club <span>↗</span></RouteLink><RouteLink to="/comunidad">Compartir recuerdos <span>↗</span></RouteLink></div><p className="data-note club-guide-note">{topic.note}</p><ClubConnections team={team} /></div>;
+  return <div className="page shell club-guide-page"><section className="club-guide-hero"><div className="club-guide-art"><img src={media.image} alt={media.alt} /><span>{topic.label} · {team.mark}</span><MediaCredit media={media} /></div><div className="club-guide-copy"><span className="eyebrow">{topic.label} · {profile.identity}</span><h1>{topic.title}</h1><p>{topic.copy}</p><a className="button" href={destination} target="_blank" rel="noreferrer">{actionLabel} ↗</a><a className="club-official-secondary" href={clubDirectory[team.id]?.site} target="_blank" rel="noreferrer">Sitio oficial de {team.name} ↗</a>{route === '/escuelas' && <RouteLink className="club-guide-community-link" to="/comunidad">Compartir un recuerdo de la tribuna →</RouteLink>}</div></section><section className="club-guide-info"><div><span className="eyebrow">UNA GUÍA DE EL SENDERO</span><h2>{profile.historyTitle}</h2><p>{profile.historyLead}</p><a href={profile.sourceUrl} target="_blank" rel="noreferrer">{profile.sourceLabel} ↗</a></div><div className="club-guide-facts">{profile.facts.slice(0, 4).map(([year, title, description]) => <article key={`${year}-${title}`}><b>{year}</b><span><strong>{title}</strong><small>{description}</small></span></article>)}</div></section><div className="club-guide-shortcuts"><RouteLink to="/memoria">Galería e historia del club <span>↗</span></RouteLink><RouteLink to="/comunidad">Compartir recuerdos <span>↗</span></RouteLink></div><p className="data-note club-guide-note">{topic.note}</p><ClubNow team={team} /><ClubConnections team={team} /></div>;
 }
 
 function ArticlePage({ article, saved, onSave, saveError, favoriteTeam }) {

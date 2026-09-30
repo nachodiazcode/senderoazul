@@ -1,5 +1,28 @@
 export const articles = [
   {
+    "id": "ida-everton-reanudada",
+    "clubIds": ["u-de-chile", "everton"],
+    "category": "Copa Chile",
+    "title": "La U cierra la llave con Everton y ya tiene rival de cuartos",
+    "excerpt": "La ida ante Everton se suspendió en Sausalito y se cerró 1–0. En la vuelta, el 1–1 le alcanzó a la U para avanzar por 2–1.",
+    "image": "/assets/club-media/u-de-chile.webp",
+    "credit": "Foto de archivo del plantel de Universidad de Chile · no corresponde al partido del 27/09/2026",
+    "creditUrl": "https://www.emol.com/noticias/Deportes/2026/09/27/1212554/everton-udechile-copa-chile-ida.html",
+    "date": "27 SEP 2026",
+    "type": "Crónica",
+    "source": {
+      "label": "Emol · ida reanudada, 27/09/2026",
+      "url": "https://www.emol.com/noticias/Deportes/2026/09/27/1212554/everton-udechile-copa-chile-ida.html"
+    },
+    "body": [
+      "La ida de los octavos de Copa Chile entre Everton y Universidad de Chile no cupo en una sola noche. El jueves 24, en el Estadio Sausalito, el partido se detuvo alrededor del minuto 82 después de que cayeran fuegos artificiales, bengalas y bombas de estruendo desde el sector de la barra azul. En la cancha, la U ya ganaba por la cuenta mínima.",
+      "El gol fue de Juan Martín Lucero, a los 62 minutos. El delantero resolvió un rebote después de un remate de Tobías Reinhart; el balón alcanzó a tocar a Hugo Magallanes antes de entrar. El club y el relato de ESPN ubican la acción en ese minuto. Emol la consignó en el 61.",
+      "La Federación decidió completar lo que faltaba este domingo, en el Estadio Nacional y a puertas cerradas. En esos minutos el marcador no se movió. Piero Maza cerró el 0–1 y la U se llevó la ventaja de la ida. La crónica de Emol y el relato de La Tercera coinciden en que la reanudación tuvo pocas ocasiones.",
+      "La vuelta se jugó esa misma tarde, otra vez en el Nacional. Eduardo Vargas abrió con un cabezazo a los 45+3, después de un centro de Ignacio Vásquez. Nicolás Montiel empató de cabeza a los 56. El 1–1 le alcanzó a la U: con el gol de Lucero en la ida, el global quedó 2–1.",
+      "Universidad de Chile avanzó a cuartos. El rival es Deportes Antofagasta, que eliminó a Deportes Iquique por 5–2 en el global. El árbitro de la vuelta fue Nicolás Millas."
+    ]
+  },
+  {
     "id": "goleada-en-la-portada",
     "clubIds": ["u-de-chile", "la-serena"],
     "category": "Primer equipo",
@@ -20,7 +43,7 @@ export const articles = [
       "Agustín Arce cambió el partido apenas comenzó el complemento. A los 47 minutos, aprovechó una mala salida local y definió de zurda para abrir la cuenta. Siete minutos después, Maximiliano Guerrero encontró a Fabián Hormazábal por la derecha y el lateral sorprendió con un taco para estirar la ventaja.",
       "La Serena buscó volver al partido con Diego Rubio. Una de sus llegadas obligó a Igor Lichnovsky a despejar sobre la línea, una intervención decisiva para conservar el arco en cero. El central, que había entrado en el segundo tiempo, terminó siendo protagonista en ambas áreas.",
       "En el cuarto minuto de descuento, un córner servido por Guerrero encontró a Igor Lichnovsky en el aire. El cabezazo del central puso el 3–0 y desató la celebración visitante.",
-      "El triunfo entrega confianza para preparar los octavos de final de Copa Chile: la U visitará a Everton el jueves 24, a las 20:00, en el Estadio Sausalito. La Portada queda como una tarde de carácter, eficacia y arco en cero. ¡Vamos la U!"
+      "El triunfo entregó confianza para los octavos de Copa Chile. El jueves 24 la U visitó a Everton en Sausalito; ese partido se suspendió y se cerró el domingo 27. La Portada queda como una tarde de carácter, eficacia y arco en cero."
     ]
   },
   {
